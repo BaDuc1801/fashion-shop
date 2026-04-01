@@ -1,0 +1,93 @@
+{
+  "common": {
+    "clearAll": "Clear all",
+    "items": "{{count}} items",
+    "backToHome": "Back to home"
+  },
+  "nav": {
+    "store": "Store",
+    "men": "Men",
+    "women": "Women",
+    "newArrivals": "New Arrivals",
+    "sale": "Sale",
+    "wishlist": "Wishlist",
+    "cart": "Cart"
+  },
+  "hero": {
+    "subtitle": "HOLIDAY 2026",
+    "titleLine1": "Women's New",
+    "titleLine2": "Arrivals",
+    "description": "New colors, now also available in women's sizing",
+    "viewCollection": "View Collection"
+  },
+  "home": {
+    "bestSellers": "Best Sellers",
+    "shopByCategories": "Shop by Categories"
+  },
+  "filters": {
+    "title": "Filters",
+    "category": "Category",
+    "price": "Price",
+    "sortBy": "Sort By",
+    "searchProducts": "Search products",
+    "featured": "Featured",
+    "priceLowToHigh": "Price: Low to High",
+    "priceHighToLow": "Price: High to Low",
+    "allProducts": "All Products"
+  },
+  "product": {
+    "price": "Price",
+    "selectSize": "Select Size",
+    "selectColor": "Select Color",
+    "addToCart": "Add to Cart",
+    "favorited": "Favorited"
+  },
+  "productReviews": {
+    "title": "Customer Reviews",
+    "basedOn": "{{rating}} / 5 based on {{count}} reviews",
+    "verifiedPurchase": "Verified Purchase",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "welcomeBack": "Hello Again!",
+    "createAccount": "Create Account",
+    "subtitle": "Sign in or create an account to continue.",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "continueWith": "Or continue with",
+    "otpHint": "Enter OTP code (hardcoded: 0000)",
+    "otpPlaceholder": "Enter 4-digit OTP",
+    "verifyOtp": "Verify OTP",
+    "requiredFields": "Please enter email and password.",
+    "requiredRegisterFields": "Please enter username, email, password and confirm password.",
+    "passwordMismatch": "Passwords do not match.",
+    "invalidOtp": "Invalid OTP. Please try 0000.",
+    "bannerText": "Finally, your style in one place."
+  },
+  "cart": {
+    "bag": "Bag",
+    "summary": "Summary",
+    "subtotal": "Subtotal",
+    "estimatedDelivery": "Estimated Delivery & Handling",
+    "free": "Free",
+    "selectVoucher": "Select voucher",
+    "voucherPlaceholder": "Choose a voucher code",
+    "discount": "Discount",
+    "voucherMinOrder": "Order from ${{amount}} to use this voucher",
+    "total": "Total",
+    "memberCheckout": "Member Checkout"
+  },
+  "collection": {
+    "notFound": "Collection not found"
+  },
+  "notFound": {
+    "message": "The page you’re looking for doesn’t exist.",
+    "goHome": "Go home"
+  }
+}
+

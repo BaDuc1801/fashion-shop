@@ -5,6 +5,12 @@
   "references": [
     {
       "path": "./apps/admin"
+    },
+    {
+      "path": "./shared"
+    },
+    {
+      "path": "./apps/store"
     }
   ]
 }

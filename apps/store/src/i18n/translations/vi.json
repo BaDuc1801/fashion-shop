@@ -1,0 +1,93 @@
+{
+  "common": {
+    "clearAll": "Xoá tất cả",
+    "items": "{{count}} sản phẩm",
+    "backToHome": "Về trang chủ"
+  },
+  "nav": {
+    "store": "Cửa hàng",
+    "men": "Nam",
+    "women": "Nữ",
+    "newArrivals": "Hàng mới",
+    "sale": "Giảm giá",
+    "wishlist": "Đã thích",
+    "cart": "Giỏ hàng"
+  },
+  "hero": {
+    "subtitle": "HOLIDAY 2026",
+    "titleLine1": "Hàng mới",
+    "titleLine2": "Cho nữ",
+    "description": "Màu mới, nay cũng có đủ size cho nữ",
+    "viewCollection": "Xem bộ sưu tập"
+  },
+  "home": {
+    "bestSellers": "Bán chạy",
+    "shopByCategories": "Mua theo danh mục"
+  },
+  "filters": {
+    "title": "Bộ lọc",
+    "category": "Danh mục",
+    "price": "Giá",
+    "sortBy": "Sắp xếp",
+    "searchProducts": "Tìm sản phẩm",
+    "featured": "Nổi bật",
+    "priceLowToHigh": "Giá: Thấp đến cao",
+    "priceHighToLow": "Giá: Cao đến thấp",
+    "allProducts": "Tất cả sản phẩm"
+  },
+  "product": {
+    "price": "Giá",
+    "selectSize": "Chọn size",
+    "selectColor": "Chọn màu",
+    "addToCart": "Thêm vào giỏ",
+    "favorited": "Đã thích"
+  },
+  "productReviews": {
+    "title": "Đánh giá khách hàng",
+    "basedOn": "{{rating}} / 5 dựa trên {{count}} đánh giá",
+    "verifiedPurchase": "Đã mua hàng",
+    "previous": "Trước",
+    "next": "Sau"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "welcomeBack": "Xin chào lần nữa!",
+    "createAccount": "Tạo tài khoản",
+    "subtitle": "Đăng nhập hoặc tạo tài khoản để tiếp tục.",
+    "username": "Tên người dùng",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Nhập lại mật khẩu",
+    "continueWith": "Hoặc tiếp tục với",
+    "otpHint": "Nhập mã OTP (hardcode: 0000)",
+    "otpPlaceholder": "Nhập OTP 4 số",
+    "verifyOtp": "Xác thực OTP",
+    "requiredFields": "Vui lòng nhập email và mật khẩu.",
+    "requiredRegisterFields": "Vui lòng nhập tên người dùng, email, mật khẩu và nhập lại mật khẩu.",
+    "passwordMismatch": "Mật khẩu nhập lại không khớp.",
+    "invalidOtp": "OTP không đúng. Hãy thử 0000.",
+    "bannerText": "Phong cách của bạn, tại một nơi."
+  },
+  "cart": {
+    "bag": "Giỏ hàng",
+    "summary": "Tóm tắt",
+    "subtotal": "Tạm tính",
+    "estimatedDelivery": "Phí vận chuyển & xử lý",
+    "free": "Miễn phí",
+    "selectVoucher": "Chọn voucher",
+    "voucherPlaceholder": "Chọn mã voucher",
+    "discount": "Giảm giá",
+    "voucherMinOrder": "Đơn từ ${{amount}} mới dùng được voucher này",
+    "total": "Tổng",
+    "memberCheckout": "Thanh toán"
+  },
+  "collection": {
+    "notFound": "Không tìm thấy bộ sưu tập"
+  },
+  "notFound": {
+    "message": "Trang bạn tìm không tồn tại.",
+    "goHome": "Về trang chủ"
+  }
+}
+
