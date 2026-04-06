@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "concurrently \"npx nx serve store\" \"npx nx serve admin\"",
-    "build": "npx nx build store && npx nx build admin"
+    "build-store": "npx nx build store",
+    "build-admin": "npx nx build admin"
   },
   "private": true,
   "dependencies": {
