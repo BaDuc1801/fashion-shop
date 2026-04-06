@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "concurrently \"npx nx serve store\" \"npx nx serve admin\"",
     "build-store": "npx nx build store",
-    "build-admin": "npx nx build admin",
-    "build": "npm run build-store"
+    "build-admin": "npx nx build admin"
   },
   "private": true,
   "dependencies": {

@@ -1,9 +1,5 @@
 {
   "name": "@fashion-monorepo/store",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "build": "npx nx build store",
-    "start": "npx nx serve store"
-  }
+  "private": true
 }
