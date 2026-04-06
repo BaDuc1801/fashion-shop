@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -19,7 +20,7 @@ export default defineConfig(() => ({
   //  plugins: [],
   // },
   build: {
-    outDir: './dist',
+    outDir: path.resolve(__dirname, '../../dist/apps/store'),
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
