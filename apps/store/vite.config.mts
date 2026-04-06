@@ -15,10 +15,6 @@ export default defineConfig(() => ({
     host: 'localhost',
   },
   plugins: [react()],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [],
-  // },
   build: {
     outDir: path.resolve(__dirname, '../../dist/apps/store'),
     emptyOutDir: true,
