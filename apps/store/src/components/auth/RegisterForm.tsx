@@ -7,6 +7,7 @@ type RegisterFormProps = {
   password: string;
   confirmPassword: string;
   error?: string;
+  loading: boolean;
   onUsernameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
@@ -15,6 +16,7 @@ type RegisterFormProps = {
 };
 
 const RegisterForm = ({
+  loading,
   username,
   email,
   password,

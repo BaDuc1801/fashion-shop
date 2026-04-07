@@ -11,7 +11,7 @@
       "@nx/react/typings/image.d.ts",
       "vite/client"
     ],
-    "rootDir": "src"
+    "rootDir": "../../"
   },
   "exclude": [
     "out-tsc",
@@ -37,6 +37,8 @@
     "src/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.json"
+    "src/**/*.json",
+    "../../shared/src/**/*.ts",
+    "../../shared/src/**/*.tsx"
   ]
 }
