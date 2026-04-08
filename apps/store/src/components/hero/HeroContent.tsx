@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 const HeroContent = () => {
   const { t } = useTranslation();
   return (
-    <div className="absolute inset-x-0 top-40 z-10 px-[200px]">
+    <div className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-[200px]">
       <div className="max-w-3xl">
         <div className="text-base tracking-wide font-semibold uppercase">
           {t('hero.subtitle')}
