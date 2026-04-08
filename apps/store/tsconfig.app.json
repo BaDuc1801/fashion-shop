@@ -40,5 +40,10 @@
     "src/**/*.json",
     "../../shared/src/**/*.ts",
     "../../shared/src/**/*.tsx"
+  ],
+  "references": [
+    {
+      "path": "../../shared/tsconfig.lib.json"
+    }
   ]
 }
