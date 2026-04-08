@@ -1,5 +1,9 @@
 {
   "name": "@fashion-monorepo/admin",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "start": "vite preview"
+  }
 }
