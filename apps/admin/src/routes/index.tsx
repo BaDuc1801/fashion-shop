@@ -18,6 +18,8 @@ import CollectionForm from '../pages/CollectionManagement/CollectionForm';
 import CollectionDetailPage from '../pages/CollectionManagement/CollectionDetailPage';
 import OrderManagementPage from '../pages/OrderManagement/OrderManagementPage';
 import OrderDetailPage from '../pages/OrderManagement/OrderDetailPage';
+import CategoryManagementPage from '../pages/CategoryManagement/CategoryManagementPage';
+import CategoryForm from '../pages/CategoryManagement/CategoryForm';
 
 const AppRoutes = () => {
   return (
@@ -36,6 +38,8 @@ const AppRoutes = () => {
         <Route path="/products" element={<ProductManagementPage />} />
         <Route path="/products/add-new" element={<ProductForm />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/categories" element={<CategoryManagementPage />} />
+        <Route path="/categories/add-new" element={<CategoryForm />} />
         <Route path="/vouchers" element={<VoucherManagementPage />} />
         <Route path="/vouchers/add-new" element={<VoucherForm />} />
         <Route path="/vouchers/:id" element={<VoucherDetailPage />} />

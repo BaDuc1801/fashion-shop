@@ -12,6 +12,7 @@
       "collections": "Bộ sưu tập",
       "managers": "Quản lý",
       "products": "Sản phẩm",
+      "categories": "Danh mục",
       "vouchers": "Mã giảm giá"
     },
     "dashboard": {
@@ -192,6 +193,37 @@
         "submitUpdate": "Cập nhật bộ sưu tập"
       }
     },
+    "category": {
+      "title": "Quản lý danh mục",
+      "add": "Thêm danh mục",
+      "searchPlaceholder": "Tìm theo tên hoặc slug…",
+      "col": {
+        "category": "Danh mục",
+        "slug": "Slug",
+        "products": "Sản phẩm",
+        "created": "Ngày tạo",
+        "status": "Trạng thái"
+      },
+      "status": {
+        "active": "đang bật",
+        "inactive": "đang tắt"
+      },
+      "form": {
+        "editTitle": "Sửa danh mục",
+        "addTitle": "Thêm danh mục",
+        "images": "Ảnh danh mục",
+        "upload": "Tải lên",
+        "name": "Tên danh mục",
+        "slug": "Slug",
+        "productsCount": "Số sản phẩm",
+        "createdAt": "Ngày tạo",
+        "active": "Đang hoạt động",
+        "placeholderName": "Nhập tên danh mục",
+        "placeholderSlug": "Nhập slug",
+        "submitCreate": "Tạo danh mục",
+        "submitUpdate": "Cập nhật danh mục"
+      }
+    },
     "validation": {
       "requiredName": "Vui lòng nhập họ tên",
       "requiredEmail": "Vui lòng nhập email",
@@ -209,6 +241,7 @@
       "stockMin": "Tồn kho phải lớn hơn hoặc bằng 0",
       "minOneImage": "Vui lòng tải ít nhất 1 ảnh",
       "requiredCollectionName": "Vui lòng nhập tên bộ sưu tập",
+      "requiredCategoryName": "Vui lòng nhập tên danh mục",
       "requiredSlug": "Vui lòng nhập slug",
       "productsCountMin": "Số sản phẩm phải ít nhất là 0",
       "selectStartDate": "Vui lòng chọn ngày bắt đầu",

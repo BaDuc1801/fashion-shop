@@ -49,6 +49,11 @@ const SidebarMenu = () => {
         label: t('admin.nav.products'),
       },
       {
+        key: '/categories',
+        icon: <AppstoreOutlined />,
+        label: t('admin.nav.categories'),
+      },
+      {
         key: '/vouchers',
         icon: <GiftOutlined />,
         label: t('admin.nav.vouchers'),

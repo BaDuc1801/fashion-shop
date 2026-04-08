@@ -12,6 +12,7 @@
       "collections": "Collections",
       "managers": "Managers",
       "products": "Products",
+      "categories": "Categories",
       "vouchers": "Vouchers"
     },
     "dashboard": {
@@ -192,6 +193,37 @@
         "submitUpdate": "Update collection"
       }
     },
+    "category": {
+      "title": "Category management",
+      "add": "Add category",
+      "searchPlaceholder": "Search by category name or slug…",
+      "col": {
+        "category": "Category",
+        "slug": "Slug",
+        "products": "Products",
+        "created": "Created",
+        "status": "Status"
+      },
+      "status": {
+        "active": "active",
+        "inactive": "inactive"
+      },
+      "form": {
+        "editTitle": "Edit category",
+        "addTitle": "Add new category",
+        "images": "Category images",
+        "upload": "Upload",
+        "name": "Category name",
+        "slug": "Slug",
+        "productsCount": "Products count",
+        "createdAt": "Created date",
+        "active": "Active",
+        "placeholderName": "Enter category name",
+        "placeholderSlug": "Enter slug",
+        "submitCreate": "Create category",
+        "submitUpdate": "Update category"
+      }
+    },
     "validation": {
       "requiredName": "Please enter name",
       "requiredEmail": "Please enter email",
@@ -209,6 +241,7 @@
       "stockMin": "Stock must be greater than or equal to 0",
       "minOneImage": "Please upload at least 1 image",
       "requiredCollectionName": "Please enter collection name",
+      "requiredCategoryName": "Please enter category name",
       "requiredSlug": "Please enter slug",
       "productsCountMin": "Products count must be at least 0",
       "selectStartDate": "Please select start date",
