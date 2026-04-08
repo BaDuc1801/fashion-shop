@@ -6,6 +6,11 @@ import path from 'path';
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../node_modules/.vite/store',
+  resolve: {
+    alias: {
+      '@shared': path.resolve(import.meta.dirname, '../../shared/src'),
+    },
+  },
   server: {
     port: 4201,
     host: 'localhost',

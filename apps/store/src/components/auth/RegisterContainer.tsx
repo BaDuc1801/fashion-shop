@@ -2,43 +2,49 @@ import { useState } from 'react';
 import OtpSection from './OtpSection';
 import RegisterForm from './RegisterForm';
 import { useTranslation } from 'react-i18next';
-import { message, Button, Spin } from 'antd';
-import { useRegisterMutation, useSendOtpMutation } from '@shared';
+import { message } from 'antd';
+import {
+  getApiErrorMessage,
+  useRegisterMutation,
+  useSendOtpMutation,
+} from '@shared';
+import {
+  defaultRegisterValues,
+  type RegisterFormValues,
+} from '../../pages/AuthPage/schema';
 
 const RegisterContainer = () => {
   const { t } = useTranslation();
 
-  // --- Form state ---
-  const [formValues, setFormValues] = useState({
-    username: '',
-    email: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const [formValues, setFormValues] = useState<RegisterFormValues>(
+    defaultRegisterValues,
+  );
 
-  // --- OTP state ---
-  const [otpDigits, setOtpDigits] = useState(['', '', '', '']);
+  const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [step, setStep] = useState<'form' | 'otp'>('form');
 
   const sendOtpMutation = useSendOtpMutation();
   const registerMutation = useRegisterMutation();
 
-  // --- Handlers ---
-  const handleSendOtp = () => {
+  const handleSendOtp = (values: RegisterFormValues) => {
+    if (sendOtpMutation.isLoading) return;
+
+    setFormValues(values);
+
     setError('');
     sendOtpMutation.mutate(
-      { email: formValues.email },
+      { email: values.email.trim() },
       {
         onSuccess: (data) => {
           if (data?.message) {
             message.success(data.message);
+            setOtpDigits(['', '', '', '', '', '']);
             setStep('otp');
           }
         },
-        onError: (err: any) => {
-          const errorMessage = err?.message || t('auth.sendOtpFailed');
+        onError: (err: unknown) => {
+          const errorMessage = getApiErrorMessage(err, t('auth.sendOtpFailed'));
           setError(errorMessage);
         },
       },
@@ -46,8 +52,10 @@ const RegisterContainer = () => {
   };
 
   const handleVerifyOtp = () => {
+    if (registerMutation.isLoading) return;
+
     const otp = otpDigits.join('');
-    if (otp !== '0000') {
+    if (!/^\d{6}$/.test(otp)) {
       setError(t('auth.invalidOtp'));
       return;
     }
@@ -55,10 +63,10 @@ const RegisterContainer = () => {
     setError('');
     registerMutation.mutate(
       {
-        email: formValues.email,
+        email: formValues.email.trim(),
         password: formValues.password,
-        fullName: formValues.username,
-        phone: formValues.phoneNumber,
+        fullName: formValues.username.trim(),
+        phone: formValues.phoneNumber.trim(),
         otp,
       },
       {
@@ -70,8 +78,11 @@ const RegisterContainer = () => {
             setError(data?.message || t('auth.registerFailed'));
           }
         },
-        onError: (err: any) => {
-          const errorMessage = err?.message || t('auth.registerFailed');
+        onError: (err: unknown) => {
+          const errorMessage = getApiErrorMessage(
+            err,
+            t('auth.registerFailed'),
+          );
           setError(errorMessage);
         },
       },
@@ -82,24 +93,8 @@ const RegisterContainer = () => {
     <div className="max-w-md mx-auto p-4">
       {step === 'form' ? (
         <RegisterForm
-          username={formValues.username}
-          email={formValues.email}
-          password={formValues.password}
-          confirmPassword={formValues.confirmPassword}
-          error={error}
-          loading={sendOtpMutation.isPending}
-          onUsernameChange={(v) =>
-            setFormValues((prev) => ({ ...prev, username: v }))
-          }
-          onEmailChange={(v) =>
-            setFormValues((prev) => ({ ...prev, email: v }))
-          }
-          onPasswordChange={(v) =>
-            setFormValues((prev) => ({ ...prev, password: v }))
-          }
-          onConfirmPasswordChange={(v) =>
-            setFormValues((prev) => ({ ...prev, confirmPassword: v }))
-          }
+          initialValues={formValues}
+          loading={sendOtpMutation.isLoading}
           onSubmit={handleSendOtp}
         />
       ) : (
@@ -110,7 +105,7 @@ const RegisterContainer = () => {
           error={error}
           setError={setError}
           onVerified={handleVerifyOtp}
-          loading={registerMutation.isPending}
+          loading={registerMutation.isLoading}
         />
       )}
     </div>

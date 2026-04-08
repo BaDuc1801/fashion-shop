@@ -1,12 +1,17 @@
+import { Button, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
+import type { UploadFile } from 'antd';
 import { useEffect } from 'react';
-import { Button, Form } from 'antd';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormItem } from '../../components/common/FormItem';
+import ImageUploader from '../../components/common/ImageUploader';
 import type { Employee } from './employeesMockData';
 import {
-  AddNewEmployeeFormValues,
   addNewEmployeeSchemaDefaultValues,
+  createAddNewEmployeeSchema,
+  AddNewEmployeeFormValues,
 } from './schemas/addNewEmployeeSchema';
-import { FormItem } from '../../components/common/FormItem';
 
 interface Props {
   initialValues?: AddNewEmployeeFormValues;
@@ -15,10 +20,15 @@ interface Props {
 }
 
 const EmployeeForm = ({ initialValues, isEdit, onSubmit }: Props) => {
-  const { control, handleSubmit, reset } = useForm<AddNewEmployeeFormValues>({
+  const { t } = useTranslation();
+  const employeeSchema = createAddNewEmployeeSchema(t);
+  const form = useForm<AddNewEmployeeFormValues>({
+    resolver: zodResolver(employeeSchema),
+    mode: 'onSubmit',
     defaultValues: addNewEmployeeSchemaDefaultValues,
   });
-  console.log(isEdit);
+  const { handleSubmit, reset } = form;
+
   useEffect(() => {
     if (initialValues) {
       reset(initialValues);
@@ -42,84 +52,96 @@ const EmployeeForm = ({ initialValues, isEdit, onSubmit }: Props) => {
   };
 
   return (
-    <Form
-      layout="vertical"
-      onFinish={handleSubmit(onFormSubmit)}
-      className="space-y-4 min-h-screen"
-    >
-      <h2 className="text-xl font-semibold text-center">
-        {isEdit ? 'Edit Employee' : 'Add New Employee'}
-      </h2>
-      <div className="grid grid-cols-5 gap-10">
-        <div className="flex flex-col col-span-1 gap-2">
-          <FormItem
-            name="avatar"
-            control={control}
-            label="Avatar"
-            type="upload"
-          />
-          <FormItem
-            name="status"
-            control={control}
-            label="Active"
-            type="switch"
-          />
-        </div>
-        <div className="col-span-2 flex flex-col gap-2">
-          <FormItem
-            name="name"
-            control={control}
-            label="Name"
-            required
-            placeholder="Enter name"
-            rules={{ required: 'Please enter name' }}
-          />
-          <FormItem
-            name="phone"
-            control={control}
-            label="Phone"
-            required
-            placeholder="Enter phone"
-            rules={{ required: 'Please enter phone' }}
-          />
-          <FormItem
-            name="joinDate"
-            control={control}
-            label="Join Date"
-            type="date"
-            placeholder="Select date"
-            rules={{ required: 'Please select date' }}
-          />
-        </div>
-        <div className="col-span-2 flex flex-col gap-2">
-          <FormItem
-            name="email"
-            control={control}
-            label="Email"
-            type="text"
-            required
-            placeholder="Enter email"
-            rules={{ required: 'Please enter email' }}
-          />
-          <FormItem
-            name="salary"
-            control={control}
-            label="Salary (USD)"
-            type="number"
-            rules={{ required: 'Please enter salary' }}
-          />
-        </div>
-      </div>
-      <Button
-        type="primary"
-        htmlType="submit"
-        block
-        size="large"
-        className="mt-4"
+    <FormProvider {...form}>
+      <Form
+        layout="vertical"
+        onFinish={handleSubmit(onFormSubmit)}
+        className="min-h-screen space-y-4"
       >
-        {isEdit ? 'Update Employee' : 'Create Employee'}
-      </Button>
-    </Form>
+        <h2 className="text-center text-xl font-semibold">
+          {isEdit
+            ? t('admin.employee.form.editTitle')
+            : t('admin.employee.form.addTitle')}
+        </h2>
+        <div className="grid grid-cols-5 gap-10">
+          <div className="col-span-1 flex flex-col gap-2">
+            <FormItem name="avatar" label={t('admin.employee.form.avatar')}>
+              {({ field }) => (
+                <div className="size-40 [&_.ant-upload-list-item-container]:!h-40 [&_.ant-upload-list-item-container]:!w-40 [&_.ant-upload-select]:!h-40 [&_.ant-upload-select]:!w-40">
+                  <ImageUploader
+                    fileList={
+                      field.value
+                        ? [
+                            {
+                              uid: 'employee-avatar',
+                              name: 'avatar',
+                              status: 'done',
+                              url: field.value,
+                            } satisfies UploadFile,
+                          ]
+                        : []
+                    }
+                    onChange={(fileList) => {
+                      const first = fileList[0];
+                      const nextUrl =
+                        first?.url ||
+                        (first?.originFileObj
+                          ? URL.createObjectURL(first.originFileObj)
+                          : '');
+                      field.onChange(nextUrl);
+                    }}
+                    maxCount={1}
+                    multiple={false}
+                    uploadLabel={t('admin.product.form.upload')}
+                  />
+                </div>
+              )}
+            </FormItem>
+            <FormItem
+              name="status"
+              label={t('admin.employee.form.active')}
+              valuePropName="checked"
+            >
+              <Switch />
+            </FormItem>
+          </div>
+          <div className="col-span-2 flex flex-col gap-2">
+            <FormItem name="name" label={t('admin.employee.form.name')}>
+              <Input placeholder={t('admin.employee.form.placeholderName')} />
+            </FormItem>
+            <FormItem name="phone" label={t('admin.employee.form.phone')}>
+              <Input placeholder={t('admin.employee.form.placeholderPhone')} />
+            </FormItem>
+            <FormItem name="joinDate" label={t('admin.employee.form.joinDate')}>
+              <DatePicker className="w-full" />
+            </FormItem>
+          </div>
+          <div className="col-span-2 flex flex-col gap-2">
+            <FormItem name="email" label={t('admin.employee.form.email')}>
+              <Input placeholder={t('admin.employee.form.placeholderEmail')} />
+            </FormItem>
+            <FormItem
+              name="salary"
+              label={t('admin.employee.form.salary')}
+              getValueFromEvent={(value) => (value as number | null) ?? 0}
+            >
+              <InputNumber className="w-full" />
+            </FormItem>
+          </div>
+        </div>
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          size="large"
+          className="mt-4"
+        >
+          {isEdit
+            ? t('admin.employee.form.submitUpdate')
+            : t('admin.employee.form.submitCreate')}
+        </Button>
+      </Form>
+    </FormProvider>
   );
 };
 

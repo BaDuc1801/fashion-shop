@@ -6,7 +6,7 @@ import CartPage from '../pages/CartPage';
 import CollectionPage from '../pages/CollectionPage';
 import ProductDetailPage from '../pages/ProductDetailPage';
 import WishlistPage from '../pages/WishlistPage';
-import AuthPage from '../pages/AuthPage';
+import AuthPage from '../pages/AuthPage/AuthPage';
 import { HomePage } from '../pages/HomePage';
 
 const AppRoutes = () => {

@@ -1,4 +1,4 @@
 export * from './user.api';
 export * from './user.request';
 export * from './user.response';
-export * from './userEndpoints';
+export * from './user.hooks';

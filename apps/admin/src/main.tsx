@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
 import '@fontsource/inter';
 import App from './app';
+import './i18n/config';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

@@ -1,0 +1,223 @@
+{
+  "admin": {
+    "language": {
+      "label": "Ngôn ngữ",
+      "en": "Tiếng Anh",
+      "vi": "Tiếng Việt"
+    },
+    "nav": {
+      "dashboard": "Tổng quan",
+      "users": "Người dùng",
+      "orders": "Đơn hàng",
+      "collections": "Bộ sưu tập",
+      "managers": "Quản lý",
+      "products": "Sản phẩm",
+      "vouchers": "Mã giảm giá"
+    },
+    "dashboard": {
+      "title": "Tổng quan",
+      "subtitle": "Tổng quan cửa hàng — dữ liệu mẫu (demo)",
+      "revenue": "Doanh thu",
+      "orders": "Đơn hàng",
+      "customers": "Khách hàng",
+      "productsKpi": "Sản phẩm",
+      "vsLastMonth": "so với tháng trước",
+      "recentOrders": "Đơn hàng gần đây",
+      "topProducts": "Sản phẩm bán chạy",
+      "sales7Days": "Doanh thu 7 ngày (mẫu)",
+      "orderCol": { "order": "Đơn", "customer": "Khách", "amount": "Số tiền", "status": "Trạng thái", "time": "Thời gian" },
+      "topCol": { "product": "Sản phẩm", "sold": "Đã bán", "revenue": "Doanh thu" },
+      "orderStatus": { "completed": "hoàn thành", "pending": "chờ xử lý", "cancelled": "đã hủy", "shipping": "đang giao" }
+    },
+    "employee": {
+      "title": "Quản lý nhân viên",
+      "add": "Thêm nhân viên",
+      "searchPlaceholder": "Tìm theo tên hoặc số điện thoại…",
+      "col": { "employee": "Nhân viên", "email": "Email", "phone": "Điện thoại", "joinDate": "Ngày vào", "status": "Trạng thái" },
+      "form": {
+        "editTitle": "Sửa nhân viên",
+        "addTitle": "Thêm nhân viên",
+        "avatar": "Ảnh đại diện",
+        "active": "Đang hoạt động",
+        "name": "Họ tên",
+        "phone": "Điện thoại",
+        "joinDate": "Ngày vào làm",
+        "email": "Email",
+        "salary": "Lương (USD)",
+        "placeholderName": "Nhập họ tên",
+        "placeholderPhone": "Nhập số điện thoại",
+        "placeholderEmail": "Nhập email",
+        "submitCreate": "Tạo nhân viên",
+        "submitUpdate": "Cập nhật nhân viên"
+      }
+    },
+    "product": {
+      "title": "Quản lý sản phẩm",
+      "add": "Thêm sản phẩm",
+      "searchPlaceholder": "Tìm theo tên hoặc SKU…",
+      "col": { "product": "Sản phẩm", "sku": "SKU", "price": "Giá", "stock": "Tồn kho", "created": "Ngày tạo", "status": "Trạng thái", "out": "Hết" },
+      "form": {
+        "editTitle": "Sửa sản phẩm",
+        "addTitle": "Thêm sản phẩm",
+        "images": "Hình ảnh sản phẩm",
+        "name": "Tên sản phẩm",
+        "sku": "SKU",
+        "price": "Giá (USD)",
+        "stock": "Tồn kho",
+        "active": "Đang bán",
+        "upload": "Tải lên",
+        "placeholderName": "Nhập tên sản phẩm",
+        "placeholderSku": "Nhập SKU",
+        "submitCreate": "Tạo sản phẩm",
+        "submitUpdate": "Cập nhật sản phẩm"
+      }
+    },
+    "user": {
+      "title": "Quản lý người dùng",
+      "searchPlaceholder": "Tìm theo tên hoặc số điện thoại…",
+      "col": { "user": "Người dùng", "email": "Email", "phone": "Điện thoại", "joinDate": "Ngày tham gia", "status": "Trạng thái" },
+      "form": {
+        "editTitle": "Sửa người dùng",
+        "addTitle": "Thêm người dùng",
+        "name": "Họ tên",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "active": "Đang hoạt động",
+        "placeholderName": "Nhập họ tên",
+        "placeholderEmail": "Nhập email",
+        "placeholderPhone": "Nhập số điện thoại",
+        "submitCreate": "Tạo người dùng",
+        "submitUpdate": "Cập nhật người dùng"
+      },
+      "purchaseHistory": "Lịch sử mua hàng",
+      "purchaseCol": {
+        "orderId": "Mã đơn",
+        "purchasedAt": "Ngày mua",
+        "totalAmount": "Tổng tiền",
+        "status": "Trạng thái",
+        "product": "Sản phẩm",
+        "quantity": "Số lượng",
+        "unitPrice": "Đơn giá",
+        "subtotal": "Thành tiền"
+      }
+    },
+    "order": {
+      "title": "Quản lý đơn hàng",
+      "searchPlaceholder": "Tìm theo mã đơn hoặc khách hàng…",
+      "col": {
+        "orderId": "Mã đơn",
+        "customer": "Khách hàng",
+        "total": "Tổng tiền",
+        "items": "Sản phẩm",
+        "status": "Trạng thái",
+        "placedAt": "Thời gian"
+      },
+      "detail": {
+        "back": "Quay lại danh sách đơn",
+        "summaryTitle": "Thông tin đơn hàng",
+        "itemsTitle": "Sản phẩm trong đơn",
+        "notFound": "Không tìm thấy đơn hàng",
+        "itemCol": {
+          "product": "Sản phẩm",
+          "quantity": "SL",
+          "unitPrice": "Đơn giá",
+          "subtotal": "Thành tiền"
+        }
+      }
+    },
+    "voucher": {
+      "title": "Quản lý voucher",
+      "add": "Thêm voucher",
+      "searchPlaceholder": "Tìm theo mã voucher…",
+      "col": {
+        "code": "Mã",
+        "discount": "Giảm giá",
+        "maxDiscount": "Giảm tối đa",
+        "minOrder": "Đơn tối thiểu",
+        "expireDate": "Hết hạn",
+        "status": "Trạng thái"
+      },
+      "form": {
+        "editTitle": "Sửa voucher",
+        "addTitle": "Thêm voucher",
+        "code": "Mã",
+        "discountPercent": "Giảm (%)",
+        "maxDiscount": "Giảm tối đa (USD)",
+        "minOrderValue": "Giá trị đơn tối thiểu (USD)",
+        "expireDate": "Ngày hết hạn",
+        "active": "Đang hoạt động",
+        "placeholderCode": "Nhập mã voucher",
+        "submitCreate": "Tạo voucher",
+        "submitUpdate": "Cập nhật voucher"
+      }
+    },
+    "collection": {
+      "title": "Quản lý bộ sưu tập",
+      "add": "Thêm bộ sưu tập",
+      "searchPlaceholder": "Tìm theo tên hoặc slug…",
+      "col": {
+        "collection": "Bộ sưu tập",
+        "slug": "Slug",
+        "products": "Sản phẩm",
+        "startDate": "Bắt đầu",
+        "endDate": "Kết thúc",
+        "status": "Trạng thái",
+        "featured": "Nổi bật",
+        "featuredTag": "Nổi bật",
+        "normalTag": "Thường"
+      },
+      "status": {
+        "draft": "nháp",
+        "active": "đang chạy",
+        "expired": "hết hạn",
+        "inactive": "tắt"
+      },
+      "form": {
+        "editTitle": "Sửa bộ sưu tập",
+        "addTitle": "Thêm bộ sưu tập",
+        "name": "Tên bộ sưu tập",
+        "slug": "Slug",
+        "productsCount": "Số sản phẩm",
+        "startDate": "Ngày bắt đầu",
+        "endDate": "Ngày kết thúc",
+        "status": "Trạng thái",
+        "featured": "Nổi bật",
+        "placeholderName": "Nhập tên",
+        "placeholderSlug": "Nhập slug",
+        "statusDraft": "Nháp",
+        "statusActive": "Đang chạy",
+        "statusExpired": "Hết hạn",
+        "statusInactive": "Tắt",
+        "submitCreate": "Tạo bộ sưu tập",
+        "submitUpdate": "Cập nhật bộ sưu tập"
+      }
+    },
+    "validation": {
+      "requiredName": "Vui lòng nhập họ tên",
+      "requiredEmail": "Vui lòng nhập email",
+      "invalidEmail": "Email không hợp lệ",
+      "requiredPhone": "Vui lòng nhập số điện thoại",
+      "phoneDigits": "Số điện thoại phải từ 9–15 chữ số",
+      "selectDate": "Vui lòng chọn ngày",
+      "requiredSalary": "Vui lòng nhập lương",
+      "salaryMin": "Lương phải lớn hơn hoặc bằng 0",
+      "requiredProductName": "Vui lòng nhập tên sản phẩm",
+      "requiredSku": "Vui lòng nhập SKU",
+      "requiredPrice": "Vui lòng nhập giá",
+      "priceMin": "Giá phải lớn hơn hoặc bằng 0",
+      "requiredStock": "Vui lòng nhập tồn kho",
+      "stockMin": "Tồn kho phải lớn hơn hoặc bằng 0",
+      "minOneImage": "Vui lòng tải ít nhất 1 ảnh",
+      "requiredCollectionName": "Vui lòng nhập tên bộ sưu tập",
+      "requiredSlug": "Vui lòng nhập slug",
+      "productsCountMin": "Số sản phẩm phải ít nhất là 0",
+      "selectStartDate": "Vui lòng chọn ngày bắt đầu",
+      "selectEndDate": "Vui lòng chọn ngày kết thúc",
+      "requiredVoucherCode": "Vui lòng nhập mã voucher",
+      "requiredDiscount": "Vui lòng nhập % giảm",
+      "requiredMaxDiscount": "Vui lòng nhập giảm tối đa",
+      "requiredMinOrder": "Vui lòng nhập giá trị đơn tối thiểu",
+      "selectExpireDate": "Vui lòng chọn ngày hết hạn"
+    }
+  }
+}

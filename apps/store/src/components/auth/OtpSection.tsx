@@ -1,8 +1,6 @@
 import { Button, Input, InputRef } from 'antd';
 import { TFunction } from 'i18next';
-import { useRef } from 'react';
-
-const OTP_CODE = '0000';
+import { useEffect, useRef } from 'react';
 
 type OtpSectionProps = {
   t: TFunction;
@@ -27,13 +25,21 @@ const OtpSection = ({
 
   const handleVerifyOtp = () => {
     const otp = otpDigits.join('');
-    if (otp !== OTP_CODE) {
+    if (otp.length !== 6) {
       setError(t('auth.invalidOtp'));
       return;
     }
     setError('');
     onVerified?.();
   };
+
+  useEffect(() => {
+    const otp = otpDigits.join('');
+    if (otp.length === 6 && !loading) {
+      setError('');
+      onVerified?.();
+    }
+  }, [loading, onVerified, otpDigits, setError]);
 
   const handleOtpChange = (index: number, value: string) => {
     const nextValue = value.replace(/\D/g, '').slice(-1);
@@ -60,15 +66,15 @@ const OtpSection = ({
     const pasted = event.clipboardData
       .getData('text')
       .replace(/\D/g, '')
-      .slice(0, 4)
+      .slice(0, 6)
       .split('');
     if (!pasted.length) return;
-    const nextDigits = ['', '', '', ''];
+    const nextDigits = ['', '', '', '', '', ''];
     pasted.forEach((v, i) => {
       nextDigits[i] = v;
     });
     setOtpDigits(nextDigits);
-    otpRefs.current[Math.min(3, pasted.length - 1)]?.focus();
+    otpRefs.current[Math.min(5, pasted.length - 1)]?.focus();
   };
 
   return (
@@ -81,6 +87,7 @@ const OtpSection = ({
             size="large"
             value={digit}
             inputMode="numeric"
+            autoComplete="one-time-code"
             maxLength={1}
             onPaste={handleOtpPaste}
             onChange={(e) => handleOtpChange(index, e.target.value)}
@@ -96,6 +103,8 @@ const OtpSection = ({
       <Button
         type="primary"
         size="large"
+        loading={loading}
+        disabled={loading}
         className="!h-11 w-full rounded-md !bg-[#a66e7f] hover:!bg-[#8d5c6d]"
         onClick={handleVerifyOtp}
       >

@@ -3,24 +3,23 @@ import type { ColumnsType } from 'antd/es/table';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import AddNewButton from '../../components/common/AddNewButton';
-import { Employee, employees } from './employeesMockData';
+import { User, users } from './usersMockData';
 
-const EmployeeManagementPage = () => {
+const UserManagementPage = () => {
   const { t } = useTranslation();
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
 
-  const filteredData = employees.filter(
-    (emp) =>
-      emp.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      emp.phone.includes(searchText),
+  const filteredData = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      user.phone.includes(searchText),
   );
 
-  const columns: ColumnsType<Employee> = useMemo(
+  const columns: ColumnsType<User> = useMemo(
     () => [
       {
-        title: t('admin.employee.col.employee'),
+        title: t('admin.user.col.user'),
         key: 'name',
         render: (_, record) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -29,30 +28,25 @@ const EmployeeManagementPage = () => {
           </div>
         ),
       },
+      { title: t('admin.user.col.email'), dataIndex: 'email' },
+      { title: t('admin.user.col.phone'), dataIndex: 'phone' },
       {
-        title: t('admin.employee.col.email'),
-        dataIndex: 'email',
-      },
-      {
-        title: t('admin.employee.col.phone'),
-        dataIndex: 'phone',
-      },
-      {
-        title: t('admin.employee.col.joinDate'),
+        title: t('admin.user.col.joinDate'),
         dataIndex: 'joinDate',
-        render: (joinDate: Employee['joinDate']) => joinDate.format('DD/MM/YYYY'),
+        render: (joinDate: User['joinDate']) => joinDate.format('DD/MM/YYYY'),
         sorter: (a, b) =>
           a.joinDate.toDate().getTime() - b.joinDate.toDate().getTime(),
       },
       {
-        title: t('admin.employee.col.status'),
+        title: t('admin.user.col.status'),
         dataIndex: 'status',
-        render: (status: Employee['status'], record) => (
+        render: (status: User['status'], record) => (
           <Switch
             checked={status === 'active'}
             onChange={(checked) => {
-              console.log('Toggle:', record.id, checked);
+              console.log('Toggle user status:', record.id, checked);
             }}
+            onClick={(_, event) => event?.stopPropagation()}
           />
         ),
       },
@@ -63,13 +57,12 @@ const EmployeeManagementPage = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <span className="text-xl font-semibold">{t('admin.employee.title')}</span>
-        <AddNewButton to="/employees/add-new" label={t('admin.employee.add')} />
+        <span className="text-xl font-semibold">{t('admin.user.title')}</span>
       </div>
       <div className="flex items-center justify-end">
         <Input
           size="large"
-          placeholder={t('admin.employee.searchPlaceholder')}
+          placeholder={t('admin.user.searchPlaceholder')}
           className="w-96"
           onChange={(e) => setSearchText(e.target.value)}
         />
@@ -81,7 +74,7 @@ const EmployeeManagementPage = () => {
         rowKey="id"
         pagination={{ pageSize: 5, position: ['bottomCenter'] }}
         onRow={(record) => ({
-          onClick: () => navigate(`/employees/${record.id}`),
+          onClick: () => navigate(`/users/${record.id}`),
           style: { cursor: 'pointer' },
         })}
       />
@@ -89,4 +82,4 @@ const EmployeeManagementPage = () => {
   );
 };
 
-export default EmployeeManagementPage;
+export default UserManagementPage;

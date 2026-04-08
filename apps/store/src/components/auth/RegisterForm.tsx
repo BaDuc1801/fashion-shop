@@ -1,71 +1,104 @@
-import { Button, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { useTranslation } from 'react-i18next';
+import type { RegisterFormValues } from '../../pages/AuthPage/schema';
 
 type RegisterFormProps = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  error?: string;
   loading: boolean;
-  onUsernameChange: (value: string) => void;
-  onEmailChange: (value: string) => void;
-  onPasswordChange: (value: string) => void;
-  onConfirmPasswordChange: (value: string) => void;
-  onSubmit: () => void;
+  initialValues: RegisterFormValues;
+  onSubmit: (values: RegisterFormValues) => void;
 };
 
 const RegisterForm = ({
   loading,
-  username,
-  email,
-  password,
-  confirmPassword,
-  error,
-  onUsernameChange,
-  onEmailChange,
-  onPasswordChange,
-  onConfirmPasswordChange,
+  initialValues,
   onSubmit,
 }: RegisterFormProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="mt-8 space-y-4">
-      <Input
-        size="large"
-        placeholder={t('auth.username')}
-        value={username}
-        onChange={(e) => onUsernameChange(e.target.value)}
-      />
-      <Input
-        size="large"
-        placeholder={t('auth.email')}
-        value={email}
-        onChange={(e) => onEmailChange(e.target.value)}
-      />
-      <Input.Password
-        size="large"
-        placeholder={t('auth.password')}
-        value={password}
-        onChange={(e) => onPasswordChange(e.target.value)}
-      />
-      <Input.Password
-        size="large"
-        placeholder={t('auth.confirmPassword')}
-        value={confirmPassword}
-        onChange={(e) => onConfirmPasswordChange(e.target.value)}
-      />
-      {error ? <p className="text-sm text-red-500">{error}</p> : null}
+    <Form
+      className="mt-8"
+      layout="vertical"
+      initialValues={initialValues}
+      onFinish={onSubmit}
+      autoComplete="off"
+    >
+      <Form.Item
+        name="username"
+        rules={[
+          { required: true, message: 'Username is required' },
+          { min: 3, message: 'Username must be at least 3 characters' },
+          { max: 20, message: 'Username must be at most 20 characters' },
+        ]}
+      >
+        <Input size="large" placeholder={t('auth.username')} autoComplete="off" />
+      </Form.Item>
+      <Form.Item
+        name="email"
+        rules={[
+          { required: true, message: 'Email is required' },
+          { type: 'email', message: 'Invalid email format' },
+        ]}
+      >
+        <Input size="large" placeholder={t('auth.email')} autoComplete="off" />
+      </Form.Item>
+      <Form.Item
+        name="phoneNumber"
+        rules={[
+          { required: true, message: 'Phone number is required' },
+          {
+            pattern: /^\d{9,15}$/,
+            message: 'Phone number must be 9-15 digits',
+          },
+        ]}
+      >
+        <Input size="large" placeholder={t('auth.phoneNumber')} autoComplete="off" />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[
+          { required: true, message: 'Password is required' },
+          { min: 6, message: 'Password must be at least 6 characters' },
+        ]}
+      >
+        <Input.Password
+          size="large"
+          placeholder={t('auth.password')}
+          autoComplete="new-password"
+        />
+      </Form.Item>
+      <Form.Item
+        name="confirmPassword"
+        dependencies={['password']}
+        rules={[
+          { required: true, message: 'Confirm password is required' },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue('password') === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('Passwords must match'));
+            },
+          }),
+        ]}
+      >
+        <Input.Password
+          size="large"
+          placeholder={t('auth.confirmPassword')}
+          autoComplete="new-password"
+        />
+      </Form.Item>
       <Button
         type="primary"
+        htmlType="submit"
         size="large"
+        loading={loading}
+        disabled={loading}
         className="!h-11 w-full rounded-md !bg-[#a66e7f] hover:!bg-[#8d5c6d]"
-        onClick={onSubmit}
       >
         {t('auth.register')}
       </Button>
-    </div>
+    </Form>
   );
 };
 

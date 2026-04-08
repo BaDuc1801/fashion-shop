@@ -6,11 +6,12 @@
     "dev": "concurrently \"npx nx serve store\" \"npx nx serve admin\"",
     "build-store": "npx nx build store",
     "build-admin": "npx nx build admin",
-    "build": "npx nx build store"
+    "build": "npx nx build store && npx nx build admin"
   },
   "private": true,
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
+    "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.96.2",
     "antd": "^6.3.5",
     "axios": "^1.14.0",
@@ -21,7 +22,9 @@
     "react-hook-form": "^7.72.1",
     "react-i18next": "^16.5.8",
     "react-icons": "^5.6.0",
-    "react-router-dom": "^6.30.3"
+    "react-router-dom": "^6.30.3",
+    "yup": "^1.7.1",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.14.5",

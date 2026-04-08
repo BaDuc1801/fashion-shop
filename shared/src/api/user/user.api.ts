@@ -1,8 +1,17 @@
 import api from '../axios';
-import { SendOtpRequest, RegisterRequest } from './user.request';
-import { SendOtpResponse, RegisterResponse } from './user.response';
+import { LoginRequest, RegisterRequest, SendOtpRequest } from './user.request';
+import {
+  LoginResponse,
+  RegisterResponse,
+  SendOtpResponse,
+} from './user.response';
 
 class UserService {
+  async login(payload: LoginRequest): Promise<LoginResponse> {
+    const res = await api.post('/api/v1/auth/login', payload);
+    return res.data;
+  }
+
   async sendOtp(payload: SendOtpRequest): Promise<SendOtpResponse> {
     const res = await api.post('/api/v1/auth/send-register-otp', payload);
     return res.data;

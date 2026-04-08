@@ -1,0 +1,223 @@
+{
+  "admin": {
+    "language": {
+      "label": "Language",
+      "en": "English",
+      "vi": "Vietnamese"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "orders": "Orders",
+      "collections": "Collections",
+      "managers": "Managers",
+      "products": "Products",
+      "vouchers": "Vouchers"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Store overview — mock data (demo)",
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "customers": "Customers",
+      "productsKpi": "Products",
+      "vsLastMonth": "vs last month",
+      "recentOrders": "Recent orders",
+      "topProducts": "Top products",
+      "sales7Days": "Revenue last 7 days (mock)",
+      "orderCol": { "order": "Order", "customer": "Customer", "amount": "Amount", "status": "Status", "time": "Time" },
+      "topCol": { "product": "Product", "sold": "Sold", "revenue": "Revenue" },
+      "orderStatus": { "completed": "completed", "pending": "pending", "cancelled": "cancelled", "shipping": "shipping" }
+    },
+    "employee": {
+      "title": "Employee management",
+      "add": "Add employee",
+      "searchPlaceholder": "Search by name or phone…",
+      "col": { "employee": "Employee", "email": "Email", "phone": "Phone", "joinDate": "Join date", "status": "Status" },
+      "form": {
+        "editTitle": "Edit employee",
+        "addTitle": "Add new employee",
+        "avatar": "Avatar",
+        "active": "Active",
+        "name": "Name",
+        "phone": "Phone",
+        "joinDate": "Join date",
+        "email": "Email",
+        "salary": "Salary (USD)",
+        "placeholderName": "Enter name",
+        "placeholderPhone": "Enter phone",
+        "placeholderEmail": "Enter email",
+        "submitCreate": "Create employee",
+        "submitUpdate": "Update employee"
+      }
+    },
+    "product": {
+      "title": "Product management",
+      "add": "Add product",
+      "searchPlaceholder": "Search by product name or SKU…",
+      "col": { "product": "Product", "sku": "SKU", "price": "Price", "stock": "Stock", "created": "Created", "status": "Status", "out": "Out" },
+      "form": {
+        "editTitle": "Edit product",
+        "addTitle": "Add new product",
+        "images": "Product images",
+        "name": "Product name",
+        "sku": "SKU",
+        "price": "Price (USD)",
+        "stock": "Stock",
+        "active": "Active",
+        "upload": "Upload",
+        "placeholderName": "Enter product name",
+        "placeholderSku": "Enter SKU",
+        "submitCreate": "Create product",
+        "submitUpdate": "Update product"
+      }
+    },
+    "user": {
+      "title": "User management",
+      "searchPlaceholder": "Search by name or phone…",
+      "col": { "user": "User", "email": "Email", "phone": "Phone", "joinDate": "Join date", "status": "Status" },
+      "form": {
+        "editTitle": "Edit user",
+        "addTitle": "Add new user",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "active": "Active",
+        "placeholderName": "Enter name",
+        "placeholderEmail": "Enter email",
+        "placeholderPhone": "Enter phone",
+        "submitCreate": "Create user",
+        "submitUpdate": "Update user"
+      },
+      "purchaseHistory": "Purchase history",
+      "purchaseCol": {
+        "orderId": "Order ID",
+        "purchasedAt": "Purchased at",
+        "totalAmount": "Total amount",
+        "status": "Status",
+        "product": "Product",
+        "quantity": "Quantity",
+        "unitPrice": "Unit price",
+        "subtotal": "Subtotal"
+      }
+    },
+    "order": {
+      "title": "Order management",
+      "searchPlaceholder": "Search by order ID or customer…",
+      "col": {
+        "orderId": "Order ID",
+        "customer": "Customer",
+        "total": "Total",
+        "items": "Items",
+        "status": "Status",
+        "placedAt": "Placed at"
+      },
+      "detail": {
+        "back": "Back to orders",
+        "summaryTitle": "Order summary",
+        "itemsTitle": "Products in this order",
+        "notFound": "Order not found",
+        "itemCol": {
+          "product": "Product",
+          "quantity": "Qty",
+          "unitPrice": "Unit price",
+          "subtotal": "Subtotal"
+        }
+      }
+    },
+    "voucher": {
+      "title": "Voucher management",
+      "add": "Add voucher",
+      "searchPlaceholder": "Search by voucher code…",
+      "col": {
+        "code": "Code",
+        "discount": "Discount",
+        "maxDiscount": "Max discount",
+        "minOrder": "Min order",
+        "expireDate": "Expire date",
+        "status": "Status"
+      },
+      "form": {
+        "editTitle": "Edit voucher",
+        "addTitle": "Add new voucher",
+        "code": "Code",
+        "discountPercent": "Discount (%)",
+        "maxDiscount": "Max discount (USD)",
+        "minOrderValue": "Min order value (USD)",
+        "expireDate": "Expire date",
+        "active": "Active",
+        "placeholderCode": "Enter voucher code",
+        "submitCreate": "Create voucher",
+        "submitUpdate": "Update voucher"
+      }
+    },
+    "collection": {
+      "title": "Collection management",
+      "add": "Add collection",
+      "searchPlaceholder": "Search by collection name or slug…",
+      "col": {
+        "collection": "Collection",
+        "slug": "Slug",
+        "products": "Products",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "status": "Status",
+        "featured": "Featured",
+        "featuredTag": "Featured",
+        "normalTag": "Normal"
+      },
+      "status": {
+        "draft": "draft",
+        "active": "active",
+        "expired": "expired",
+        "inactive": "inactive"
+      },
+      "form": {
+        "editTitle": "Edit collection",
+        "addTitle": "Add new collection",
+        "name": "Collection name",
+        "slug": "Slug",
+        "productsCount": "Products count",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "status": "Status",
+        "featured": "Featured",
+        "placeholderName": "Enter collection name",
+        "placeholderSlug": "Enter slug",
+        "statusDraft": "Draft",
+        "statusActive": "Active",
+        "statusExpired": "Expired",
+        "statusInactive": "Inactive",
+        "submitCreate": "Create collection",
+        "submitUpdate": "Update collection"
+      }
+    },
+    "validation": {
+      "requiredName": "Please enter name",
+      "requiredEmail": "Please enter email",
+      "invalidEmail": "Invalid email",
+      "requiredPhone": "Please enter phone",
+      "phoneDigits": "Phone must be 9-15 digits",
+      "selectDate": "Please select date",
+      "requiredSalary": "Please enter salary",
+      "salaryMin": "Salary must be greater than or equal to 0",
+      "requiredProductName": "Please enter product name",
+      "requiredSku": "Please enter SKU",
+      "requiredPrice": "Please enter price",
+      "priceMin": "Price must be greater than or equal to 0",
+      "requiredStock": "Please enter stock",
+      "stockMin": "Stock must be greater than or equal to 0",
+      "minOneImage": "Please upload at least 1 image",
+      "requiredCollectionName": "Please enter collection name",
+      "requiredSlug": "Please enter slug",
+      "productsCountMin": "Products count must be at least 0",
+      "selectStartDate": "Please select start date",
+      "selectEndDate": "Please select end date",
+      "requiredVoucherCode": "Please enter voucher code",
+      "requiredDiscount": "Please enter discount percent",
+      "requiredMaxDiscount": "Please enter max discount",
+      "requiredMinOrder": "Please enter min order value",
+      "selectExpireDate": "Please select expire date"
+    }
+  }
+}

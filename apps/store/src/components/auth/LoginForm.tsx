@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 type LoginFormProps = {
   email: string;
   password: string;
+  loading: boolean;
   error?: string;
   onEmailChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
@@ -13,6 +14,7 @@ type LoginFormProps = {
 const LoginForm = ({
   email,
   password,
+  loading,
   error,
   onEmailChange,
   onPasswordChange,
@@ -26,18 +28,22 @@ const LoginForm = ({
         size="large"
         placeholder={t('auth.email')}
         value={email}
+        autoComplete="off"
         onChange={(e) => onEmailChange(e.target.value)}
       />
       <Input.Password
         size="large"
         placeholder={t('auth.password')}
         value={password}
+        autoComplete="new-password"
         onChange={(e) => onPasswordChange(e.target.value)}
       />
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
       <Button
         type="primary"
         size="large"
+        loading={loading}
+        disabled={loading}
         className="!h-11 w-full rounded-md !bg-[#a66e7f] hover:!bg-[#8d5c6d]"
         onClick={onSubmit}
       >
