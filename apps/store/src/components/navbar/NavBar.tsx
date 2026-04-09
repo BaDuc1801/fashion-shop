@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { FaRegHeart, FaRegUser } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
 import { MdSearch } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { mockCartItems } from './mockCart';
 import { mockWishlist } from './mockWishlist';
 
 const NavBar = () => {
   const { i18n, t } = useTranslation();
+  const navigate = useNavigate();
 
   const toggleLanguage = () => {
     const next = i18n.language === 'en' ? 'vi' : 'en';
@@ -59,6 +60,14 @@ const NavBar = () => {
 
         <Button size="small" onClick={toggleLanguage}>
           {i18n.language === 'en' ? 'EN' : 'VI'}
+        </Button>
+        <Button
+          size="large"
+          type="primary"
+          className="px-5"
+          onClick={() => navigate('/auth')}
+        >
+          {t('auth.login')}
         </Button>
       </nav>
     </div>
