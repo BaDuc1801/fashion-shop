@@ -2,11 +2,13 @@ import { Avatar, Input, Switch, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import AddNewButton from '../../components/common/AddNewButton';
 import { Category, categories } from './categoriesMockData';
 
 const CategoryManagementPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
 
   const filteredData = categories.filter(
@@ -80,6 +82,10 @@ const CategoryManagementPage = () => {
         dataSource={filteredData}
         rowKey="id"
         pagination={{ pageSize: 5, position: ['bottomCenter'] }}
+        onRow={(record) => ({
+          onClick: () => navigate(`/categories/${record.id}`),
+          style: { cursor: 'pointer' },
+        })}
       />
     </div>
   );

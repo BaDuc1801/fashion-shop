@@ -16,9 +16,14 @@ import {
 interface CategoryFormProps {
   initialValues?: Category;
   isEdit?: boolean;
+  showTitle?: boolean;
 }
 
-const CategoryForm = ({ initialValues, isEdit }: CategoryFormProps) => {
+const CategoryForm = ({
+  initialValues,
+  isEdit,
+  showTitle = true,
+}: CategoryFormProps) => {
   const { t } = useTranslation();
   const categorySchema = createCategoryFormSchema(t);
   const form = useForm<CategoryFormValues>({
@@ -61,17 +66,19 @@ const CategoryForm = ({ initialValues, isEdit }: CategoryFormProps) => {
         onFinish={handleSubmit(handleFinish)}
         className="max-w-2xl space-y-2"
       >
-        <h2 className="text-xl font-semibold">
-          {isEdit
-            ? t('admin.category.form.editTitle')
-            : t('admin.category.form.addTitle')}
-        </h2>
+        {showTitle ? (
+          <h2 className="text-xl font-semibold">
+            {isEdit
+              ? t('admin.category.form.editTitle')
+              : t('admin.category.form.addTitle')}
+          </h2>
+        ) : null}
         <FormItem name="images" label={t('admin.category.form.images')}>
           {({ field }) => (
             <ImageUploader
               fileList={(field.value as UploadFile[]) || []}
               onChange={(fileList) => field.onChange(fileList.slice(0, 3))}
-              maxCount={3}
+              maxCount={1}
               uploadLabel={t('admin.category.form.upload')}
               multiple
             />

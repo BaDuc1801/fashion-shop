@@ -5,7 +5,7 @@ const RootLayout = () => {
   return (
     <div className="flex">
       <SidebarMenu />
-      <div className="ml-72 p-10 border-l border-gray-200 flex-1">
+      <div className="ml-80 px-10 py-5 border-l border-gray-200 flex-1">
         <Outlet />
       </div>
     </div>

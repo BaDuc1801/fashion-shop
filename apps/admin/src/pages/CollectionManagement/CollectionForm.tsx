@@ -7,11 +7,13 @@ import {
   Select,
   Switch,
 } from 'antd';
+import type { UploadFile } from 'antd';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormItem } from '../../components/common/FormItem';
+import ImageUploader from '../../components/common/ImageUploader';
 import type { Collection } from './collectionsMockData';
 import {
   collectionFormSchemaDefaultValues,
@@ -22,9 +24,14 @@ import {
 interface CollectionFormProps {
   initialValues?: Collection;
   isEdit?: boolean;
+  showTitle?: boolean;
 }
 
-const CollectionForm = ({ initialValues, isEdit }: CollectionFormProps) => {
+const CollectionForm = ({
+  initialValues,
+  isEdit,
+  showTitle = true,
+}: CollectionFormProps) => {
   const { t } = useTranslation();
   const collectionSchema = createCollectionFormSchema(t);
   const form = useForm<CollectionFormValues>({
@@ -39,6 +46,16 @@ const CollectionForm = ({ initialValues, isEdit }: CollectionFormProps) => {
       reset({
         name: initialValues.name,
         slug: initialValues.slug,
+        images: initialValues.banner
+          ? [
+              {
+                uid: initialValues.id,
+                name: initialValues.name,
+                status: 'done',
+                url: initialValues.banner,
+              },
+            ]
+          : [],
         productsCount: initialValues.productsCount,
         startDate: initialValues.startDate,
         endDate: initialValues.endDate,
@@ -54,7 +71,10 @@ const CollectionForm = ({ initialValues, isEdit }: CollectionFormProps) => {
 
   const statusOptions = [
     { value: 'draft' as const, label: t('admin.collection.form.statusDraft') },
-    { value: 'active' as const, label: t('admin.collection.form.statusActive') },
+    {
+      value: 'active' as const,
+      label: t('admin.collection.form.statusActive'),
+    },
     {
       value: 'expired' as const,
       label: t('admin.collection.form.statusExpired'),
@@ -72,16 +92,29 @@ const CollectionForm = ({ initialValues, isEdit }: CollectionFormProps) => {
         onFinish={handleSubmit(handleFinish)}
         className="max-w-2xl space-y-2"
       >
-        <h2 className="text-xl font-semibold">
-          {isEdit
-            ? t('admin.collection.form.editTitle')
-            : t('admin.collection.form.addTitle')}
-        </h2>
+        {showTitle ? (
+          <h2 className="text-xl font-semibold">
+            {isEdit
+              ? t('admin.collection.form.editTitle')
+              : t('admin.collection.form.addTitle')}
+          </h2>
+        ) : null}
         <FormItem name="name" label={t('admin.collection.form.name')}>
           <Input placeholder={t('admin.collection.form.placeholderName')} />
         </FormItem>
         <FormItem name="slug" label={t('admin.collection.form.slug')}>
           <Input placeholder={t('admin.collection.form.placeholderSlug')} />
+        </FormItem>
+        <FormItem name="images" label={t('admin.collection.form.banner')}>
+          {({ field }) => (
+            <ImageUploader
+              fileList={(field.value as UploadFile[]) || []}
+              onChange={(fileList) => field.onChange(fileList.slice(0, 1))}
+              maxCount={1}
+              uploadLabel={t('admin.product.form.upload')}
+              multiple={false}
+            />
+          )}
         </FormItem>
         <FormItem
           name="productsCount"

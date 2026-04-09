@@ -14,9 +14,14 @@ import {
 interface UserFormProps {
   initialValues?: User;
   isEdit?: boolean;
+  showTitle?: boolean;
 }
 
-const UserForm = ({ initialValues, isEdit }: UserFormProps) => {
+const UserForm = ({
+  initialValues,
+  isEdit,
+  showTitle = true,
+}: UserFormProps) => {
   const { t } = useTranslation();
   const userSchema = createUserFormSchema(t);
   const form = useForm<UserFormValues>({
@@ -48,11 +53,13 @@ const UserForm = ({ initialValues, isEdit }: UserFormProps) => {
         onFinish={handleSubmit(handleFinish)}
         className="max-w-2xl space-y-2"
       >
-        <h2 className="text-xl font-semibold">
-          {isEdit
-            ? t('admin.user.form.editTitle')
-            : t('admin.user.form.addTitle')}
-        </h2>
+        {showTitle ? (
+          <h2 className="text-xl font-semibold">
+            {isEdit
+              ? t('admin.user.form.editTitle')
+              : t('admin.user.form.addTitle')}
+          </h2>
+        ) : null}
         <FormItem name="name" label={t('admin.user.form.name')}>
           <Input placeholder={t('admin.user.form.placeholderName')} />
         </FormItem>

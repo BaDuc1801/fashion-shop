@@ -1,6 +1,8 @@
 import { Button, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
+import type { UploadFile } from 'antd';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import ImageUploader from '../../components/common/ImageUploader';
 import type { Voucher } from './vouchersMockData';
 
 type VoucherFormValues = {
@@ -10,14 +12,38 @@ type VoucherFormValues = {
   minOrderValue: number;
   expiresAt: Voucher['expiresAt'];
   status: boolean;
+  images: UploadFile[];
 };
+
+const VoucherImageField = ({
+  value,
+  onChange,
+  uploadLabel,
+}: {
+  value?: UploadFile[];
+  onChange?: (v: UploadFile[]) => void;
+  uploadLabel: string;
+}) => (
+  <ImageUploader
+    fileList={value || []}
+    onChange={(fileList) => onChange?.(fileList.slice(0, 1))}
+    maxCount={1}
+    uploadLabel={uploadLabel}
+    multiple={false}
+  />
+);
 
 interface VoucherFormProps {
   initialValues?: Voucher;
   isEdit?: boolean;
+  showTitle?: boolean;
 }
 
-const VoucherForm = ({ initialValues, isEdit }: VoucherFormProps) => {
+const VoucherForm = ({
+  initialValues,
+  isEdit,
+  showTitle = true,
+}: VoucherFormProps) => {
   const { t } = useTranslation();
   const [form] = Form.useForm<VoucherFormValues>();
 
@@ -30,7 +56,19 @@ const VoucherForm = ({ initialValues, isEdit }: VoucherFormProps) => {
         minOrderValue: initialValues.minOrderValue,
         expiresAt: initialValues.expiresAt,
         status: initialValues.status === 'active',
+        images: initialValues.image
+          ? [
+              {
+                uid: initialValues.id,
+                name: initialValues.code,
+                status: 'done',
+                url: initialValues.image,
+              },
+            ]
+          : [],
       });
+    } else {
+      form.setFieldsValue({ images: [] });
     }
   }, [form, initialValues]);
 
@@ -44,10 +82,18 @@ const VoucherForm = ({ initialValues, isEdit }: VoucherFormProps) => {
       layout="vertical"
       onFinish={handleFinish}
       className="max-w-2xl space-y-2"
+      initialValues={{ images: [] as UploadFile[] }}
     >
-      <h2 className="text-xl font-semibold">
-        {isEdit ? t('admin.voucher.form.editTitle') : t('admin.voucher.form.addTitle')}
-      </h2>
+      {showTitle ? (
+        <h2 className="text-xl font-semibold">
+          {isEdit
+            ? t('admin.voucher.form.editTitle')
+            : t('admin.voucher.form.addTitle')}
+        </h2>
+      ) : null}
+      <Form.Item name="images" label={t('admin.voucher.form.image')}>
+        <VoucherImageField uploadLabel={t('admin.product.form.upload')} />
+      </Form.Item>
       <Form.Item
         name="code"
         label={t('admin.voucher.form.code')}

@@ -20,42 +20,42 @@ const SidebarMenu = () => {
     () => [
       {
         key: '/dashboard',
-        icon: <HomeOutlined />,
+        icon: <HomeOutlined className="!text-base" />,
         label: t('admin.nav.dashboard'),
       },
       {
         key: '/users',
-        icon: <UserOutlined />,
+        icon: <UserOutlined className="!text-base" />,
         label: t('admin.nav.users'),
       },
       {
         key: '/orders',
-        icon: <ShoppingCartOutlined />,
+        icon: <ShoppingCartOutlined className="!text-base" />,
         label: t('admin.nav.orders'),
       },
       {
         key: '/collections',
-        icon: <AppstoreOutlined />,
+        icon: <AppstoreOutlined className="!text-base" />,
         label: t('admin.nav.collections'),
       },
       {
         key: '/employees',
-        icon: <UserOutlined />,
+        icon: <UserOutlined className="!text-base" />,
         label: t('admin.nav.managers'),
       },
       {
         key: '/products',
-        icon: <ShoppingOutlined />,
+        icon: <ShoppingOutlined className="!text-base" />,
         label: t('admin.nav.products'),
       },
       {
         key: '/categories',
-        icon: <AppstoreOutlined />,
+        icon: <AppstoreOutlined className="!text-base" />,
         label: t('admin.nav.categories'),
       },
       {
         key: '/vouchers',
-        icon: <GiftOutlined />,
+        icon: <GiftOutlined className="!text-base" />,
         label: t('admin.nav.vouchers'),
       },
     ],
@@ -66,12 +66,12 @@ const SidebarMenu = () => {
     items.find((item) => location.pathname.startsWith(item.key))?.key || '';
 
   return (
-    <div className="border-r border-gray-200 fixed flex h-screen w-72 flex-col bg-white">
+    <div className="border-r border-gray-200 fixed flex h-screen w-80 flex-col bg-white">
       <div className="text-xl font-semibold mt-4 ms-7">Admin</div>
       <Menu
         mode="inline"
         selectedKeys={[selectedKey]}
-        className="min-h-0 flex-1 border-r-0 pt-2"
+        className="min-h-0 flex-1 border-r-0 pt-2 text-base"
         items={items}
         onClick={(item) => {
           navigate(item.key);

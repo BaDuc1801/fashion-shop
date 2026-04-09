@@ -30,11 +30,23 @@
       "topCol": { "product": "Sản phẩm", "sold": "Đã bán", "revenue": "Doanh thu" },
       "orderStatus": { "completed": "hoàn thành", "pending": "chờ xử lý", "cancelled": "đã hủy", "shipping": "đang giao" }
     },
+    "common": {
+      "noData": "Khong co du lieu"
+    },
     "employee": {
       "title": "Quản lý nhân viên",
       "add": "Thêm nhân viên",
       "searchPlaceholder": "Tìm theo tên hoặc số điện thoại…",
       "col": { "employee": "Nhân viên", "email": "Email", "phone": "Điện thoại", "joinDate": "Ngày vào", "status": "Trạng thái" },
+      "detail": {
+        "back": "Quay lai danh sach nhan vien",
+        "backToAddNew": "Quay lại trang thêm nhân viên mới",
+        "listTitle": "Danh sach nhan vien",
+        "listSearchPlaceholder": "Tim theo ten, email, so dien thoai"
+      },
+      "addPage": {
+        "existingListTitle": "Nhân viên đã tồn tại"
+      },
       "form": {
         "editTitle": "Sửa nhân viên",
         "addTitle": "Thêm nhân viên",
@@ -57,6 +69,15 @@
       "add": "Thêm sản phẩm",
       "searchPlaceholder": "Tìm theo tên hoặc SKU…",
       "col": { "product": "Sản phẩm", "sku": "SKU", "price": "Giá", "stock": "Tồn kho", "created": "Ngày tạo", "status": "Trạng thái", "out": "Hết" },
+      "detail": {
+        "back": "Quay lai danh sach san pham",
+        "backToAddNew": "Quay lại trang thêm sản phẩm mới",
+        "listTitle": "Danh sach san pham",
+        "listSearchPlaceholder": "Tim theo ten hoac SKU"
+      },
+      "addPage": {
+        "existingListTitle": "Sản phẩm đã tồn tại"
+      },
       "form": {
         "editTitle": "Sửa sản phẩm",
         "addTitle": "Thêm sản phẩm",
@@ -77,6 +98,15 @@
       "title": "Quản lý người dùng",
       "searchPlaceholder": "Tìm theo tên hoặc số điện thoại…",
       "col": { "user": "Người dùng", "email": "Email", "phone": "Điện thoại", "joinDate": "Ngày tham gia", "status": "Trạng thái" },
+      "detail": {
+        "back": "Quay lai danh sach nguoi dung",
+        "backToAddNew": "Quay lại trang thêm người dùng mới",
+        "listTitle": "Danh sach nguoi dung",
+        "listSearchPlaceholder": "Tim theo ten hoac so dien thoai"
+      },
+      "addPage": {
+        "existingListTitle": "Người dùng đã tồn tại"
+      },
       "form": {
         "editTitle": "Sửa người dùng",
         "addTitle": "Thêm người dùng",
@@ -115,6 +145,8 @@
       },
       "detail": {
         "back": "Quay lại danh sách đơn",
+        "listTitle": "Danh sach don hang",
+        "listSearchPlaceholder": "Tim theo ma don hoac ten khach",
         "summaryTitle": "Thông tin đơn hàng",
         "itemsTitle": "Sản phẩm trong đơn",
         "notFound": "Không tìm thấy đơn hàng",
@@ -138,9 +170,19 @@
         "expireDate": "Hết hạn",
         "status": "Trạng thái"
       },
+      "detail": {
+        "back": "Quay lai danh sach voucher",
+        "backToAddNew": "Quay lại trang thêm voucher mới",
+        "listTitle": "Danh sach voucher",
+        "listSearchPlaceholder": "Tim theo ma voucher"
+      },
+      "addPage": {
+        "existingListTitle": "Voucher đã tồn tại"
+      },
       "form": {
         "editTitle": "Sửa voucher",
         "addTitle": "Thêm voucher",
+        "image": "Ảnh voucher (tối đa 1)",
         "code": "Mã",
         "discountPercent": "Giảm (%)",
         "maxDiscount": "Giảm tối đa (USD)",
@@ -167,6 +209,15 @@
         "featuredTag": "Nổi bật",
         "normalTag": "Thường"
       },
+      "detail": {
+        "back": "Quay lai danh sach bo suu tap",
+        "backToAddNew": "Quay lại trang thêm bộ sưu tập mới",
+        "listTitle": "Danh sach collection",
+        "listSearchPlaceholder": "Tim theo ten hoac slug"
+      },
+      "addPage": {
+        "existingListTitle": "Bộ sưu tập đã tồn tại"
+      },
       "status": {
         "draft": "nháp",
         "active": "đang chạy",
@@ -177,6 +228,7 @@
         "editTitle": "Sửa bộ sưu tập",
         "addTitle": "Thêm bộ sưu tập",
         "name": "Tên bộ sưu tập",
+        "banner": "Ảnh bìa (tối đa 1)",
         "slug": "Slug",
         "productsCount": "Số sản phẩm",
         "startDate": "Ngày bắt đầu",
@@ -197,6 +249,15 @@
       "title": "Quản lý danh mục",
       "add": "Thêm danh mục",
       "searchPlaceholder": "Tìm theo tên hoặc slug…",
+      "detail": {
+        "back": "Quay lai danh sach danh muc",
+        "backToAddNew": "Quay lại trang thêm danh mục mới",
+        "listTitle": "Danh sach danh muc",
+        "listSearchPlaceholder": "Tim theo ten hoac slug"
+      },
+      "addPage": {
+        "existingListTitle": "Danh mục đã tồn tại"
+      },
       "col": {
         "category": "Danh mục",
         "slug": "Slug",

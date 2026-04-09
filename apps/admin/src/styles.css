@@ -12,3 +12,27 @@ html,
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+.image-uploader-square-full {
+  display: block !important;
+  width: 100%;
+}
+
+.image-uploader-square-full .ant-upload.ant-upload-select,
+.image-uploader-square-full .ant-upload-list-item-container {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1;
+}
+
+.image-uploader-square-full .ant-upload-list-picture-card:not(:empty) {
+  min-height: 0 !important;
+}
+
+.image-uploader-square-full .ant-upload-list-picture-card {
+  width: 100%;
+}
+
+.image-uploader-square-full .ant-upload-list-item {
+  height: 100% !important;
+}

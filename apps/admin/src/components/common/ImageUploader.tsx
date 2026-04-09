@@ -9,6 +9,7 @@ interface ImageUploaderProps {
   maxCount?: number;
   uploadLabel?: string;
   multiple?: boolean;
+  squareFullWidth?: boolean;
 }
 
 const ImageUploader = ({
@@ -17,6 +18,7 @@ const ImageUploader = ({
   maxCount = 6,
   uploadLabel = 'Upload',
   multiple = true,
+  squareFullWidth = false,
 }: ImageUploaderProps) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -52,9 +54,12 @@ const ImageUploader = ({
         onPreview={handlePreview}
         onChange={handleChange}
         fileList={fileList}
+        rootClassName={
+          squareFullWidth ? 'image-uploader-square-full' : undefined
+        }
       >
         {fileList.length >= maxCount ? null : (
-          <button type="button" style={{ border: 0, background: 'none' }}>
+          <button type="button" className="border-none">
             <PlusOutlined />
             <div style={{ marginTop: 8 }}>{uploadLabel}</div>
           </button>

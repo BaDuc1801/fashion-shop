@@ -16,9 +16,14 @@ import {
 interface ProductFormProps {
   initialValues?: Product;
   isEdit?: boolean;
+  showTitle?: boolean;
 }
 
-const ProductForm = ({ initialValues, isEdit }: ProductFormProps) => {
+const ProductForm = ({
+  initialValues,
+  isEdit,
+  showTitle = true,
+}: ProductFormProps) => {
   const { t } = useTranslation();
   const productSchema = createAddNewProductSchema(t);
   const form = useForm<AddNewProductFormValues>({
@@ -61,11 +66,13 @@ const ProductForm = ({ initialValues, isEdit }: ProductFormProps) => {
         onFinish={handleSubmit(handleFinish)}
         className="max-w-2xl space-y-2"
       >
-        <h2 className="text-xl font-semibold">
-          {isEdit
-            ? t('admin.product.form.editTitle')
-            : t('admin.product.form.addTitle')}
-        </h2>
+        {showTitle ? (
+          <h2 className="text-xl font-semibold">
+            {isEdit
+              ? t('admin.product.form.editTitle')
+              : t('admin.product.form.addTitle')}
+          </h2>
+        ) : null}
 
         <FormItem name="images" label={t('admin.product.form.images')}>
           {({ field }) => (

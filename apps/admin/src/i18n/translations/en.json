@@ -30,11 +30,23 @@
       "topCol": { "product": "Product", "sold": "Sold", "revenue": "Revenue" },
       "orderStatus": { "completed": "completed", "pending": "pending", "cancelled": "cancelled", "shipping": "shipping" }
     },
+    "common": {
+      "noData": "No data"
+    },
     "employee": {
       "title": "Employee management",
       "add": "Add employee",
       "searchPlaceholder": "Search by name or phone…",
       "col": { "employee": "Employee", "email": "Email", "phone": "Phone", "joinDate": "Join date", "status": "Status" },
+      "detail": {
+        "back": "Back to employee list",
+        "backToAddNew": "Back to add new employee",
+        "listTitle": "Employee list",
+        "listSearchPlaceholder": "Search by name, email, phone"
+      },
+      "addPage": {
+        "existingListTitle": "Existing employees"
+      },
       "form": {
         "editTitle": "Edit employee",
         "addTitle": "Add new employee",
@@ -57,6 +69,15 @@
       "add": "Add product",
       "searchPlaceholder": "Search by product name or SKU…",
       "col": { "product": "Product", "sku": "SKU", "price": "Price", "stock": "Stock", "created": "Created", "status": "Status", "out": "Out" },
+      "detail": {
+        "back": "Back to product list",
+        "backToAddNew": "Back to add new product",
+        "listTitle": "Product list",
+        "listSearchPlaceholder": "Search by name or SKU"
+      },
+      "addPage": {
+        "existingListTitle": "Existing products"
+      },
       "form": {
         "editTitle": "Edit product",
         "addTitle": "Add new product",
@@ -77,6 +98,15 @@
       "title": "User management",
       "searchPlaceholder": "Search by name or phone…",
       "col": { "user": "User", "email": "Email", "phone": "Phone", "joinDate": "Join date", "status": "Status" },
+      "detail": {
+        "back": "Back to user list",
+        "backToAddNew": "Back to add new user",
+        "listTitle": "User list",
+        "listSearchPlaceholder": "Search by name or phone"
+      },
+      "addPage": {
+        "existingListTitle": "Existing users"
+      },
       "form": {
         "editTitle": "Edit user",
         "addTitle": "Add new user",
@@ -115,6 +145,8 @@
       },
       "detail": {
         "back": "Back to orders",
+        "listTitle": "Order list",
+        "listSearchPlaceholder": "Search by order ID or customer",
         "summaryTitle": "Order summary",
         "itemsTitle": "Products in this order",
         "notFound": "Order not found",
@@ -138,9 +170,19 @@
         "expireDate": "Expire date",
         "status": "Status"
       },
+      "detail": {
+        "back": "Back to voucher list",
+        "backToAddNew": "Back to add new voucher",
+        "listTitle": "Voucher list",
+        "listSearchPlaceholder": "Search by voucher code"
+      },
+      "addPage": {
+        "existingListTitle": "Existing vouchers"
+      },
       "form": {
         "editTitle": "Edit voucher",
         "addTitle": "Add new voucher",
+        "image": "Voucher image (max 1)",
         "code": "Code",
         "discountPercent": "Discount (%)",
         "maxDiscount": "Max discount (USD)",
@@ -167,6 +209,15 @@
         "featuredTag": "Featured",
         "normalTag": "Normal"
       },
+      "detail": {
+        "back": "Back to collection list",
+        "backToAddNew": "Back to add new collection",
+        "listTitle": "Collection list",
+        "listSearchPlaceholder": "Search by name or slug"
+      },
+      "addPage": {
+        "existingListTitle": "Existing collections"
+      },
       "status": {
         "draft": "draft",
         "active": "active",
@@ -177,6 +228,7 @@
         "editTitle": "Edit collection",
         "addTitle": "Add new collection",
         "name": "Collection name",
+        "banner": "Banner image (max 1)",
         "slug": "Slug",
         "productsCount": "Products count",
         "startDate": "Start date",
@@ -197,6 +249,15 @@
       "title": "Category management",
       "add": "Add category",
       "searchPlaceholder": "Search by category name or slug…",
+      "detail": {
+        "back": "Back to category list",
+        "backToAddNew": "Back to add new category",
+        "listTitle": "Category list",
+        "listSearchPlaceholder": "Search by name or slug"
+      },
+      "addPage": {
+        "existingListTitle": "Existing categories"
+      },
       "col": {
         "category": "Category",
         "slug": "Slug",

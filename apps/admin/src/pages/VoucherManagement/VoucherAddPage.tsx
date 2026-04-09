@@ -2,7 +2,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Card, Input, List } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   ADD_NEW_PATH,
   type ReturnToAddNewState,
@@ -10,15 +10,11 @@ import {
 import VoucherForm from './VoucherForm';
 import { vouchers } from './vouchersMockData';
 
-const VoucherDetailPage = () => {
+const VoucherAddPage = () => {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
-  const returnTo = (location.state as ReturnToAddNewState | null)?.returnTo;
-  const isFromAddPage = returnTo === ADD_NEW_PATH.vouchers;
   const [searchText, setSearchText] = useState('');
-  const voucher = vouchers.find((item) => item.id === id);
+
   const filteredVouchers = useMemo(
     () =>
       vouchers.filter((item) =>
@@ -27,25 +23,28 @@ const VoucherDetailPage = () => {
     [searchText],
   );
 
+  const fromAddState: ReturnToAddNewState = {
+    returnTo: ADD_NEW_PATH.vouchers,
+  };
+
   return (
     <div>
       <Button
         type="text"
         icon={<ArrowLeftOutlined />}
-        onClick={() =>
-          navigate(isFromAddPage ? ADD_NEW_PATH.vouchers : '/vouchers')
-        }
+        onClick={() => navigate('/vouchers')}
         className="!flex w-fit items-center gap-1 text-slate-700 mb-4"
       >
-        {isFromAddPage
-          ? t('admin.voucher.detail.backToAddNew')
-          : t('admin.voucher.detail.back')}
+        {t('admin.voucher.detail.back')}
       </Button>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <Card title={t('admin.voucher.form.editTitle')}>
-          <VoucherForm initialValues={voucher} isEdit showTitle={false} />
+        <Card title={t('admin.voucher.form.addTitle')} className="h-fit">
+          <VoucherForm isEdit={false} showTitle={false} />
         </Card>
-        <Card title={t('admin.voucher.detail.listTitle')} className="h-fit">
+        <Card
+          title={t('admin.voucher.addPage.existingListTitle')}
+          className="h-fit"
+        >
           <Input
             placeholder={t('admin.voucher.detail.listSearchPlaceholder')}
             value={searchText}
@@ -59,11 +58,9 @@ const VoucherDetailPage = () => {
               locale={{ emptyText: t('admin.common.noData') }}
               renderItem={(item) => (
                 <List.Item
-                  className={`cursor-pointer ${
-                    item.id === id ? 'bg-slate-100 font-medium' : ''
-                  }`}
+                  className="cursor-pointer"
                   onClick={() =>
-                    navigate(`/vouchers/${item.id}`, { state: location.state })
+                    navigate(`/vouchers/${item.id}`, { state: fromAddState })
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">
@@ -82,4 +79,4 @@ const VoucherDetailPage = () => {
   );
 };
 
-export default VoucherDetailPage;
+export default VoucherAddPage;

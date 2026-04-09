@@ -7,22 +7,24 @@ import {
   ADD_NEW_PATH,
   type ReturnToAddNewState,
 } from '../../constants/addNewReturn';
-import VoucherForm from './VoucherForm';
-import { vouchers } from './vouchersMockData';
+import CategoryForm from './CategoryForm';
+import { categories } from './categoriesMockData';
 
-const VoucherDetailPage = () => {
+const CategoryDetailPage = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const returnTo = (location.state as ReturnToAddNewState | null)?.returnTo;
-  const isFromAddPage = returnTo === ADD_NEW_PATH.vouchers;
+  const isFromAddPage = returnTo === ADD_NEW_PATH.categories;
   const [searchText, setSearchText] = useState('');
-  const voucher = vouchers.find((item) => item.id === id);
-  const filteredVouchers = useMemo(
+  const category = categories.find((item) => item.id === id);
+  const filteredCategories = useMemo(
     () =>
-      vouchers.filter((item) =>
-        item.code.toLowerCase().includes(searchText.toLowerCase()),
+      categories.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          item.slug.toLowerCase().includes(searchText.toLowerCase()),
       ),
     [searchText],
   );
@@ -33,21 +35,21 @@ const VoucherDetailPage = () => {
         type="text"
         icon={<ArrowLeftOutlined />}
         onClick={() =>
-          navigate(isFromAddPage ? ADD_NEW_PATH.vouchers : '/vouchers')
+          navigate(isFromAddPage ? ADD_NEW_PATH.categories : '/categories')
         }
         className="!flex w-fit items-center gap-1 text-slate-700 mb-4"
       >
         {isFromAddPage
-          ? t('admin.voucher.detail.backToAddNew')
-          : t('admin.voucher.detail.back')}
+          ? t('admin.category.detail.backToAddNew')
+          : t('admin.category.detail.back')}
       </Button>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <Card title={t('admin.voucher.form.editTitle')}>
-          <VoucherForm initialValues={voucher} isEdit showTitle={false} />
+        <Card title={t('admin.category.form.editTitle')}>
+          <CategoryForm initialValues={category} isEdit showTitle={false} />
         </Card>
-        <Card title={t('admin.voucher.detail.listTitle')} className="h-fit">
+        <Card title={t('admin.category.detail.listTitle')} className="h-fit">
           <Input
-            placeholder={t('admin.voucher.detail.listSearchPlaceholder')}
+            placeholder={t('admin.category.detail.listSearchPlaceholder')}
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}
             className="mb-4"
@@ -55,7 +57,7 @@ const VoucherDetailPage = () => {
           <div className="max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden overscroll-y-contain">
             <List
               bordered
-              dataSource={filteredVouchers}
+              dataSource={filteredCategories}
               locale={{ emptyText: t('admin.common.noData') }}
               renderItem={(item) => (
                 <List.Item
@@ -63,14 +65,14 @@ const VoucherDetailPage = () => {
                     item.id === id ? 'bg-slate-100 font-medium' : ''
                   }`}
                   onClick={() =>
-                    navigate(`/vouchers/${item.id}`, { state: location.state })
+                    navigate(`/categories/${item.id}`, {
+                      state: location.state,
+                    })
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">
-                    <span className="truncate">{item.code}</span>
-                    <span className="text-xs text-slate-500">
-                      {item.discountPercent}%
-                    </span>
+                    <span className="truncate">{item.name}</span>
+                    <span className="text-xs text-slate-500">{item.slug}</span>
                   </div>
                 </List.Item>
               )}
@@ -82,4 +84,4 @@ const VoucherDetailPage = () => {
   );
 };
 
-export default VoucherDetailPage;
+export default CategoryDetailPage;

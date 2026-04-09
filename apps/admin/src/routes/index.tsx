@@ -5,21 +5,22 @@ import VoucherManagementPage from '../pages/VoucherManagement/VoucherManagementP
 import CollectionManagementPage from '../pages/CollectionManagement/CollectionManagementPage';
 import RootLayout from '../components/layout/RootLayout';
 import Dashboard from '../pages/Dashboard/Dashboard';
-import EmployeeForm from '../pages/EmployeeManagement/EmployeeForm';
+import EmployeeAddPage from '../pages/EmployeeManagement/EmployeeAddPage';
 import EmployeeDetailPage from '../pages/EmployeeManagement/EmployeeDetailPage';
 import UserManagementPage from '../pages/UserManagement/UserManagementPage';
-import UserForm from '../pages/UserManagement/UserForm';
+import UserAddPage from '../pages/UserManagement/UserAddPage';
 import UserDetailPage from '../pages/UserManagement/UserDetailPage';
-import ProductForm from '../pages/ProductManagement/ProductForm';
+import ProductAddPage from '../pages/ProductManagement/ProductAddPage';
 import ProductDetailPage from '../pages/ProductManagement/ProductDetailPage';
-import VoucherForm from '../pages/VoucherManagement/VoucherForm';
+import VoucherAddPage from '../pages/VoucherManagement/VoucherAddPage';
 import VoucherDetailPage from '../pages/VoucherManagement/VoucherDetailPage';
-import CollectionForm from '../pages/CollectionManagement/CollectionForm';
+import CollectionAddPage from '../pages/CollectionManagement/CollectionAddPage';
 import CollectionDetailPage from '../pages/CollectionManagement/CollectionDetailPage';
 import OrderManagementPage from '../pages/OrderManagement/OrderManagementPage';
 import OrderDetailPage from '../pages/OrderManagement/OrderDetailPage';
 import CategoryManagementPage from '../pages/CategoryManagement/CategoryManagementPage';
-import CategoryForm from '../pages/CategoryManagement/CategoryForm';
+import CategoryAddPage from '../pages/CategoryManagement/CategoryAddPage';
+import CategoryDetailPage from '../pages/CategoryManagement/CategoryDetailPage';
 
 const AppRoutes = () => {
   return (
@@ -28,23 +29,24 @@ const AppRoutes = () => {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/employees" element={<EmployeeManagementPage />} />
-        <Route path="/employees/add-new" element={<EmployeeForm />} />
+        <Route path="/employees/add-new" element={<EmployeeAddPage />} />
         <Route path="/employees/:id" element={<EmployeeDetailPage />} />
         <Route path="/users" element={<UserManagementPage />} />
-        <Route path="/users/add-new" element={<UserForm />} />
+        <Route path="/users/add-new" element={<UserAddPage />} />
         <Route path="/users/:id" element={<UserDetailPage />} />
         <Route path="/orders" element={<OrderManagementPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
         <Route path="/products" element={<ProductManagementPage />} />
-        <Route path="/products/add-new" element={<ProductForm />} />
+        <Route path="/products/add-new" element={<ProductAddPage />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/categories" element={<CategoryManagementPage />} />
-        <Route path="/categories/add-new" element={<CategoryForm />} />
+        <Route path="/categories/add-new" element={<CategoryAddPage />} />
+        <Route path="/categories/:id" element={<CategoryDetailPage />} />
         <Route path="/vouchers" element={<VoucherManagementPage />} />
-        <Route path="/vouchers/add-new" element={<VoucherForm />} />
+        <Route path="/vouchers/add-new" element={<VoucherAddPage />} />
         <Route path="/vouchers/:id" element={<VoucherDetailPage />} />
         <Route path="/collections" element={<CollectionManagementPage />} />
-        <Route path="/collections/add-new" element={<CollectionForm />} />
+        <Route path="/collections/add-new" element={<CollectionAddPage />} />
         <Route path="/collections/:id" element={<CollectionDetailPage />} />
       </Route>
     </Routes>

@@ -16,10 +16,16 @@ import {
 interface Props {
   initialValues?: AddNewEmployeeFormValues;
   isEdit?: boolean;
+  showTitle?: boolean;
   onSubmit?: (values: Employee) => void;
 }
 
-const EmployeeForm = ({ initialValues, isEdit, onSubmit }: Props) => {
+const EmployeeForm = ({
+  initialValues,
+  isEdit,
+  showTitle = true,
+  onSubmit,
+}: Props) => {
   const { t } = useTranslation();
   const employeeSchema = createAddNewEmployeeSchema(t);
   const form = useForm<AddNewEmployeeFormValues>({
@@ -56,45 +62,46 @@ const EmployeeForm = ({ initialValues, isEdit, onSubmit }: Props) => {
       <Form
         layout="vertical"
         onFinish={handleSubmit(onFormSubmit)}
-        className="min-h-screen space-y-4"
+        className="h-fit space-y-4"
       >
-        <h2 className="text-center text-xl font-semibold">
-          {isEdit
-            ? t('admin.employee.form.editTitle')
-            : t('admin.employee.form.addTitle')}
-        </h2>
-        <div className="grid grid-cols-5 gap-10">
-          <div className="col-span-1 flex flex-col gap-2">
+        {showTitle ? (
+          <h2 className="text-center text-xl font-semibold">
+            {isEdit
+              ? t('admin.employee.form.editTitle')
+              : t('admin.employee.form.addTitle')}
+          </h2>
+        ) : null}
+        <div className="grid grid-cols-3 gap-6">
+          <div className="flex flex-col gap-2">
             <FormItem name="avatar" label={t('admin.employee.form.avatar')}>
               {({ field }) => (
-                <div className="size-40 [&_.ant-upload-list-item-container]:!h-40 [&_.ant-upload-list-item-container]:!w-40 [&_.ant-upload-select]:!h-40 [&_.ant-upload-select]:!w-40">
-                  <ImageUploader
-                    fileList={
-                      field.value
-                        ? [
-                            {
-                              uid: 'employee-avatar',
-                              name: 'avatar',
-                              status: 'done',
-                              url: field.value,
-                            } satisfies UploadFile,
-                          ]
-                        : []
-                    }
-                    onChange={(fileList) => {
-                      const first = fileList[0];
-                      const nextUrl =
-                        first?.url ||
-                        (first?.originFileObj
-                          ? URL.createObjectURL(first.originFileObj)
-                          : '');
-                      field.onChange(nextUrl);
-                    }}
-                    maxCount={1}
-                    multiple={false}
-                    uploadLabel={t('admin.product.form.upload')}
-                  />
-                </div>
+                <ImageUploader
+                  squareFullWidth
+                  fileList={
+                    field.value
+                      ? [
+                          {
+                            uid: 'employee-avatar',
+                            name: 'avatar',
+                            status: 'done',
+                            url: field.value,
+                          } satisfies UploadFile,
+                        ]
+                      : []
+                  }
+                  onChange={(fileList) => {
+                    const first = fileList[0];
+                    const nextUrl =
+                      first?.url ||
+                      (first?.originFileObj
+                        ? URL.createObjectURL(first.originFileObj)
+                        : '');
+                    field.onChange(nextUrl);
+                  }}
+                  maxCount={1}
+                  multiple={false}
+                  uploadLabel={t('admin.product.form.upload')}
+                />
               )}
             </FormItem>
             <FormItem
@@ -105,7 +112,7 @@ const EmployeeForm = ({ initialValues, isEdit, onSubmit }: Props) => {
               <Switch />
             </FormItem>
           </div>
-          <div className="col-span-2 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <FormItem name="name" label={t('admin.employee.form.name')}>
               <Input placeholder={t('admin.employee.form.placeholderName')} />
             </FormItem>
@@ -116,7 +123,7 @@ const EmployeeForm = ({ initialValues, isEdit, onSubmit }: Props) => {
               <DatePicker className="w-full" />
             </FormItem>
           </div>
-          <div className="col-span-2 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <FormItem name="email" label={t('admin.employee.form.email')}>
               <Input placeholder={t('admin.employee.form.placeholderEmail')} />
             </FormItem>

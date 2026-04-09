@@ -2,54 +2,54 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Card, Input, List } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   ADD_NEW_PATH,
   type ReturnToAddNewState,
 } from '../../constants/addNewReturn';
-import CollectionForm from './CollectionForm';
-import { collections } from './collectionsMockData';
+import EmployeeForm from './EmployeeForm';
+import { employees } from './employeesMockData';
 
-const CollectionDetailPage = () => {
+const EmployeeAddPage = () => {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
-  const returnTo = (location.state as ReturnToAddNewState | null)?.returnTo;
-  const isFromAddPage = returnTo === ADD_NEW_PATH.collections;
   const [searchText, setSearchText] = useState('');
-  const collection = collections.find((item) => item.id === id);
-  const filteredCollections = useMemo(
+
+  const filteredEmployees = useMemo(
     () =>
-      collections.filter(
+      employees.filter(
         (item) =>
           item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          item.slug.toLowerCase().includes(searchText.toLowerCase()),
+          item.phone.includes(searchText) ||
+          item.email?.toLowerCase().includes(searchText.toLowerCase()),
       ),
     [searchText],
   );
+
+  const fromAddState: ReturnToAddNewState = {
+    returnTo: ADD_NEW_PATH.employees,
+  };
 
   return (
     <div>
       <Button
         type="text"
         icon={<ArrowLeftOutlined />}
-        onClick={() =>
-          navigate(isFromAddPage ? ADD_NEW_PATH.collections : '/collections')
-        }
+        onClick={() => navigate('/employees')}
         className="!flex w-fit items-center gap-1 text-slate-700 mb-4"
       >
-        {isFromAddPage
-          ? t('admin.collection.detail.backToAddNew')
-          : t('admin.collection.detail.back')}
+        {t('admin.employee.detail.back')}
       </Button>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <Card title={t('admin.collection.form.editTitle')}>
-          <CollectionForm initialValues={collection} isEdit showTitle={false} />
+        <Card title={t('admin.employee.form.addTitle')} className="h-fit">
+          <EmployeeForm isEdit={false} showTitle={false} />
         </Card>
-        <Card title={t('admin.collection.detail.listTitle')} className="h-fit">
+        <Card
+          title={t('admin.employee.addPage.existingListTitle')}
+          className="h-fit"
+        >
           <Input
-            placeholder={t('admin.collection.detail.listSearchPlaceholder')}
+            placeholder={t('admin.employee.detail.listSearchPlaceholder')}
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}
             className="mb-4"
@@ -57,22 +57,18 @@ const CollectionDetailPage = () => {
           <div className="max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden overscroll-y-contain">
             <List
               bordered
-              dataSource={filteredCollections}
+              dataSource={filteredEmployees}
               locale={{ emptyText: t('admin.common.noData') }}
               renderItem={(item) => (
                 <List.Item
-                  className={`cursor-pointer ${
-                    item.id === id ? 'bg-slate-100 font-medium' : ''
-                  }`}
+                  className="cursor-pointer"
                   onClick={() =>
-                    navigate(`/collections/${item.id}`, {
-                      state: location.state,
-                    })
+                    navigate(`/employees/${item.id}`, { state: fromAddState })
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">
                     <span className="truncate">{item.name}</span>
-                    <span className="text-xs text-slate-500">{item.slug}</span>
+                    <span className="text-xs text-slate-500">{item.phone}</span>
                   </div>
                 </List.Item>
               )}
@@ -84,4 +80,4 @@ const CollectionDetailPage = () => {
   );
 };
 
-export default CollectionDetailPage;
+export default EmployeeAddPage;

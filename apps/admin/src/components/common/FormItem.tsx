@@ -72,10 +72,14 @@ export const FormItem = ({
                     'target' in (firstArg as Record<string, unknown>)
                   ) {
                     const target = (
-                      firstArg as { target?: { value?: unknown; checked?: unknown } }
+                      firstArg as {
+                        target?: { value?: unknown; checked?: unknown };
+                      }
                     ).target;
                     field.onChange(
-                      valuePropName === 'checked' ? target?.checked : target?.value,
+                      valuePropName === 'checked'
+                        ? target?.checked
+                        : target?.value,
                     );
                     return;
                   }
