@@ -61,13 +61,22 @@ const UserForm = ({
           </h2>
         ) : null}
         <FormItem name="name" label={t('admin.user.form.name')}>
-          <Input placeholder={t('admin.user.form.placeholderName')} />
+          <Input
+            placeholder={t('admin.user.form.placeholderName')}
+            size="large"
+          />
         </FormItem>
         <FormItem name="email" label={t('admin.user.form.email')}>
-          <Input placeholder={t('admin.user.form.placeholderEmail')} />
+          <Input
+            placeholder={t('admin.user.form.placeholderEmail')}
+            size="large"
+          />
         </FormItem>
         <FormItem name="phone" label={t('admin.user.form.phone')}>
-          <Input placeholder={t('admin.user.form.placeholderPhone')} />
+          <Input
+            placeholder={t('admin.user.form.placeholderPhone')}
+            size="large"
+          />
         </FormItem>
         <FormItem
           name="status"
@@ -76,7 +85,7 @@ const UserForm = ({
         >
           <Switch />
         </FormItem>
-        <Button type="primary" htmlType="submit" block>
+        <Button type="primary" htmlType="submit" block size="large">
           {isEdit
             ? t('admin.user.form.submitUpdate')
             : t('admin.user.form.submitCreate')}

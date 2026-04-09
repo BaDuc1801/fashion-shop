@@ -8,6 +8,7 @@ import ProductDetailPage from '../pages/ProductDetailPage';
 import WishlistPage from '../pages/WishlistPage';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import { HomePage } from '../pages/HomePage';
+import UserAccountPage from '../pages/UserAccountPage';
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
         <Route path="home" element={<Navigate to="/" replace />} />
+        <Route path="account" element={<UserAccountPage />} />
         <Route path="category" element={<CategoryPage />} />
         <Route path="category/:categoryId" element={<CategoryPage />} />
         <Route path="product/:productId" element={<ProductDetailPage />} />

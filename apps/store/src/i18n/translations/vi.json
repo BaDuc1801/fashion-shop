@@ -88,6 +88,25 @@
   "notFound": {
     "message": "Trang bạn tìm không tồn tại.",
     "goHome": "Về trang chủ"
+  },
+  "account": {
+    "title": "Tài khoản của tôi",
+    "tabs": {
+      "profile": "Thông tin cá nhân",
+      "orders": "Đơn hàng của tôi"
+    },
+    "profile": {
+      "name": "Họ tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "update": "Cập nhật"
+    },
+    "orders": {
+      "code": "Mã đơn",
+      "date": "Ngày đặt",
+      "status": "Trạng thái",
+      "total": "Tổng tiền"
+    }
   }
 }
-

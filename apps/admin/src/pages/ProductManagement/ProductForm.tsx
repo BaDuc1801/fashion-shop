@@ -87,11 +87,17 @@ const ProductForm = ({
         </FormItem>
 
         <FormItem name="name" label={t('admin.product.form.name')}>
-          <Input placeholder={t('admin.product.form.placeholderName')} />
+          <Input
+            placeholder={t('admin.product.form.placeholderName')}
+            size="large"
+          />
         </FormItem>
 
         <FormItem name="sku" label={t('admin.product.form.sku')}>
-          <Input placeholder={t('admin.product.form.placeholderSku')} />
+          <Input
+            placeholder={t('admin.product.form.placeholderSku')}
+            size="large"
+          />
         </FormItem>
 
         <FormItem
@@ -99,7 +105,7 @@ const ProductForm = ({
           label={t('admin.product.form.price')}
           getValueFromEvent={(value) => (value as number | null) ?? 0}
         >
-          <InputNumber min={0} className="w-full" />
+          <InputNumber min={0} className="w-full" size="large" />
         </FormItem>
 
         <FormItem
@@ -107,7 +113,7 @@ const ProductForm = ({
           label={t('admin.product.form.stock')}
           getValueFromEvent={(value) => (value as number | null) ?? 0}
         >
-          <InputNumber min={0} className="w-full" />
+          <InputNumber min={0} className="w-full" size="large" />
         </FormItem>
 
         <FormItem
@@ -118,7 +124,7 @@ const ProductForm = ({
           <Switch />
         </FormItem>
 
-        <Button type="primary" htmlType="submit" block>
+        <Button type="primary" htmlType="submit" block size="large">
           {isEdit
             ? t('admin.product.form.submitUpdate')
             : t('admin.product.form.submitCreate')}

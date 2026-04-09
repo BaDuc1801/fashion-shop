@@ -72,7 +72,7 @@ const EmployeeForm = ({
           </h2>
         ) : null}
         <div className="grid grid-cols-3 gap-6">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <FormItem name="avatar" label={t('admin.employee.form.avatar')}>
               {({ field }) => (
                 <ImageUploader
@@ -112,27 +112,36 @@ const EmployeeForm = ({
               <Switch />
             </FormItem>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <FormItem name="name" label={t('admin.employee.form.name')}>
-              <Input placeholder={t('admin.employee.form.placeholderName')} />
+              <Input
+                placeholder={t('admin.employee.form.placeholderName')}
+                size="large"
+              />
             </FormItem>
             <FormItem name="phone" label={t('admin.employee.form.phone')}>
-              <Input placeholder={t('admin.employee.form.placeholderPhone')} />
+              <Input
+                placeholder={t('admin.employee.form.placeholderPhone')}
+                size="large"
+              />
             </FormItem>
             <FormItem name="joinDate" label={t('admin.employee.form.joinDate')}>
-              <DatePicker className="w-full" />
+              <DatePicker className="w-full" size="large" />
             </FormItem>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <FormItem name="email" label={t('admin.employee.form.email')}>
-              <Input placeholder={t('admin.employee.form.placeholderEmail')} />
+              <Input
+                placeholder={t('admin.employee.form.placeholderEmail')}
+                size="large"
+              />
             </FormItem>
             <FormItem
               name="salary"
               label={t('admin.employee.form.salary')}
               getValueFromEvent={(value) => (value as number | null) ?? 0}
             >
-              <InputNumber className="w-full" />
+              <InputNumber className="w-full" size="large" />
             </FormItem>
           </div>
         </div>

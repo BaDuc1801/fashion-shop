@@ -100,10 +100,16 @@ const CollectionForm = ({
           </h2>
         ) : null}
         <FormItem name="name" label={t('admin.collection.form.name')}>
-          <Input placeholder={t('admin.collection.form.placeholderName')} />
+          <Input
+            placeholder={t('admin.collection.form.placeholderName')}
+            size="large"
+          />
         </FormItem>
         <FormItem name="slug" label={t('admin.collection.form.slug')}>
-          <Input placeholder={t('admin.collection.form.placeholderSlug')} />
+          <Input
+            placeholder={t('admin.collection.form.placeholderSlug')}
+            size="large"
+          />
         </FormItem>
         <FormItem name="images" label={t('admin.collection.form.banner')}>
           {({ field }) => (
@@ -121,13 +127,13 @@ const CollectionForm = ({
           label={t('admin.collection.form.productsCount')}
           getValueFromEvent={(value) => (value as number | null) ?? 0}
         >
-          <InputNumber min={0} className="w-full" />
+          <InputNumber min={0} className="w-full" size="large" />
         </FormItem>
         <FormItem name="startDate" label={t('admin.collection.form.startDate')}>
-          <DatePicker className="w-full" />
+          <DatePicker className="w-full" size="large" />
         </FormItem>
         <FormItem name="endDate" label={t('admin.collection.form.endDate')}>
-          <DatePicker className="w-full" />
+          <DatePicker className="w-full" size="large" />
         </FormItem>
         <FormItem name="status" label={t('admin.collection.form.status')}>
           <Select options={statusOptions} />
@@ -139,7 +145,7 @@ const CollectionForm = ({
         >
           <Switch />
         </FormItem>
-        <Button type="primary" htmlType="submit" block>
+        <Button type="primary" htmlType="submit" block size="large">
           {isEdit
             ? t('admin.collection.form.submitUpdate')
             : t('admin.collection.form.submitCreate')}

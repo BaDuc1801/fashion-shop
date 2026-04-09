@@ -13,6 +13,10 @@ body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.css-var-root.ant-form-css-var {
+  --ant-form-item-margin-bottom: 0px;
+}
+
 .image-uploader-square-full {
   display: block !important;
   width: 100%;

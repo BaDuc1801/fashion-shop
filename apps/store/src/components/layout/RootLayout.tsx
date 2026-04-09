@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import NavBar from '../navbar/NavBar';
+import Footer from './Footer';
 
 export function RootLayout() {
   return (
@@ -12,11 +13,7 @@ export function RootLayout() {
         <Outlet />
       </main>
 
-      <footer className="">
-        <div className="mx-auto w-full max-w-6xl px-4 py-6 text-sm text-slate-600">
-          © {new Date().getFullYear()} Store
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

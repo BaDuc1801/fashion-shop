@@ -26,7 +26,7 @@ const NavBar = () => {
           className="font-bold text-3xl mr-3
         "
         >
-          {t('nav.store')}
+          MonoChic
         </Link>
         <Link to="/" className="text-base font-medium hover:font-semibold">
           {t('nav.men')}
@@ -43,7 +43,9 @@ const NavBar = () => {
       </div>
       <nav className="flex items-center gap-6 text-2xl font-medium">
         <MdSearch className="text-3xl cursor-pointer hover:font-semibold" />
-        <FaRegUser className="cursor-pointer hover:font-semibold" />
+        <Link to="/account" className="leading-none">
+          <FaRegUser className="cursor-pointer hover:font-semibold" />
+        </Link>
         <Link to="/wishlist" className="leading-none">
           <Badge count={wishlistCount} size="small" offset={[0, 2]}>
             <FaRegHeart className="text-2xl cursor-pointer hover:font-semibold" />
@@ -56,7 +58,7 @@ const NavBar = () => {
         </Link>
 
         <Button size="small" onClick={toggleLanguage}>
-          {i18n.language === 'en' ? 'VI' : 'EN'}
+          {i18n.language === 'en' ? 'EN' : 'VI'}
         </Button>
       </nav>
     </div>

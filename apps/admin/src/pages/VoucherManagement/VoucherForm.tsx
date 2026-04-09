@@ -98,10 +98,16 @@ const VoucherForm = ({
         name="code"
         label={t('admin.voucher.form.code')}
         rules={[
-          { required: true, message: t('admin.validation.requiredVoucherCode') },
+          {
+            required: true,
+            message: t('admin.validation.requiredVoucherCode'),
+          },
         ]}
       >
-        <Input placeholder={t('admin.voucher.form.placeholderCode')} />
+        <Input
+          placeholder={t('admin.voucher.form.placeholderCode')}
+          size="large"
+        />
       </Form.Item>
       <Form.Item
         name="discountPercent"
@@ -110,16 +116,19 @@ const VoucherForm = ({
           { required: true, message: t('admin.validation.requiredDiscount') },
         ]}
       >
-        <InputNumber min={1} max={100} className="w-full" />
+        <InputNumber min={1} max={100} className="w-full" size="large" />
       </Form.Item>
       <Form.Item
         name="maxDiscount"
         label={t('admin.voucher.form.maxDiscount')}
         rules={[
-          { required: true, message: t('admin.validation.requiredMaxDiscount') },
+          {
+            required: true,
+            message: t('admin.validation.requiredMaxDiscount'),
+          },
         ]}
       >
-        <InputNumber min={0} className="w-full" />
+        <InputNumber min={0} className="w-full" size="large" />
       </Form.Item>
       <Form.Item
         name="minOrderValue"
@@ -128,7 +137,7 @@ const VoucherForm = ({
           { required: true, message: t('admin.validation.requiredMinOrder') },
         ]}
       >
-        <InputNumber min={0} className="w-full" />
+        <InputNumber min={0} className="w-full" size="large" />
       </Form.Item>
       <Form.Item
         name="expiresAt"
@@ -137,12 +146,16 @@ const VoucherForm = ({
           { required: true, message: t('admin.validation.selectExpireDate') },
         ]}
       >
-        <DatePicker className="w-full" />
+        <DatePicker className="w-full" size="large" />
       </Form.Item>
-      <Form.Item name="status" label={t('admin.voucher.form.active')} valuePropName="checked">
+      <Form.Item
+        name="status"
+        label={t('admin.voucher.form.active')}
+        valuePropName="checked"
+      >
         <Switch />
       </Form.Item>
-      <Button type="primary" htmlType="submit" block>
+      <Button type="primary" htmlType="submit" block size="large">
         {isEdit
           ? t('admin.voucher.form.submitUpdate')
           : t('admin.voucher.form.submitCreate')}

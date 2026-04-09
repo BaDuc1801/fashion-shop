@@ -88,6 +88,25 @@
   "notFound": {
     "message": "The page you’re looking for doesn’t exist.",
     "goHome": "Go home"
+  },
+  "account": {
+    "title": "My Account",
+    "tabs": {
+      "profile": "Profile",
+      "orders": "My Orders"
+    },
+    "profile": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone number",
+      "address": "Address",
+      "update": "Update"
+    },
+    "orders": {
+      "code": "Order code",
+      "date": "Order date",
+      "status": "Status",
+      "total": "Total"
+    }
   }
 }
-

@@ -85,20 +85,26 @@ const CategoryForm = ({
           )}
         </FormItem>
         <FormItem name="name" label={t('admin.category.form.name')}>
-          <Input placeholder={t('admin.category.form.placeholderName')} />
+          <Input
+            placeholder={t('admin.category.form.placeholderName')}
+            size="large"
+          />
         </FormItem>
         <FormItem name="slug" label={t('admin.category.form.slug')}>
-          <Input placeholder={t('admin.category.form.placeholderSlug')} />
+          <Input
+            placeholder={t('admin.category.form.placeholderSlug')}
+            size="large"
+          />
         </FormItem>
         <FormItem
           name="productsCount"
           label={t('admin.category.form.productsCount')}
           getValueFromEvent={(value) => (value as number | null) ?? 0}
         >
-          <InputNumber min={0} className="w-full" />
+          <InputNumber min={0} className="w-full" size="large" />
         </FormItem>
         <FormItem name="createdAt" label={t('admin.category.form.createdAt')}>
-          <DatePicker className="w-full" />
+          <DatePicker className="w-full" size="large" />
         </FormItem>
         <FormItem
           name="status"
@@ -107,7 +113,7 @@ const CategoryForm = ({
         >
           <Switch />
         </FormItem>
-        <Button type="primary" htmlType="submit" block>
+        <Button type="primary" htmlType="submit" block size="large">
           {isEdit
             ? t('admin.category.form.submitUpdate')
             : t('admin.category.form.submitCreate')}
