@@ -67,7 +67,8 @@
     "requiredRegisterFields": "Vui lòng nhập tên người dùng, email, mật khẩu và nhập lại mật khẩu.",
     "passwordMismatch": "Mật khẩu nhập lại không khớp.",
     "invalidOtp": "OTP không đúng. Hãy thử 0000.",
-    "bannerText": "Phong cách của bạn, tại một nơi."
+    "bannerText": "Phong cách của bạn, tại một nơi.",
+    "logout": "Đăng xuất"
   },
   "cart": {
     "bag": "Giỏ hàng",

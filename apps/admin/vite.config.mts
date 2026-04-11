@@ -6,6 +6,11 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/apps/admin',
+  resolve: {
+    alias: {
+      '@shared': path.resolve(import.meta.dirname, '../../shared/src'),
+    },
+  },
   server: {
     port: 4200,
     host: 'localhost',

@@ -4,14 +4,13 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormItem } from '../../components/common/FormItem';
-import ImageUploader from '../../components/common/ImageUploader';
 import type { Employee } from './employeesMockData';
 import {
   addNewEmployeeSchemaDefaultValues,
   createAddNewEmployeeSchema,
   AddNewEmployeeFormValues,
 } from './schemas/addNewEmployeeSchema';
+import { FormItem, ImageUploader } from '@shared';
 
 interface Props {
   initialValues?: AddNewEmployeeFormValues;

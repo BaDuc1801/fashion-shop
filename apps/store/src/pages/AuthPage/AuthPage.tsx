@@ -1,12 +1,17 @@
+import { useMutation } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { getApiErrorMessage, useLoginMutation } from '@shared';
+import {
+  getApiErrorMessage,
+  userService,
+  useAuthStore,
+  type LoginRequest,
+} from '@shared';
 import heroBanner1 from '../../assets/hero-banner-1.png';
 import LoginForm from '../../components/auth/LoginForm';
 import RegisterContainer from '../../components/auth/RegisterContainer';
-
 type AuthMode = 'login' | 'register';
 
 const AuthPage = () => {
@@ -17,15 +22,18 @@ const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const loginMutation = useLoginMutation();
+
+  const loginMutation = useMutation({
+    mutationFn: (args: LoginRequest) => userService.login(args),
+  });
 
   const headline = useMemo(
     () => (mode === 'login' ? t('auth.welcomeBack') : t('auth.createAccount')),
     [mode, t],
   );
 
-  const handleContinue = () => {
-    if (loginMutation.isLoading) return;
+  const handleContinue = async () => {
+    if (loginMutation.isPending) return;
 
     if (!email || !password) {
       setError(t('auth.requiredFields'));
@@ -33,25 +41,26 @@ const AuthPage = () => {
     }
 
     setError('');
-    loginMutation.mutate(
-      {
+    try {
+      const response = await loginMutation.mutateAsync({
         email: email.trim(),
         password,
-      },
-      {
-        onSuccess: (data) => {
-          if (data?.token) {
-            navigate('/');
-            return;
-          }
+      });
+      const loginData = response?.data;
+      if (!loginData?.token) {
+        setError(response?.message || t('auth.loginFailed'));
+        return;
+      }
+      useAuthStore.getState().setSessionFromLogin(loginData);
+      const me = await userService.getCurrentUser();
+      if (me?.data) {
+        useAuthStore.getState().mergeUserFromMe(me.data);
+      }
 
-          setError(data?.message || t('auth.loginFailed'));
-        },
-        onError: (err: unknown) => {
-          setError(getApiErrorMessage(err, t('auth.loginFailed')));
-        },
-      },
-    );
+      navigate('/');
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err, t('auth.loginFailed')));
+    }
   };
 
   const handleSwitchMode = (newMode: AuthMode) => {
@@ -99,14 +108,21 @@ const AuthPage = () => {
               <LoginForm
                 email={email}
                 password={password}
-                loading={loginMutation.isLoading}
+                loading={loginMutation.isPending}
                 error={error}
                 onEmailChange={setEmail}
                 onPasswordChange={setPassword}
                 onSubmit={handleContinue}
               />
             ) : (
-              <RegisterContainer />
+              <RegisterContainer
+                onRegisterSuccess={(registeredEmail) => {
+                  setMode('login');
+                  setEmail(registeredEmail);
+                  setPassword('');
+                  setError('');
+                }}
+              />
             )}
 
             <div className="my-8 h-px bg-slate-200" />

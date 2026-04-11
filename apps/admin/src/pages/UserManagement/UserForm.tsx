@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormItem } from '../../components/common/FormItem';
+import { FormItem } from '@shared';
 import type { User } from './usersMockData';
 import {
   createUserFormSchema,

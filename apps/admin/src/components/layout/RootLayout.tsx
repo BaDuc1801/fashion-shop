@@ -1,7 +1,25 @@
-import { Outlet } from 'react-router-dom';
+import { Spin } from 'antd';
+import { Navigate, Outlet } from 'react-router-dom';
+import { isAdminUser, useAuthStore } from '@shared';
 import SidebarMenu from './SidebarMenu';
 
 const RootLayout = () => {
+  const hasHydrated = useAuthStore.persist.hasHydrated();
+  const token = useAuthStore((s) => s.token);
+  const user = useAuthStore((s) => s.user);
+
+  if (!hasHydrated) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-gray-50">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (!token || !isAdminUser(user)) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="flex">
       <SidebarMenu />

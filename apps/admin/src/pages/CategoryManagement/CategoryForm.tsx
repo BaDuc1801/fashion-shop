@@ -4,8 +4,7 @@ import type { UploadFile } from 'antd';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FormItem } from '../../components/common/FormItem';
-import ImageUploader from '../../components/common/ImageUploader';
+import { FormItem, ImageUploader } from '@shared';
 import type { Category } from './categoriesMockData';
 import {
   categoryFormSchemaDefaultValues,

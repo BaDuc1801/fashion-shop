@@ -14,7 +14,7 @@ type RenderArgs = {
   field: ControllerRenderProps<FieldValues, string>;
 };
 
-interface FormItemProps {
+export interface FormItemProps {
   name: string;
   label?: string;
   rules?: RegisterOptions;

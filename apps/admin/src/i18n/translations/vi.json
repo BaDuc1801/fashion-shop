@@ -5,6 +5,16 @@
       "en": "Tiếng Anh",
       "vi": "Tiếng Việt"
     },
+    "auth": {
+      "title": "Đăng nhập quản trị",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "submit": "Đăng nhập",
+      "required": "Vui lòng nhập email và mật khẩu.",
+      "failed": "Đăng nhập thất bại",
+      "logout": "Đăng xuất",
+      "adminOnly": "Chỉ tài khoản quản trị (ADMIN) mới được vào khu vực này."
+    },
     "nav": {
       "dashboard": "Tổng quan",
       "users": "Người dùng",
@@ -26,18 +36,40 @@
       "recentOrders": "Đơn hàng gần đây",
       "topProducts": "Sản phẩm bán chạy",
       "sales7Days": "Doanh thu 7 ngày (mẫu)",
-      "orderCol": { "order": "Đơn", "customer": "Khách", "amount": "Số tiền", "status": "Trạng thái", "time": "Thời gian" },
-      "topCol": { "product": "Sản phẩm", "sold": "Đã bán", "revenue": "Doanh thu" },
-      "orderStatus": { "completed": "hoàn thành", "pending": "chờ xử lý", "cancelled": "đã hủy", "shipping": "đang giao" }
+      "orderCol": {
+        "order": "Đơn",
+        "customer": "Khách",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "time": "Thời gian"
+      },
+      "topCol": {
+        "product": "Sản phẩm",
+        "sold": "Đã bán",
+        "revenue": "Doanh thu"
+      },
+      "orderStatus": {
+        "completed": "hoàn thành",
+        "pending": "chờ xử lý",
+        "cancelled": "đã hủy",
+        "shipping": "đang giao"
+      }
     },
     "common": {
-      "noData": "Khong co du lieu"
+      "noData": "Khong co du lieu",
+      "welcome": "Chào mừng"
     },
     "employee": {
       "title": "Quản lý nhân viên",
       "add": "Thêm nhân viên",
       "searchPlaceholder": "Tìm theo tên hoặc số điện thoại…",
-      "col": { "employee": "Nhân viên", "email": "Email", "phone": "Điện thoại", "joinDate": "Ngày vào", "status": "Trạng thái" },
+      "col": {
+        "employee": "Nhân viên",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "joinDate": "Ngày vào",
+        "status": "Trạng thái"
+      },
       "detail": {
         "back": "Quay lai danh sach nhan vien",
         "backToAddNew": "Quay lại trang thêm nhân viên mới",
@@ -68,7 +100,15 @@
       "title": "Quản lý sản phẩm",
       "add": "Thêm sản phẩm",
       "searchPlaceholder": "Tìm theo tên hoặc SKU…",
-      "col": { "product": "Sản phẩm", "sku": "SKU", "price": "Giá", "stock": "Tồn kho", "created": "Ngày tạo", "status": "Trạng thái", "out": "Hết" },
+      "col": {
+        "product": "Sản phẩm",
+        "sku": "SKU",
+        "price": "Giá",
+        "stock": "Tồn kho",
+        "created": "Ngày tạo",
+        "status": "Trạng thái",
+        "out": "Hết"
+      },
       "detail": {
         "back": "Quay lai danh sach san pham",
         "backToAddNew": "Quay lại trang thêm sản phẩm mới",
@@ -97,7 +137,13 @@
     "user": {
       "title": "Quản lý người dùng",
       "searchPlaceholder": "Tìm theo tên hoặc số điện thoại…",
-      "col": { "user": "Người dùng", "email": "Email", "phone": "Điện thoại", "joinDate": "Ngày tham gia", "status": "Trạng thái" },
+      "col": {
+        "user": "Người dùng",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "joinDate": "Ngày tham gia",
+        "status": "Trạng thái"
+      },
       "detail": {
         "back": "Quay lai danh sach nguoi dung",
         "backToAddNew": "Quay lại trang thêm người dùng mới",

@@ -5,6 +5,16 @@
       "en": "English",
       "vi": "Vietnamese"
     },
+    "auth": {
+      "title": "Admin",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "required": "Please enter email and password.",
+      "failed": "Sign in failed",
+      "logout": "Log out",
+      "adminOnly": "Only administrator (ADMIN) accounts can access this area."
+    },
     "nav": {
       "dashboard": "Dashboard",
       "users": "Users",
@@ -26,18 +36,36 @@
       "recentOrders": "Recent orders",
       "topProducts": "Top products",
       "sales7Days": "Revenue last 7 days (mock)",
-      "orderCol": { "order": "Order", "customer": "Customer", "amount": "Amount", "status": "Status", "time": "Time" },
+      "orderCol": {
+        "order": "Order",
+        "customer": "Customer",
+        "amount": "Amount",
+        "status": "Status",
+        "time": "Time"
+      },
       "topCol": { "product": "Product", "sold": "Sold", "revenue": "Revenue" },
-      "orderStatus": { "completed": "completed", "pending": "pending", "cancelled": "cancelled", "shipping": "shipping" }
+      "orderStatus": {
+        "completed": "completed",
+        "pending": "pending",
+        "cancelled": "cancelled",
+        "shipping": "shipping"
+      }
     },
     "common": {
-      "noData": "No data"
+      "noData": "No data",
+      "welcome": "Welcome"
     },
     "employee": {
       "title": "Employee management",
       "add": "Add employee",
       "searchPlaceholder": "Search by name or phone…",
-      "col": { "employee": "Employee", "email": "Email", "phone": "Phone", "joinDate": "Join date", "status": "Status" },
+      "col": {
+        "employee": "Employee",
+        "email": "Email",
+        "phone": "Phone",
+        "joinDate": "Join date",
+        "status": "Status"
+      },
       "detail": {
         "back": "Back to employee list",
         "backToAddNew": "Back to add new employee",
@@ -68,7 +96,15 @@
       "title": "Product management",
       "add": "Add product",
       "searchPlaceholder": "Search by product name or SKU…",
-      "col": { "product": "Product", "sku": "SKU", "price": "Price", "stock": "Stock", "created": "Created", "status": "Status", "out": "Out" },
+      "col": {
+        "product": "Product",
+        "sku": "SKU",
+        "price": "Price",
+        "stock": "Stock",
+        "created": "Created",
+        "status": "Status",
+        "out": "Out"
+      },
       "detail": {
         "back": "Back to product list",
         "backToAddNew": "Back to add new product",
@@ -97,7 +133,13 @@
     "user": {
       "title": "User management",
       "searchPlaceholder": "Search by name or phone…",
-      "col": { "user": "User", "email": "Email", "phone": "Phone", "joinDate": "Join date", "status": "Status" },
+      "col": {
+        "user": "User",
+        "email": "Email",
+        "phone": "Phone",
+        "joinDate": "Join date",
+        "status": "Status"
+      },
       "detail": {
         "back": "Back to user list",
         "backToAddNew": "Back to add new user",

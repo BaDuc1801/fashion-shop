@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import OtpSection from './OtpSection';
 import RegisterForm from './RegisterForm';
@@ -5,15 +6,20 @@ import { useTranslation } from 'react-i18next';
 import { message } from 'antd';
 import {
   getApiErrorMessage,
-  useRegisterMutation,
-  useSendOtpMutation,
+  userService,
+  type RegisterRequest,
+  type SendOtpRequest,
 } from '@shared';
 import {
   defaultRegisterValues,
   type RegisterFormValues,
 } from '../../pages/AuthPage/schema';
 
-const RegisterContainer = () => {
+type RegisterContainerProps = {
+  onRegisterSuccess?: (email: string) => void;
+};
+
+const RegisterContainer = ({ onRegisterSuccess }: RegisterContainerProps) => {
   const { t } = useTranslation();
 
   const [formValues, setFormValues] = useState<RegisterFormValues>(
@@ -24,11 +30,16 @@ const RegisterContainer = () => {
   const [error, setError] = useState('');
   const [step, setStep] = useState<'form' | 'otp'>('form');
 
-  const sendOtpMutation = useSendOtpMutation();
-  const registerMutation = useRegisterMutation();
+  const sendOtpMutation = useMutation({
+    mutationFn: (args: SendOtpRequest) => userService.sendOtp(args),
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: (args: RegisterRequest) => userService.register(args),
+  });
 
   const handleSendOtp = (values: RegisterFormValues) => {
-    if (sendOtpMutation.isLoading) return;
+    if (sendOtpMutation.isPending) return;
 
     setFormValues(values);
 
@@ -51,11 +62,10 @@ const RegisterContainer = () => {
     );
   };
 
-  const handleVerifyOtp = () => {
-    if (registerMutation.isLoading) return;
+  const handleVerifyOtp = (otpFromInput: string) => {
+    if (registerMutation.isPending) return;
 
-    const otp = otpDigits.join('');
-    if (!/^\d{6}$/.test(otp)) {
+    if (!/^\d{6}$/.test(otpFromInput)) {
       setError(t('auth.invalidOtp'));
       return;
     }
@@ -67,13 +77,15 @@ const RegisterContainer = () => {
         password: formValues.password,
         fullName: formValues.username.trim(),
         phone: formValues.phoneNumber.trim(),
-        otp,
+        otp: otpFromInput,
       },
       {
         onSuccess: (data) => {
-          if (data?.token) {
+          const token = data?.data?.token ?? data?.token;
+          if (token) {
             message.success(t('auth.registerSuccess'));
             setError('');
+            onRegisterSuccess?.(formValues.email.trim());
           } else {
             setError(data?.message || t('auth.registerFailed'));
           }
@@ -94,7 +106,7 @@ const RegisterContainer = () => {
       {step === 'form' ? (
         <RegisterForm
           initialValues={formValues}
-          loading={sendOtpMutation.isLoading}
+          loading={sendOtpMutation.isPending}
           onSubmit={handleSendOtp}
         />
       ) : (
@@ -105,7 +117,7 @@ const RegisterContainer = () => {
           error={error}
           setError={setError}
           onVerified={handleVerifyOtp}
-          loading={registerMutation.isLoading}
+          loading={registerMutation.isPending}
         />
       )}
     </div>

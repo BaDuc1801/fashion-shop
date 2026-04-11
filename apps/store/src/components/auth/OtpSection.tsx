@@ -1,6 +1,6 @@
 import { Button, Input, InputRef } from 'antd';
 import { TFunction } from 'i18next';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 type OtpSectionProps = {
   t: TFunction;
@@ -9,7 +9,7 @@ type OtpSectionProps = {
   setOtpDigits: (digits: string[]) => void;
   error: string;
   setError: (error: string) => void;
-  onVerified?: () => void;
+  onVerified: (otp: string) => void;
 };
 
 const OtpSection = ({
@@ -30,16 +30,8 @@ const OtpSection = ({
       return;
     }
     setError('');
-    onVerified?.();
+    onVerified(otp);
   };
-
-  useEffect(() => {
-    const otp = otpDigits.join('');
-    if (otp.length === 6 && !loading) {
-      setError('');
-      onVerified?.();
-    }
-  }, [loading, onVerified, otpDigits, setError]);
 
   const handleOtpChange = (index: number, value: string) => {
     const nextValue = value.replace(/\D/g, '').slice(-1);
@@ -49,6 +41,12 @@ const OtpSection = ({
 
     if (nextValue && index < otpRefs.current.length - 1) {
       otpRefs.current[index + 1]?.focus();
+    }
+
+    const otp = nextDigits.join('');
+    if (otp.length === 6 && !loading) {
+      setError('');
+      onVerified(otp);
     }
   };
 
@@ -75,6 +73,12 @@ const OtpSection = ({
     });
     setOtpDigits(nextDigits);
     otpRefs.current[Math.min(5, pasted.length - 1)]?.focus();
+
+    const otp = nextDigits.join('');
+    if (otp.length === 6 && !loading) {
+      setError('');
+      onVerified(otp);
+    }
   };
 
   return (

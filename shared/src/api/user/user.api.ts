@@ -1,14 +1,20 @@
 import api from '../axios';
 import { LoginRequest, RegisterRequest, SendOtpRequest } from './user.request';
 import {
-  LoginResponse,
+  LoginApiResponse,
   RegisterResponse,
   SendOtpResponse,
+  UserMeApiResponse,
 } from './user.response';
 
 class UserService {
-  async login(payload: LoginRequest): Promise<LoginResponse> {
+  async login(payload: LoginRequest): Promise<LoginApiResponse> {
     const res = await api.post('/api/v1/auth/login', payload);
+    return res.data;
+  }
+
+  async getCurrentUser(): Promise<UserMeApiResponse> {
+    const res = await api.get('/api/v1/users/me');
     return res.data;
   }
 

@@ -3,7 +3,7 @@ import { Image, Upload } from 'antd';
 import type { UploadFile, UploadProps } from 'antd';
 import { useState } from 'react';
 
-interface ImageUploaderProps {
+export interface ImageUploaderProps {
   fileList: UploadFile[];
   onChange: (fileList: UploadFile[]) => void;
   maxCount?: number;
@@ -12,7 +12,7 @@ interface ImageUploaderProps {
   squareFullWidth?: boolean;
 }
 
-const ImageUploader = ({
+export const ImageUploader = ({
   fileList,
   onChange,
   maxCount = 6,
@@ -28,7 +28,7 @@ const ImageUploader = ({
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
+      reader.onerror = () => reject(new Error('FileReader failed'));
     });
 
   const handlePreview: UploadProps['onPreview'] = async (file) => {
@@ -76,5 +76,3 @@ const ImageUploader = ({
     </>
   );
 };
-
-export default ImageUploader;

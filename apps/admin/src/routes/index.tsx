@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from '../pages/Login/LoginPage';
 import EmployeeManagementPage from '../pages/EmployeeManagement/EmployeeManagementPage';
 import ProductManagementPage from '../pages/ProductManagement/ProductManagementPage';
 import VoucherManagementPage from '../pages/VoucherManagement/VoucherManagementPage';
@@ -25,6 +26,7 @@ import CategoryDetailPage from '../pages/CategoryManagement/CategoryDetailPage';
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/login" element={<LoginPage />} />
       <Route element={<RootLayout />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />

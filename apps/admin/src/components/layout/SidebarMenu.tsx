@@ -6,7 +6,8 @@ import {
   ShoppingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Menu, Select } from 'antd';
+import { useAuthStore } from '@shared';
+import { Button, Menu, Select } from 'antd';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -15,6 +16,7 @@ const SidebarMenu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, i18n } = useTranslation();
+  const user = useAuthStore((s) => s.user);
 
   const items = useMemo(
     () => [
@@ -67,7 +69,9 @@ const SidebarMenu = () => {
 
   return (
     <div className="border-r border-gray-200 fixed flex h-screen w-80 flex-col bg-white">
-      <div className="text-xl font-semibold mt-4 ms-7">Admin</div>
+      <div className="text-lg font-semibold mt-4 ms-7">
+        {t('admin.common.welcome')}, {user?.fullName}
+      </div>
       <Menu
         mode="inline"
         selectedKeys={[selectedKey]}
@@ -90,6 +94,16 @@ const SidebarMenu = () => {
             { value: 'vi', label: t('admin.language.vi') },
           ]}
         />
+        <Button
+          block
+          className="mt-3"
+          onClick={() => {
+            useAuthStore.getState().clearSession();
+            navigate('/login');
+          }}
+        >
+          {t('admin.auth.logout')}
+        </Button>
       </div>
     </div>
   );

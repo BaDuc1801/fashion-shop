@@ -67,7 +67,8 @@
     "requiredRegisterFields": "Please enter username, email, password and confirm password.",
     "passwordMismatch": "Passwords do not match.",
     "invalidOtp": "Invalid OTP. Please try 0000.",
-    "bannerText": "Finally, your style in one place."
+    "bannerText": "Finally, your style in one place.",
+    "logout": "Log out"
   },
   "cart": {
     "bag": "Bag",

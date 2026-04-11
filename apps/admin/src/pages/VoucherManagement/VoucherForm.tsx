@@ -2,7 +2,7 @@ import { Button, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
 import type { UploadFile } from 'antd';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import ImageUploader from '../../components/common/ImageUploader';
+import { ImageUploader } from '@shared';
 import type { Voucher } from './vouchersMockData';
 
 type VoucherFormValues = {

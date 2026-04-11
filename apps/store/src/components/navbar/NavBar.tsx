@@ -1,15 +1,25 @@
-import { Badge, Button } from 'antd';
+import { Badge, Button, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FaRegHeart, FaRegUser } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
 import { MdSearch } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
+import { useShallow } from 'zustand/react/shallow';
+import { useAuthStore } from '@shared';
 import { mockCartItems } from './mockCart';
 import { mockWishlist } from './mockWishlist';
 
 const NavBar = () => {
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
+  const { token, user, clearSession } = useAuthStore(
+    useShallow((s) => ({
+      token: s.token,
+      user: s.user,
+      clearSession: s.clearSession,
+    })),
+  );
 
   const toggleLanguage = () => {
     const next = i18n.language === 'en' ? 'vi' : 'en';
@@ -18,6 +28,21 @@ const NavBar = () => {
 
   const cartCount = mockCartItems.reduce((sum, it) => sum + it.quantity, 0);
   const wishlistCount = mockWishlist.length;
+
+  const isLoggedIn = Boolean(token && user);
+  const displayName =
+    user?.fullName?.trim() || user?.email?.trim() || t('auth.login');
+
+  const userMenuItems: MenuProps['items'] = [
+    {
+      key: 'logout',
+      label: t('auth.logout'),
+      onClick: () => {
+        clearSession();
+        navigate('/auth');
+      },
+    },
+  ];
 
   return (
     <div className="absolute inset-x-0 top-0 z-10 mx-auto flex w-full items-center justify-between px-[200px] py-4">
@@ -61,14 +86,29 @@ const NavBar = () => {
         <Button size="small" onClick={toggleLanguage}>
           {i18n.language === 'en' ? 'EN' : 'VI'}
         </Button>
-        <Button
-          size="large"
-          type="primary"
-          className="px-5"
-          onClick={() => navigate('/auth')}
-        >
-          {t('auth.login')}
-        </Button>
+        {isLoggedIn ? (
+          <Dropdown
+            menu={{ items: userMenuItems }}
+            trigger={['hover']}
+            placement="bottomRight"
+          >
+            <button
+              type="button"
+              className="max-w-[160px] truncate rounded-md border border-transparent px-3 py-1.5 text-base font-medium text-slate-800 hover:bg-white/60"
+            >
+              {displayName}
+            </button>
+          </Dropdown>
+        ) : (
+          <Button
+            size="large"
+            type="primary"
+            className="px-5"
+            onClick={() => navigate('/auth')}
+          >
+            {t('auth.login')}
+          </Button>
+        )}
       </nav>
     </div>
   );
