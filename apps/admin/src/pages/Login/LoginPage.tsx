@@ -56,11 +56,15 @@ const LoginPage = () => {
         password: values.password,
       });
       const loginData = response?.data;
-      if (!loginData?.token) {
+      const sessionToken = loginData?.accessToken;
+      if (!loginData || !sessionToken) {
         setError(response?.message || t('admin.auth.failed'));
         return;
       }
-      useAuthStore.getState().setSessionFromLogin(loginData);
+      useAuthStore.getState().setSessionFromLogin({
+        ...loginData,
+        accessToken: sessionToken,
+      });
       try {
         const me = await userService.getCurrentUser();
         if (me?.data) {

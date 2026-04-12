@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { setApiBearerToken } from '../api/axios';
 import type { LoginResponseData, UserMeData } from '../api/user/user.response';
 
-export type AuthUser = Omit<LoginResponseData, 'token'>;
+export type AuthUser = Omit<LoginResponseData, 'accessToken'>;
 
 export const ADMIN_PANEL_ROLE = 'ADMIN' as const;
 
@@ -24,7 +24,9 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       setSessionFromLogin: (data) => {
-        const { token, userId, email, fullName, role } = data;
+        const token = data.accessToken;
+        if (!token) return;
+        const { userId, email, fullName, role } = data;
         setApiBearerToken(token);
         set({
           token,

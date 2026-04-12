@@ -47,17 +47,25 @@ const AuthPage = () => {
         password,
       });
       const loginData = response?.data;
-      if (!loginData?.token) {
+      const sessionToken = loginData?.accessToken;
+      if (!loginData || !sessionToken) {
         setError(response?.message || t('auth.loginFailed'));
         return;
       }
-      useAuthStore.getState().setSessionFromLogin(loginData);
-      const me = await userService.getCurrentUser();
-      if (me?.data) {
-        useAuthStore.getState().mergeUserFromMe(me.data);
+      useAuthStore.getState().setSessionFromLogin({
+        ...loginData,
+        accessToken: sessionToken,
+      });
+      try {
+        const me = await userService.getCurrentUser();
+        if (me?.data) {
+          useAuthStore.getState().mergeUserFromMe(me.data);
+        }
+      } catch {
+        /* vẫn đăng nhập được nếu chỉ /users/me lỗi */
       }
 
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (err: unknown) {
       setError(getApiErrorMessage(err, t('auth.loginFailed')));
     }

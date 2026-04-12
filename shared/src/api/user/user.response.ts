@@ -3,7 +3,7 @@ export interface SendOtpResponse {
 }
 
 export interface LoginResponseData {
-  token: string;
+  accessToken?: string;
   userId: string;
   email: string;
   fullName: string;
