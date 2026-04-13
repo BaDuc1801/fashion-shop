@@ -1,27 +1,39 @@
 export interface SendOtpResponse {
   message: string;
-}
-
-export interface LoginResponseData {
-  accessToken?: string;
-  userId: string;
-  email: string;
-  fullName: string;
-  role: string;
+  otpExpiresAt?: string;
+  serverTime?: string;
 }
 
 export interface LoginApiResponse {
-  message?: string;
-  data?: LoginResponseData;
-  timestamp?: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    avatar: string;
+    addresses: unknown[];
+    role: string;
+    provider: string;
+    isVerified: boolean;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  token: string;
 }
 
 export interface UserMeData {
-  userId?: string;
-  id?: string;
-  email?: string;
-  fullName?: string;
-  role?: string;
+  _id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  addresses: unknown[];
+  role: string;
+  provider: string;
+  isVerified: boolean;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface UserMeApiResponse {
@@ -32,13 +44,39 @@ export interface UserMeApiResponse {
 
 export interface RegisterResponse {
   message: string;
-  token?: string;
-  userId?: string;
-  data?: {
-    token?: string;
-    userId?: string;
-    email?: string;
-    fullName?: string;
-    role?: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    avatar: string;
+    addresses: unknown[];
+    role: string;
+    provider: string;
+    isVerified: boolean;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
   };
+  otpExpiresAt: string;
+  serverTime: string;
+}
+
+export interface VerifyOtpResponse {
+  message: string;
+  token?: string;
+}
+
+export interface ResendOtpResponse {
+  message: string;
+  otpExpiresAt?: string;
+  serverTime?: string;
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+}
+
+export interface ChangePasswordResponse {
+  message: string;
 }

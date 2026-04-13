@@ -10,6 +10,7 @@
       "email": "Email",
       "password": "Mật khẩu",
       "submit": "Đăng nhập",
+      "phoneNumber": "Số điện thoại",
       "required": "Vui lòng nhập email và mật khẩu.",
       "failed": "Đăng nhập thất bại",
       "logout": "Đăng xuất",
@@ -126,12 +127,32 @@
         "sku": "SKU",
         "price": "Giá (USD)",
         "stock": "Tồn kho",
+        "totalStock": "Tổng tồn kho (theo size & màu)",
+        "sizesTitle": "Size & màu sắc",
+        "sizeLabel": "Size",
+        "placeholderSize": "VD: S, M, 30, 32…",
+        "colorsSection": "Màu & số lượng",
+        "colorName": "Màu",
+        "color": "Màu",
+        "placeholderColor": "VD: Đen, Trắng…",
+        "quantity": "Số lượng",
+        "addSize": "Thêm size",
+        "removeSize": "Xóa size",
+        "addColor": "Thêm màu",
+        "removeColor": "Xóa màu",
         "active": "Đang bán",
         "upload": "Tải lên",
         "placeholderName": "Nhập tên sản phẩm",
         "placeholderSku": "Nhập SKU",
         "submitCreate": "Tạo sản phẩm",
-        "submitUpdate": "Cập nhật sản phẩm"
+        "submitUpdate": "Cập nhật sản phẩm",
+        "delete": "Xóa sản phẩm",
+        "deleteConfirm": "Bạn có chắc muốn xóa sản phẩm này?",
+        "createSuccess": "Tạo sản phẩm thành công",
+        "createFailed": "Tạo sản phẩm thất bại",
+        "updateFailed": "Cập nhật sản phẩm thất bại",
+        "deleteSuccess": "Xóa sản phẩm thành công",
+        "deleteFailed": "Xóa sản phẩm thất bại"
       }
     },
     "user": {
@@ -347,6 +368,11 @@
       "requiredStock": "Vui lòng nhập tồn kho",
       "stockMin": "Tồn kho phải lớn hơn hoặc bằng 0",
       "minOneImage": "Vui lòng tải ít nhất 1 ảnh",
+      "requiredSize": "Vui lòng nhập size",
+      "requiredColorName": "Vui lòng nhập tên màu",
+      "minOneSize": "Cần ít nhất một size",
+      "minOneColor": "Mỗi size cần ít nhất một màu",
+      "invalidColorHex": "Chọn màu hợp lệ (định dạng hex)",
       "requiredCollectionName": "Vui lòng nhập tên bộ sưu tập",
       "requiredCategoryName": "Vui lòng nhập tên danh mục",
       "requiredSlug": "Vui lòng nhập slug",
@@ -358,6 +384,14 @@
       "requiredMaxDiscount": "Vui lòng nhập giảm tối đa",
       "requiredMinOrder": "Vui lòng nhập giá trị đơn tối thiểu",
       "selectExpireDate": "Vui lòng chọn ngày hết hạn"
+    },
+    "confirmModal": {
+      "title": "Xác nhận",
+      "descriptionPrefix": "Bạn có chắc chắn muốn cập nhật trạng thái sản phẩm",
+      "descriptionSuffix": "không?",
+      "updateSuccess": "Cập nhật sản phẩm thành công",
+      "confirmText": "Đồng ý",
+      "cancelText": "Hủy"
     }
   }
 }

@@ -1,29 +1,29 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Card, Input, List } from 'antd';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { productService, useDebouncedValue } from '@shared';
 import {
   ADD_NEW_PATH,
   type ReturnToAddNewState,
 } from '../../constants/addNewReturn';
 import ProductForm from './ProductForm';
-import { products } from './productsMockData';
+import { useCreateProduct } from './hooks/useCreateProduct';
 
 const ProductAddPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
+  const debouncedSearch = useDebouncedValue(searchText, 400);
 
-  const filteredProducts = useMemo(
-    () =>
-      products.filter(
-        (item) =>
-          item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          item.sku.toLowerCase().includes(searchText.toLowerCase()),
-      ),
-    [searchText],
-  );
+  const { data: productsResponse, isLoading } = useQuery({
+    queryKey: ['products', 'add-list', debouncedSearch],
+    queryFn: () => productService.getProducts({ search: debouncedSearch }),
+  });
+
+  const createProductMutation = useCreateProduct();
 
   const fromAddState: ReturnToAddNewState = {
     returnTo: ADD_NEW_PATH.products,
@@ -41,7 +41,14 @@ const ProductAddPage = () => {
       </Button>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Card title={t('admin.product.form.addTitle')} className="h-fit">
-          <ProductForm isEdit={false} showTitle={false} />
+          <ProductForm
+            isEdit={false}
+            showTitle={false}
+            submitting={createProductMutation.isPending}
+            onSubmit={async (values) => {
+              await createProductMutation.mutateAsync(values);
+            }}
+          />
         </Card>
         <Card
           title={t('admin.product.addPage.existingListTitle')}
@@ -56,13 +63,14 @@ const ProductAddPage = () => {
           <div className="max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden overscroll-y-contain">
             <List
               bordered
-              dataSource={filteredProducts}
+              dataSource={productsResponse?.data ?? []}
               locale={{ emptyText: t('admin.common.noData') }}
+              loading={isLoading}
               renderItem={(item) => (
                 <List.Item
                   className="cursor-pointer"
                   onClick={() =>
-                    navigate(`/products/${item.id}`, { state: fromAddState })
+                    navigate(`/products/${item.sku}`, { state: fromAddState })
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">

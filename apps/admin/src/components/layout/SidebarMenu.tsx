@@ -70,7 +70,7 @@ const SidebarMenu = () => {
   return (
     <div className="border-r border-gray-200 fixed flex h-screen w-80 flex-col bg-white">
       <div className="text-lg font-semibold mt-4 ms-7">
-        {t('admin.common.welcome')}, {user?.fullName}
+        {t('admin.common.welcome')}, {user?.name}
       </div>
       <Menu
         mode="inline"

@@ -55,16 +55,7 @@ const LoginPage = () => {
         email: values.email.trim(),
         password: values.password,
       });
-      const loginData = response?.data;
-      const sessionToken = loginData?.accessToken;
-      if (!loginData || !sessionToken) {
-        setError(response?.message || t('admin.auth.failed'));
-        return;
-      }
-      useAuthStore.getState().setSessionFromLogin({
-        ...loginData,
-        accessToken: sessionToken,
-      });
+      useAuthStore.getState().setSessionFromLogin(response);
       try {
         const me = await userService.getCurrentUser();
         if (me?.data) {

@@ -10,6 +10,7 @@
       "email": "Email",
       "password": "Password",
       "submit": "Sign in",
+      "phoneNumber": "Phone number",
       "required": "Please enter email and password.",
       "failed": "Sign in failed",
       "logout": "Log out",
@@ -122,12 +123,32 @@
         "sku": "SKU",
         "price": "Price (USD)",
         "stock": "Stock",
+        "totalStock": "Total stock",
+        "sizesTitle": "Sizes & colors",
+        "sizeLabel": "Size",
+        "placeholderSize": "e.g. S, M, XL,...",
+        "colorsSection": "Colors & quantities",
+        "colorName": "Color",
+        "color": "Color",
+        "placeholderColor": "e.g. Black, White…",
+        "quantity": "Quantity",
+        "addSize": "Add size",
+        "removeSize": "Remove size",
+        "addColor": "Add color",
+        "removeColor": "Remove color",
         "active": "Active",
         "upload": "Upload",
         "placeholderName": "Enter product name",
         "placeholderSku": "Enter SKU",
         "submitCreate": "Create product",
-        "submitUpdate": "Update product"
+        "submitUpdate": "Update product",
+        "delete": "Delete product",
+        "deleteConfirm": "Are you sure you want to delete this product?",
+        "createSuccess": "Product created successfully",
+        "createFailed": "Product creation failed",
+        "updateFailed": "Product update failed",
+        "deleteSuccess": "Product deleted successfully",
+        "deleteFailed": "Product deletion failed"
       }
     },
     "user": {
@@ -343,6 +364,11 @@
       "requiredStock": "Please enter stock",
       "stockMin": "Stock must be greater than or equal to 0",
       "minOneImage": "Please upload at least 1 image",
+      "requiredSize": "Please enter size",
+      "requiredColorName": "Please enter color name",
+      "minOneSize": "At least one size is required",
+      "minOneColor": "Each size needs at least one color",
+      "invalidColorHex": "Pick a valid color (hex format)",
       "requiredCollectionName": "Please enter collection name",
       "requiredCategoryName": "Please enter category name",
       "requiredSlug": "Please enter slug",
@@ -354,6 +380,14 @@
       "requiredMaxDiscount": "Please enter max discount",
       "requiredMinOrder": "Please enter min order value",
       "selectExpireDate": "Please select expire date"
+    },
+    "confirmModal": {
+      "title": "Confirm",
+      "descriptionPrefix": "Are you sure you want to update the status of product",
+      "descriptionSuffix": "?",
+      "updateSuccess": "Product updated successfully",
+      "confirmText": "Confirm",
+      "cancelText": "Cancel"
     }
   }
 }

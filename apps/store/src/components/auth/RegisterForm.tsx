@@ -40,12 +40,12 @@ const RegisterForm = ({
         onFinish={handleSubmit(onSubmit)}
         autoComplete="off"
       >
-        <FormItem name="username">
+        <FormItem name="name">
           <Input
             size="large"
             placeholder={t('auth.username')}
             autoComplete="off"
-            onFocus={() => clearErrors('username')}
+            onFocus={() => clearErrors('name')}
           />
         </FormItem>
         <FormItem name="email">

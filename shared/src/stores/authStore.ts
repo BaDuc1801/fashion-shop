@@ -1,19 +1,24 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { setApiBearerToken } from '../api/axios';
-import type { LoginResponseData, UserMeData } from '../api/user/user.response';
+import type { LoginApiResponse, UserMeData } from '../api/user/user.response';
 
-export type AuthUser = Omit<LoginResponseData, 'accessToken'>;
+export type AuthUser = {
+  userId: string;
+  email: string;
+  name: string;
+  role: string;
+  avatar: string;
+};
 
-export const ADMIN_PANEL_ROLE = 'ADMIN' as const;
+export const ADMIN_PANEL_ROLE = 'admin' as const;
 
 export const isAdminUser = (user: AuthUser | null | undefined) =>
-  user?.role === ADMIN_PANEL_ROLE;
+  user?.role?.toLowerCase() === ADMIN_PANEL_ROLE;
 
 type AuthState = {
   token: string | null;
   user: AuthUser | null;
-  setSessionFromLogin: (data: LoginResponseData) => void;
+  setSessionFromLogin: (data: LoginApiResponse) => void;
   mergeUserFromMe: (me: UserMeData) => void;
   clearSession: () => void;
 };
@@ -24,42 +29,36 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       setSessionFromLogin: (data) => {
-        const token = data.accessToken;
-        if (!token) return;
-        const { userId, email, fullName, role } = data;
-        setApiBearerToken(token);
+        const token = data.token;
+        const userId = data.user._id;
+        const email = data.user.email;
+        const name = data.user.name;
+        const role = data.user.role;
+        const avatar = data.user.avatar;
         set({
           token,
-          user: { userId, email, fullName, role },
+          user: { userId, email, name, role, avatar },
         });
       },
       mergeUserFromMe: (me) => {
-        const prev = get().user;
-        if (!prev) return;
-        const userId = me.userId ?? me.id ?? prev.userId;
+        if (!get().user) return;
         set({
           user: {
-            userId,
-            email: me.email ?? prev.email,
-            fullName: me.fullName ?? prev.fullName,
-            role: me.role ?? prev.role,
+            userId: me._id,
+            email: me.email,
+            name: me.name,
+            role: me.role,
+            avatar: me.avatar,
           },
         });
       },
       clearSession: () => {
-        setApiBearerToken(null);
         set({ token: null, user: null });
       },
     }),
     {
       name: 'fashion-monorepo-auth',
       partialize: (s) => ({ token: s.token, user: s.user }),
-      onRehydrateStorage: () => (state, error) => {
-        if (error) return;
-        if (state?.token) {
-          setApiBearerToken(state.token);
-        }
-      },
     },
   ),
 );

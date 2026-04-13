@@ -9,6 +9,7 @@ type LoginFormProps = {
   onEmailChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
   onSubmit: () => void;
+  onForgotPassword: () => void;
 };
 
 const LoginForm = ({
@@ -19,6 +20,7 @@ const LoginForm = ({
   onEmailChange,
   onPasswordChange,
   onSubmit,
+  onForgotPassword,
 }: LoginFormProps) => {
   const { t } = useTranslation();
 
@@ -38,6 +40,13 @@ const LoginForm = ({
         autoComplete="new-password"
         onChange={(e) => onPasswordChange(e.target.value)}
       />
+      <button
+        type="button"
+        className="text-sm text-slate-500 underline"
+        onClick={onForgotPassword}
+      >
+        {t('auth.forgotPassword')}
+      </button>
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
       <Button
         type="primary"

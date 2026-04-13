@@ -1,23 +1,60 @@
 import axios from 'axios';
+import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-let bearerToken: string | null = null;
-
-export const setApiBearerToken = (token: string | null) => {
-  bearerToken = token;
+type RetryableRequestConfig = InternalAxiosRequestConfig & {
+  _retry?: boolean;
 };
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-api.interceptors.request.use((config) => {
-  if (bearerToken) {
-    config.headers.Authorization = `Bearer ${bearerToken}`;
+let refreshPromise: Promise<void> | null = null;
+
+const refreshAccessToken = async () => {
+  if (!refreshPromise) {
+    refreshPromise = axios
+      .post(
+        `${import.meta.env.VITE_API_URL}/api/users/refresh`,
+        {},
+        { withCredentials: true },
+      )
+      .then(() => undefined)
+      .finally(() => {
+        refreshPromise = null;
+      });
   }
-  return config;
-});
+  return refreshPromise;
+};
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryableRequestConfig | undefined;
+    const status = error.response?.status;
+
+    if (
+      status !== 401 ||
+      !originalRequest ||
+      originalRequest._retry ||
+      originalRequest.url?.includes('/api/users/refresh')
+    ) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    try {
+      await refreshAccessToken();
+      return api(originalRequest);
+    } catch {
+      return Promise.reject(error);
+    }
+  },
+);
 
 export default api;

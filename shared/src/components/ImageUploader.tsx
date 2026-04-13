@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
 import type { UploadFile, UploadProps } from 'antd';

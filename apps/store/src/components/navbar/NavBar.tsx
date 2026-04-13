@@ -1,12 +1,15 @@
-import { Badge, Button, Dropdown } from 'antd';
+import { useMutation } from '@tanstack/react-query';
+import { Badge, Button, Dropdown, message } from 'antd';
 import type { MenuProps } from 'antd';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaRegHeart, FaRegUser } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
 import { MdSearch } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
-import { useAuthStore } from '@shared';
+import { getApiErrorMessage, useAuthStore, userService } from '@shared';
+import ChangePasswordModal from '../auth/ChangePasswordModal';
 import { mockCartItems } from './mockCart';
 import { mockWishlist } from './mockWishlist';
 
@@ -28,12 +31,77 @@ const NavBar = () => {
 
   const cartCount = mockCartItems.reduce((sum, it) => sum + it.quantity, 0);
   const wishlistCount = mockWishlist.length;
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [changePasswordError, setChangePasswordError] = useState('');
 
   const isLoggedIn = Boolean(token && user);
-  const displayName =
-    user?.fullName?.trim() || user?.email?.trim() || t('auth.login');
+  const avatar = user?.avatar;
+
+  const changePasswordMutation = useMutation({
+    mutationFn: (payload: { currentPassword: string; newPassword: string }) =>
+      userService.changePassword(payload),
+  });
+
+  const resetChangePasswordForm = () => {
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setChangePasswordError('');
+  };
+
+  const handleCloseChangePassword = () => {
+    if (changePasswordMutation.isPending) return;
+    setIsChangePasswordOpen(false);
+    resetChangePasswordForm();
+  };
+
+  const handleSubmitChangePassword = async () => {
+    if (changePasswordMutation.isPending) return;
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setChangePasswordError(t('auth.requiredChangePasswordFields'));
+      return;
+    }
+    if (newPassword.length < 6) {
+      setChangePasswordError(t('auth.passwordMinLength'));
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setChangePasswordError(t('auth.passwordMismatch'));
+      return;
+    }
+    setChangePasswordError('');
+    try {
+      const data = await changePasswordMutation.mutateAsync({
+        currentPassword,
+        newPassword,
+      });
+      message.success(data.message || t('auth.changePasswordSuccess'));
+      clearSession();
+      setIsChangePasswordOpen(false);
+      resetChangePasswordForm();
+      navigate('/auth');
+    } catch (err: unknown) {
+      setChangePasswordError(
+        getApiErrorMessage(err, t('auth.changePasswordFailed')),
+      );
+    }
+  };
 
   const userMenuItems: MenuProps['items'] = [
+    {
+      key: 'change-password',
+      label: t('auth.changePassword'),
+      onClick: () => {
+        setIsChangePasswordOpen(true);
+        setChangePasswordError('');
+      },
+    },
+    {
+      type: 'divider',
+    },
     {
       key: 'logout',
       label: t('auth.logout'),
@@ -87,18 +155,32 @@ const NavBar = () => {
           {i18n.language === 'en' ? 'EN' : 'VI'}
         </Button>
         {isLoggedIn ? (
-          <Dropdown
-            menu={{ items: userMenuItems }}
-            trigger={['hover']}
-            placement="bottomRight"
-          >
-            <button
-              type="button"
-              className="max-w-[160px] truncate rounded-md border border-transparent px-3 py-1.5 text-base font-medium text-slate-800 hover:bg-white/60"
+          <>
+            <Dropdown
+              menu={{ items: userMenuItems }}
+              trigger={['hover']}
+              placement="bottomRight"
             >
-              {displayName}
-            </button>
-          </Dropdown>
+              <img
+                src={avatar}
+                alt="avatar"
+                className="size-12 rounded-full cursor-pointer"
+              />
+            </Dropdown>
+            <ChangePasswordModal
+              open={isChangePasswordOpen}
+              loading={changePasswordMutation.isPending}
+              currentPassword={currentPassword}
+              newPassword={newPassword}
+              confirmPassword={confirmPassword}
+              error={changePasswordError}
+              onCurrentPasswordChange={setCurrentPassword}
+              onNewPasswordChange={setNewPassword}
+              onConfirmPasswordChange={setConfirmPassword}
+              onCancel={handleCloseChangePassword}
+              onSubmit={handleSubmitChangePassword}
+            />
+          </>
         ) : (
           <Button
             size="large"

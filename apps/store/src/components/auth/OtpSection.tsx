@@ -6,22 +6,32 @@ type OtpSectionProps = {
   t: TFunction;
   otpDigits: string[];
   loading: boolean;
+  resendLoading: boolean;
+  remainingSeconds: number;
+  canResend: boolean;
   setOtpDigits: (digits: string[]) => void;
   error: string;
   setError: (error: string) => void;
   onVerified: (otp: string) => void;
+  onResend: () => void;
 };
 
 const OtpSection = ({
   t,
   otpDigits,
   loading,
+  resendLoading,
+  remainingSeconds,
+  canResend,
   setOtpDigits,
   error,
   setError,
   onVerified,
+  onResend,
 }: OtpSectionProps) => {
   const otpRefs = useRef<Array<InputRef | null>>([]);
+  const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+  const seconds = String(remainingSeconds % 60).padStart(2, '0');
 
   const handleVerifyOtp = () => {
     const otp = otpDigits.join('');
@@ -29,6 +39,7 @@ const OtpSection = ({
       setError(t('auth.invalidOtp'));
       return;
     }
+    setOtpDigits(['', '', '', '', '', '']);
     setError('');
     onVerified(otp);
   };
@@ -104,6 +115,18 @@ const OtpSection = ({
         ))}
       </div>
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
+      <div className="flex items-center justify-between text-sm text-slate-500">
+        <span>{t('auth.otpExpiresIn', { time: `${minutes}:${seconds}` })}</span>
+        <Button
+          type="link"
+          className="!px-0"
+          onClick={onResend}
+          disabled={!canResend || resendLoading}
+          loading={resendLoading}
+        >
+          {t('auth.resendOtp')}
+        </Button>
+      </div>
       <Button
         type="primary"
         size="large"
