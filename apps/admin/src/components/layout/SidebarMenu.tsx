@@ -63,11 +63,6 @@ const SidebarMenu = () => {
         label: t('admin.nav.orders'),
       },
       {
-        key: '/collections',
-        icon: <AppstoreOutlined className="!text-base" />,
-        label: t('admin.nav.collections'),
-      },
-      {
         key: '/employees',
         icon: <UserOutlined className="!text-base" />,
         label: t('admin.nav.managers'),

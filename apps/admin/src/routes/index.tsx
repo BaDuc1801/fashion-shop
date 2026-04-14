@@ -3,7 +3,6 @@ import LoginPage from '../pages/Login/LoginPage';
 import EmployeeManagementPage from '../pages/EmployeeManagement/EmployeeManagementPage';
 import ProductManagementPage from '../pages/ProductManagement/ProductManagementPage';
 import VoucherManagementPage from '../pages/VoucherManagement/VoucherManagementPage';
-import CollectionManagementPage from '../pages/CollectionManagement/CollectionManagementPage';
 import RootLayout from '../components/layout/RootLayout';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import EmployeeAddPage from '../pages/EmployeeManagement/EmployeeAddPage';
@@ -15,8 +14,6 @@ import ProductAddPage from '../pages/ProductManagement/ProductAddPage';
 import ProductDetailPage from '../pages/ProductManagement/ProductDetailPage';
 import VoucherAddPage from '../pages/VoucherManagement/VoucherAddPage';
 import VoucherDetailPage from '../pages/VoucherManagement/VoucherDetailPage';
-import CollectionAddPage from '../pages/CollectionManagement/CollectionAddPage';
-import CollectionDetailPage from '../pages/CollectionManagement/CollectionDetailPage';
 import OrderManagementPage from '../pages/OrderManagement/OrderManagementPage';
 import OrderDetailPage from '../pages/OrderManagement/OrderDetailPage';
 import CategoryManagementPage from '../pages/CategoryManagement/CategoryManagementPage';
@@ -47,9 +44,6 @@ const AppRoutes = () => {
         <Route path="/vouchers" element={<VoucherManagementPage />} />
         <Route path="/vouchers/add-new" element={<VoucherAddPage />} />
         <Route path="/vouchers/:id" element={<VoucherDetailPage />} />
-        <Route path="/collections" element={<CollectionManagementPage />} />
-        <Route path="/collections/add-new" element={<CollectionAddPage />} />
-        <Route path="/collections/:id" element={<CollectionDetailPage />} />
       </Route>
     </Routes>
   );
