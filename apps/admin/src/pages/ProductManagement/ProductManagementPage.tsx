@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import AddNewButton from '../../components/common/AddNewButton';
-import { ConfirmModal, useDebouncedValue } from '@shared';
+import { ConfirmModal, useTableQuery } from '@shared';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ProductData, productService } from '@shared';
@@ -13,24 +13,29 @@ import dayjs from 'dayjs';
 const ProductManagementPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [searchText, setSearchText] = useState('');
-  const debouncedSearch = useDebouncedValue(searchText, 400);
   const [pendingStatusUpdate, setPendingStatusUpdate] = useState<{
     id: string;
     nextStatus: string;
     productName: string;
   } | null>(null);
 
+  const { page, limit, search, searchText, setSearchText, onPageChange } =
+    useTableQuery({
+      defaultLimit: 10,
+    });
+
+  const queryParams = {
+    search,
+    page,
+    limit,
+  };
+
   const { data: productsResponse, isLoading } = useQuery({
-    queryKey: ['products', debouncedSearch],
-    queryFn: () =>
-      productService.getProducts({
-        search: debouncedSearch,
-      }),
+    queryKey: ['products', queryParams],
+    queryFn: () => productService.getProducts(queryParams),
   });
 
   const products = productsResponse?.data || [];
-
   const queryClient = useQueryClient();
 
   const updateStatusMutation = useMutation({
@@ -68,6 +73,13 @@ const ProductManagementPage = () => {
         ),
       },
       { title: t('admin.product.col.sku'), dataIndex: 'sku' },
+      {
+        title: t('admin.product.col.category'),
+        key: 'category',
+        render: (_, record) => {
+          return record.categoryId ? record.categoryId.name : '-';
+        },
+      },
       {
         title: t('admin.product.col.price'),
         dataIndex: 'price',
@@ -130,6 +142,7 @@ const ProductManagementPage = () => {
           size="large"
           placeholder={t('admin.product.searchPlaceholder')}
           className="w-96"
+          value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
@@ -138,8 +151,14 @@ const ProductManagementPage = () => {
         loading={isLoading}
         columns={columns}
         dataSource={products}
-        rowKey="id"
-        pagination={{ pageSize: 5, position: ['bottomCenter'] }}
+        rowKey="_id"
+        pagination={{
+          current: page,
+          pageSize: limit,
+          total: productsResponse?.total,
+          onChange: onPageChange,
+          position: ['bottomCenter'],
+        }}
         onRow={(record) => ({
           onClick: () => navigate(`/products/${record.sku}`),
           style: { cursor: 'pointer' },

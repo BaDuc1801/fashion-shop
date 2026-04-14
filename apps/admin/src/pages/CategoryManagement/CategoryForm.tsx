@@ -1,11 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
+import { Button, Form, Input, InputNumber, Switch } from 'antd';
 import type { UploadFile } from 'antd';
-import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FormItem, ImageUploader } from '@shared';
-import type { Category } from './categoriesMockData';
+import { FormItem, ImageUploader, type Category } from '@shared';
+import { useCategoryDetail } from './hooks/useCategoryDetail';
 import {
   categoryFormSchemaDefaultValues,
   createCategoryFormSchema,
@@ -16,12 +15,16 @@ interface CategoryFormProps {
   initialValues?: Category;
   isEdit?: boolean;
   showTitle?: boolean;
+  submitting?: boolean;
+  onSubmit?: (values: CategoryFormValues) => void | Promise<void>;
 }
 
 const CategoryForm = ({
   initialValues,
   isEdit,
   showTitle = true,
+  submitting = false,
+  onSubmit,
 }: CategoryFormProps) => {
   const { t } = useTranslation();
   const categorySchema = createCategoryFormSchema(t);
@@ -32,30 +35,10 @@ const CategoryForm = ({
   });
   const { handleSubmit, reset } = form;
 
-  useEffect(() => {
-    if (initialValues) {
-      reset({
-        name: initialValues.name,
-        slug: initialValues.slug,
-        productsCount: initialValues.productsCount,
-        createdAt: initialValues.createdAt,
-        status: initialValues.status === 'active',
-        images: initialValues.icon
-          ? [
-              {
-                uid: initialValues.id,
-                name: initialValues.name,
-                status: 'done',
-                url: initialValues.icon,
-              },
-            ]
-          : [],
-      });
-    }
-  }, [initialValues, reset]);
+  useCategoryDetail({ initialValues, reset });
 
-  const handleFinish = (values: CategoryFormValues) => {
-    console.log('Category payload:', values);
+  const handleFinish = async (values: CategoryFormValues) => {
+    await onSubmit?.(values);
   };
 
   return (
@@ -76,7 +59,7 @@ const CategoryForm = ({
           {({ field }) => (
             <ImageUploader
               fileList={(field.value as UploadFile[]) || []}
-              onChange={(fileList) => field.onChange(fileList.slice(0, 3))}
+              onChange={(fileList) => field.onChange(fileList.slice(0, 1))}
               maxCount={1}
               uploadLabel={t('admin.category.form.upload')}
               multiple
@@ -96,14 +79,10 @@ const CategoryForm = ({
           />
         </FormItem>
         <FormItem
-          name="productsCount"
-          label={t('admin.category.form.productsCount')}
-          getValueFromEvent={(value) => (value as number | null) ?? 0}
+          name="productCount"
+          label={t('admin.category.form.productCount')}
         >
-          <InputNumber min={0} className="w-full" size="large" />
-        </FormItem>
-        <FormItem name="createdAt" label={t('admin.category.form.createdAt')}>
-          <DatePicker className="w-full" size="large" />
+          <InputNumber size="large" disabled />
         </FormItem>
         <FormItem
           name="status"
@@ -112,7 +91,13 @@ const CategoryForm = ({
         >
           <Switch />
         </FormItem>
-        <Button type="primary" htmlType="submit" block size="large">
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          size="large"
+          loading={submitting}
+        >
           {isEdit
             ? t('admin.category.form.submitUpdate')
             : t('admin.category.form.submitCreate')}

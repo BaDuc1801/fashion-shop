@@ -4,4 +4,7 @@ export * from './user/user.response';
 export * from './product/product.api';
 export * from './product/product.request';
 export * from './product/product.response';
+export * from './category/category.api';
+export * from './category/category.request';
+export * from './category/category.response';
 export * from './upload/upload.api';

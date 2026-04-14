@@ -1,14 +1,21 @@
-import { Button, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Switch,
+} from 'antd';
 import type { UploadFile } from 'antd';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Employee } from './employeesMockData';
 import {
   addNewEmployeeSchemaDefaultValues,
   createAddNewEmployeeSchema,
-  AddNewEmployeeFormValues,
+  type AddNewEmployeeFormValues,
 } from './schemas/addNewEmployeeSchema';
 import { FormItem, ImageUploader } from '@shared';
 
@@ -16,13 +23,15 @@ interface Props {
   initialValues?: AddNewEmployeeFormValues;
   isEdit?: boolean;
   showTitle?: boolean;
-  onSubmit?: (values: Employee) => void;
+  submitting?: boolean;
+  onSubmit?: (values: AddNewEmployeeFormValues) => void | Promise<void>;
 }
 
 const EmployeeForm = ({
   initialValues,
   isEdit,
   showTitle = true,
+  submitting = false,
   onSubmit,
 }: Props) => {
   const { t } = useTranslation();
@@ -40,20 +49,8 @@ const EmployeeForm = ({
     }
   }, [initialValues, reset]);
 
-  const onFormSubmit = (values: AddNewEmployeeFormValues) => {
-    const payload: Employee = {
-      id: values.id,
-      name: values.name,
-      email: values.email,
-      phone: values.phone,
-      joinDate: values.joinDate,
-      salary: values.salary,
-      avatar: { url: values.avatar || '', name: 'avatar.png' },
-      status: values.status ? 'active' : 'inactive',
-      role: values.role,
-    };
-
-    onSubmit?.(payload);
+  const onFormSubmit = async (values: AddNewEmployeeFormValues) => {
+    await onSubmit?.(values);
   };
 
   return (
@@ -76,27 +73,11 @@ const EmployeeForm = ({
               {({ field }) => (
                 <ImageUploader
                   squareFullWidth
-                  fileList={
-                    field.value
-                      ? [
-                          {
-                            uid: 'employee-avatar',
-                            name: 'avatar',
-                            status: 'done',
-                            url: field.value,
-                          } satisfies UploadFile,
-                        ]
-                      : []
-                  }
-                  onChange={(fileList) => {
-                    const first = fileList[0];
-                    const nextUrl =
-                      first?.url ||
-                      (first?.originFileObj
-                        ? URL.createObjectURL(first.originFileObj)
-                        : '');
-                    field.onChange(nextUrl);
-                  }}
+                  fileList={((field.value as UploadFile[] | undefined) ?? []).slice(
+                    0,
+                    1,
+                  )}
+                  onChange={(fileList) => field.onChange(fileList.slice(0, 1))}
                   maxCount={1}
                   multiple={false}
                   uploadLabel={t('admin.product.form.upload')}
@@ -142,6 +123,15 @@ const EmployeeForm = ({
             >
               <InputNumber className="w-full" size="large" />
             </FormItem>
+            <FormItem name="role" label={t('admin.user.col.role')}>
+              <Select
+                size="large"
+                options={[
+                  { label: t('admin.employee.form.admin'), value: 'admin' },
+                  { label: t('admin.employee.form.staff'), value: 'staff' },
+                ]}
+              />
+            </FormItem>
           </div>
         </div>
         <Button
@@ -150,6 +140,7 @@ const EmployeeForm = ({
           block
           size="large"
           className="mt-4"
+          loading={submitting}
         >
           {isEdit
             ? t('admin.employee.form.submitUpdate')

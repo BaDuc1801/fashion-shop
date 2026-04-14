@@ -6,6 +6,8 @@ export interface ConfirmModalProps {
   open: boolean;
   title: string;
   productName?: string;
+  categoryName?: string;
+  userName?: string;
   confirmText?: string;
   cancelText?: string;
   loading?: boolean;
@@ -17,6 +19,8 @@ export const ConfirmModal = ({
   open,
   title,
   productName,
+  categoryName,
+  userName,
   confirmText,
   cancelText,
   loading = false,
@@ -52,9 +56,26 @@ export const ConfirmModal = ({
       ]}
     >
       <span className="mb-0 text-base">
-        {t('admin.confirmModal.descriptionPrefix')}{' '}
-        <span className="font-semibold">{productName ?? ''}</span>{' '}
-        {t('admin.confirmModal.descriptionSuffix')}
+        {categoryName && (
+          <>
+            {t('admin.confirmModal.descriptionPrefixCategory')}{' '}
+            <span className="font-semibold">{categoryName}</span>?
+          </>
+        )}
+
+        {productName && (
+          <>
+            {t('admin.confirmModal.descriptionPrefixProduct')}{' '}
+            <span className="font-semibold">{productName}</span>?
+          </>
+        )}
+
+        {userName && (
+          <>
+            {t('admin.confirmModal.descriptionPrefixUser')}{' '}
+            <span className="font-semibold">{userName}</span>?
+          </>
+        )}
       </span>
     </Modal>
   );

@@ -8,7 +8,8 @@ import {
   Switch,
 } from 'antd';
 import type { UploadFile } from 'antd';
-import { useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import {
   FormProvider,
   useFieldArray,
@@ -18,16 +19,16 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormItem, ImageUploader, ProductData } from '@shared';
+import { categoryService, FormItem, ImageUploader, ProductData } from '@shared';
 import { PRODUCT_SIZE_SELECT_OPTIONS } from './constants/productSizeOptions';
 import {
   addNewProductSchemaDefaultValues,
   createAddNewProductSchema,
   type AddNewProductFormValues,
 } from './schemas/addNewProductSchema';
+import { useProductDetail } from './hooks/useProductDetail';
 
 const DEFAULT_SWATCH = '#1677ff';
-const HEX_COLOR_REGEX = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
 
 interface ProductFormProps {
   initialValues?: ProductData;
@@ -111,6 +112,12 @@ const ProductForm = ({
     defaultValues: addNewProductSchemaDefaultValues,
   });
   const { handleSubmit, reset, control } = form;
+  const { data: categoriesResponse, isLoading: isCategoriesLoading } = useQuery(
+    {
+      queryKey: ['categories', 'product-form'],
+      queryFn: () => categoryService.getCategories({ page: 1, limit: 100 }),
+    },
+  );
 
   const {
     fields: sizeFields,
@@ -137,42 +144,16 @@ const ProductForm = ({
     }, 0);
   }, [sizeVariantsWatch]);
 
-  useEffect(() => {
-    if (initialValues) {
-      reset({
-        name: initialValues.name,
-        sku: initialValues.sku,
-        price: initialValues.price,
-        status: initialValues.status === 'active',
-        images: initialValues.images?.length
-          ? initialValues.images.map((url, index) => ({
-              uid: `${initialValues._id}-img-${index}`,
-              name: `${initialValues.name}-${index + 1}`,
-              status: 'done' as const,
-              url,
-            }))
-          : [],
-        sizeVariants:
-          initialValues.sizeVariants && initialValues.sizeVariants.length > 0
-            ? initialValues.sizeVariants.map((sv) => ({
-                size: sv.size,
-                colors: sv.colors.map((c) => ({
-                  // Doi mau tu BE ve hex de ColorPicker + zod validate khong bi sai dinh dang.
-                  name: HEX_COLOR_REGEX.test(c.name) ? c.name : DEFAULT_SWATCH,
-                  quantity: c.quantity,
-                })),
-              }))
-            : [
-                {
-                  size: '',
-                  colors: [
-                    { name: DEFAULT_SWATCH, quantity: initialValues.stock },
-                  ],
-                },
-              ],
-      });
-    }
-  }, [initialValues, reset]);
+  const categoryOptions = useMemo(
+    () =>
+      categoriesResponse?.data?.map((category) => ({
+        value: category._id,
+        label: category.name,
+      })),
+    [categoriesResponse],
+  );
+
+  useProductDetail({ initialValues, reset });
 
   const handleFinish = async (values: AddNewProductFormValues) => {
     await onSubmit?.(values);
@@ -203,6 +184,17 @@ const ProductForm = ({
               multiple
             />
           )}
+        </FormItem>
+
+        <FormItem name="categoryId" label={t('admin.product.form.category')}>
+          <Select
+            showSearch
+            optionFilterProp="label"
+            options={categoryOptions}
+            loading={isCategoriesLoading}
+            placeholder={t('admin.product.form.placeholderCategory')}
+            size="large"
+          />
         </FormItem>
 
         <FormItem name="name" label={t('admin.product.form.name')}>
@@ -256,12 +248,14 @@ const ProductForm = ({
                         const selectedSizes = (sizeVariantsWatch ?? [])
                           .map((variant) => variant?.size)
                           .filter((size): size is string => Boolean(size));
-                        const options = PRODUCT_SIZE_SELECT_OPTIONS.map((option) => ({
-                          ...option,
-                          disabled:
-                            option.value !== field.value &&
-                            selectedSizes.includes(option.value),
-                        }));
+                        const options = PRODUCT_SIZE_SELECT_OPTIONS.map(
+                          (option) => ({
+                            ...option,
+                            disabled:
+                              option.value !== field.value &&
+                              selectedSizes.includes(option.value),
+                          }),
+                        );
 
                         return (
                           <Select
@@ -272,7 +266,9 @@ const ProductForm = ({
                             showSearch
                             optionFilterProp="label"
                             options={options}
-                            placeholder={t('admin.product.form.placeholderSize')}
+                            placeholder={t(
+                              'admin.product.form.placeholderSize',
+                            )}
                             size="large"
                             className="w-full"
                           />

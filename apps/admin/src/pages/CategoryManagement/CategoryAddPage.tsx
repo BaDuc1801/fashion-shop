@@ -1,29 +1,30 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Card, Input, List } from 'antd';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import {
   ADD_NEW_PATH,
   type ReturnToAddNewState,
 } from '../../constants/addNewReturn';
 import CategoryForm from './CategoryForm';
-import { categories } from './categoriesMockData';
+import { useCreateCategory } from './hooks/useCreateCategory';
+import { categoryService, useDebouncedValue } from '@shared';
 
 const CategoryAddPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
+  const debouncedSearch = useDebouncedValue(searchText, 400);
 
-  const filteredCategories = useMemo(
-    () =>
-      categories.filter(
-        (item) =>
-          item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          item.slug.toLowerCase().includes(searchText.toLowerCase()),
-      ),
-    [searchText],
-  );
+  const { data: categoriesResponse, isLoading } = useQuery({
+    queryKey: ['categories', 'add-list', debouncedSearch],
+    queryFn: () =>
+      categoryService.getCategories({ search: debouncedSearch, page: 1, limit: 100 }),
+  });
+
+  const createCategoryMutation = useCreateCategory();
 
   const fromAddState: ReturnToAddNewState = {
     returnTo: ADD_NEW_PATH.categories,
@@ -41,7 +42,14 @@ const CategoryAddPage = () => {
       </Button>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Card title={t('admin.category.form.addTitle')} className="h-fit">
-          <CategoryForm isEdit={false} showTitle={false} />
+          <CategoryForm
+            isEdit={false}
+            showTitle={false}
+            submitting={createCategoryMutation.isPending}
+            onSubmit={async (values) => {
+              await createCategoryMutation.mutateAsync(values);
+            }}
+          />
         </Card>
         <Card
           title={t('admin.category.addPage.existingListTitle')}
@@ -56,13 +64,14 @@ const CategoryAddPage = () => {
           <div className="max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden overscroll-y-contain">
             <List
               bordered
-              dataSource={filteredCategories}
+              dataSource={categoriesResponse?.data ?? []}
               locale={{ emptyText: t('admin.common.noData') }}
+              loading={isLoading}
               renderItem={(item) => (
                 <List.Item
                   className="cursor-pointer"
                   onClick={() =>
-                    navigate(`/categories/${item.id}`, { state: fromAddState })
+                    navigate(`/categories/${item._id}`, { state: fromAddState })
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">

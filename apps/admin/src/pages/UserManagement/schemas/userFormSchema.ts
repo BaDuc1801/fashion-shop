@@ -1,8 +1,10 @@
+import { UploadFile } from 'antd';
 import type { TFunction } from 'i18next';
 import { z } from 'zod';
 
 export const createUserFormSchema = (t: TFunction) =>
   z.object({
+    avatar: z.array(z.custom<UploadFile>()),
     name: z.string().min(1, t('admin.validation.requiredName')),
     email: z.email(t('admin.validation.invalidEmail')),
     phone: z
@@ -13,6 +15,7 @@ export const createUserFormSchema = (t: TFunction) =>
   });
 
 export const userFormSchemaDefaultValues = {
+  avatar: [] as UploadFile[],
   name: '',
   email: '',
   phone: '',

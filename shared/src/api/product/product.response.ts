@@ -1,8 +1,10 @@
+import { Category } from '../category/category.response';
 import { ProductSizeVariant } from './product.request';
 
 export interface ProductData {
   _id: string;
   name: string;
+  categoryId: Category;
   sku: string;
   price: number;
   status: string;
@@ -24,6 +26,7 @@ export interface GetProductsResponse {
 export interface ProductResponse {
   _id: string;
   name: string;
+  categoryId: string;
   sku: string;
   price: number;
   status: string;

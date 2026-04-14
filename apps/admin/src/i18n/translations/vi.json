@@ -10,6 +10,28 @@
       "email": "Email",
       "password": "Mật khẩu",
       "submit": "Đăng nhập",
+      "forgotPassword": "Quên mật khẩu?",
+      "sendOtp": "Gửi OTP",
+      "resendOtp": "Gửi lại OTP",
+      "verifyOtp": "Xác thực OTP",
+      "otpExpiresIn": "OTP hết hạn sau {{time}}",
+      "invalidOtp": "OTP không hợp lệ",
+      "sendOtpFailed": "Gửi OTP thất bại",
+      "verifyOtpFailed": "Xác thực OTP thất bại",
+      "resendOtpFailed": "Gửi lại OTP thất bại",
+      "resetPassword": "Đặt lại mật khẩu",
+      "resetPasswordFailed": "Đặt lại mật khẩu thất bại",
+      "newPassword": "Mật khẩu mới",
+      "confirmNewPassword": "Xác nhận mật khẩu mới",
+      "requiredEmail": "Vui lòng nhập email",
+      "requiredResetPasswordFields": "Vui lòng nhập đầy đủ thông tin mật khẩu",
+      "passwordMin": "Mật khẩu phải có ít nhất 6 ký tự",
+      "passwordNotMatch": "Mật khẩu xác nhận không khớp",
+      "changePassword": "Đổi mật khẩu",
+      "currentPassword": "Mật khẩu hiện tại",
+      "requiredChangePasswordFields": "Vui lòng nhập đầy đủ thông tin đổi mật khẩu",
+      "changePasswordSuccess": "Đổi mật khẩu thành công, vui lòng đăng nhập lại",
+      "changePasswordFailed": "Đổi mật khẩu thất bại",
       "phoneNumber": "Số điện thoại",
       "required": "Vui lòng nhập email và mật khẩu.",
       "failed": "Đăng nhập thất bại",
@@ -58,7 +80,8 @@
     },
     "common": {
       "noData": "Khong co du lieu",
-      "welcome": "Chào mừng"
+      "welcome": "Chào mừng",
+      "cancel": "Hủy"
     },
     "employee": {
       "title": "Quản lý nhân viên",
@@ -90,11 +113,22 @@
         "joinDate": "Ngày vào làm",
         "email": "Email",
         "salary": "Lương (USD)",
+        "admin": "Quản trị viên",
+        "staff": "Nhân viên",
         "placeholderName": "Nhập họ tên",
         "placeholderPhone": "Nhập số điện thoại",
         "placeholderEmail": "Nhập email",
-        "submitCreate": "Tạo nhân viên",
-        "submitUpdate": "Cập nhật nhân viên"
+        "submitCreate": "Mời nhân viên",
+        "submitUpdate": "Cập nhật nhân viên",
+        "inviteSuccess": "Đã mời thành công",
+        "createSuccess": "Tạo nhân viên thành công",
+        "createFailed": "Tạo nhân viên thất bại",
+        "updateSuccess": "Cập nhật nhân viên thành công",
+        "updateFailed": "Cập nhật nhân viên thất bại",
+        "delete": "Xóa nhân viên",
+        "deleteConfirm": "Bạn có chắc muốn xóa nhân viên này?",
+        "deleteSuccess": "Xóa nhân viên thành công",
+        "deleteFailed": "Xóa nhân viên thất bại"
       }
     },
     "product": {
@@ -108,7 +142,8 @@
         "stock": "Tồn kho",
         "created": "Ngày tạo",
         "status": "Trạng thái",
-        "out": "Hết"
+        "out": "Hết",
+        "category": "Danh mục"
       },
       "detail": {
         "back": "Quay lai danh sach san pham",
@@ -123,6 +158,7 @@
         "editTitle": "Sửa sản phẩm",
         "addTitle": "Thêm sản phẩm",
         "images": "Hình ảnh sản phẩm",
+        "category": "Danh mục",
         "name": "Tên sản phẩm",
         "sku": "SKU",
         "price": "Giá (USD)",
@@ -143,6 +179,7 @@
         "active": "Đang bán",
         "upload": "Tải lên",
         "placeholderName": "Nhập tên sản phẩm",
+        "placeholderCategory": "Chọn danh mục",
         "placeholderSku": "Nhập SKU",
         "submitCreate": "Tạo sản phẩm",
         "submitUpdate": "Cập nhật sản phẩm",
@@ -163,7 +200,8 @@
         "email": "Email",
         "phone": "Điện thoại",
         "joinDate": "Ngày tham gia",
-        "status": "Trạng thái"
+        "status": "Trạng thái",
+        "role": "Chức vụ"
       },
       "detail": {
         "back": "Quay lai danh sach nguoi dung",
@@ -185,7 +223,15 @@
         "placeholderEmail": "Nhập email",
         "placeholderPhone": "Nhập số điện thoại",
         "submitCreate": "Tạo người dùng",
-        "submitUpdate": "Cập nhật người dùng"
+        "submitUpdate": "Cập nhật người dùng",
+        "createSuccess": "Tạo người dùng thành công",
+        "createFailed": "Tạo người dùng thất bại",
+        "updateSuccess": "Cập nhật người dùng thành công",
+        "updateFailed": "Cập nhật người dùng thất bại",
+        "delete": "Xóa người dùng",
+        "deleteConfirm": "Bạn có chắc muốn xóa người dùng này?",
+        "deleteSuccess": "Xóa người dùng thành công",
+        "deleteFailed": "Xóa người dùng thất bại"
       },
       "purchaseHistory": "Lịch sử mua hàng",
       "purchaseCol": {
@@ -349,7 +395,16 @@
         "placeholderName": "Nhập tên danh mục",
         "placeholderSlug": "Nhập slug",
         "submitCreate": "Tạo danh mục",
-        "submitUpdate": "Cập nhật danh mục"
+        "submitUpdate": "Cập nhật danh mục",
+        "createSuccess": "Tạo danh mục thành công",
+        "createFailed": "Tạo danh mục thất bại",
+        "updateSuccess": "Cập nhật danh mục thành công",
+        "updateFailed": "Cập nhật danh mục thất bại",
+        "delete": "Xóa danh mục",
+        "deleteConfirm": "Bạn có chắc muốn xóa danh mục này?",
+        "deleteSuccess": "Xóa danh mục thành công",
+        "deleteFailed": "Xóa danh mục thất bại",
+        "productCount": "Số sản phẩm"
       }
     },
     "validation": {
@@ -383,11 +438,13 @@
       "requiredDiscount": "Vui lòng nhập % giảm",
       "requiredMaxDiscount": "Vui lòng nhập giảm tối đa",
       "requiredMinOrder": "Vui lòng nhập giá trị đơn tối thiểu",
-      "selectExpireDate": "Vui lòng chọn ngày hết hạn"
+      "selectExpireDate": "Vui lòng chọn ngày hết hạn",
+      "requiredCategory": "Vui lòng chọn danh mục"
     },
     "confirmModal": {
       "title": "Xác nhận",
       "descriptionPrefix": "Bạn có chắc chắn muốn cập nhật trạng thái sản phẩm",
+      "descriptionPrefixCategory": "Bạn có chắc chắn muốn cập nhật trạng thái danh mục",
       "descriptionSuffix": "không?",
       "updateSuccess": "Cập nhật sản phẩm thành công",
       "confirmText": "Đồng ý",

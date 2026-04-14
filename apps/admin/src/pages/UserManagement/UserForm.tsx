@@ -1,10 +1,9 @@
-import { Button, Form, Input, Switch } from 'antd';
+import { Button, Form, Input, Switch, UploadFile } from 'antd';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormItem } from '@shared';
-import type { User } from './usersMockData';
+import { FormItem, ImageUploader, type UserMeData } from '@shared';
 import {
   createUserFormSchema,
   userFormSchemaDefaultValues,
@@ -12,15 +11,19 @@ import {
 } from './schemas/userFormSchema';
 
 interface UserFormProps {
-  initialValues?: User;
+  initialValues?: UserMeData;
   isEdit?: boolean;
   showTitle?: boolean;
+  submitting?: boolean;
+  onSubmit?: (values: UserFormValues) => void | Promise<void>;
 }
 
 const UserForm = ({
   initialValues,
   isEdit,
   showTitle = true,
+  submitting = false,
+  onSubmit,
 }: UserFormProps) => {
   const { t } = useTranslation();
   const userSchema = createUserFormSchema(t);
@@ -34,16 +37,26 @@ const UserForm = ({
   useEffect(() => {
     if (initialValues) {
       reset({
+        avatar: initialValues.avatar
+          ? [
+              {
+                uid: `${initialValues._id}-avatar`,
+                name: `${initialValues.name}-avatar`,
+                status: 'done',
+                url: initialValues.avatar,
+              } as UploadFile,
+            ]
+          : [],
         name: initialValues.name,
         email: initialValues.email,
-        phone: initialValues.phone,
+        phone: initialValues.phone ?? '',
         status: initialValues.status === 'active',
       });
     }
   }, [initialValues, reset]);
 
-  const handleFinish = (values: UserFormValues) => {
-    console.log('User payload:', values);
+  const handleFinish = async (values: UserFormValues) => {
+    await onSubmit?.(values);
   };
 
   return (
@@ -60,6 +73,16 @@ const UserForm = ({
               : t('admin.user.form.addTitle')}
           </h2>
         ) : null}
+        <FormItem name="avatar" label={t('admin.employee.form.avatar')}>
+          {({ field }) => (
+            <ImageUploader
+              fileList={(field.value as UploadFile[]) || []}
+              onChange={(fileList) => field.onChange(fileList.slice(0, 1))}
+              maxCount={1}
+              uploadLabel={t('admin.category.form.upload')}
+            />
+          )}
+        </FormItem>
         <FormItem name="name" label={t('admin.user.form.name')}>
           <Input
             placeholder={t('admin.user.form.placeholderName')}
@@ -85,7 +108,13 @@ const UserForm = ({
         >
           <Switch />
         </FormItem>
-        <Button type="primary" htmlType="submit" block size="large">
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          size="large"
+          loading={submitting}
+        >
           {isEdit
             ? t('admin.user.form.submitUpdate')
             : t('admin.user.form.submitCreate')}

@@ -1,12 +1,16 @@
 import api from '../axios';
 import {
   ChangePasswordRequest,
+  CreateUserRequest,
+  UpdateUserRequest,
   LoginRequest,
   RegisterRequest,
   ResetPasswordRequest,
   ResendOtpRequest,
   SendOtpRequest,
   VerifyOtpRequest,
+  GetUsersRequest,
+  InviteUserRequest,
 } from './user.request';
 import {
   ChangePasswordResponse,
@@ -15,8 +19,10 @@ import {
   ResendOtpResponse,
   RegisterResponse,
   SendOtpResponse,
+  UserMeData,
   UserMeApiResponse,
   VerifyOtpResponse,
+  GetUsersResponse,
 } from './user.response';
 
 class UserService {
@@ -61,6 +67,36 @@ class UserService {
     payload: ChangePasswordRequest,
   ): Promise<ChangePasswordResponse> {
     const res = await api.put('/api/users/me/password', payload);
+    return res.data;
+  }
+
+  async getUsers(queryParams: GetUsersRequest): Promise<GetUsersResponse> {
+    const res = await api.get('/api/users', { params: queryParams });
+    return res.data;
+  }
+
+  async getUserById(id: string): Promise<UserMeData> {
+    const res = await api.get(`/api/users/${id}`);
+    return res.data;
+  }
+
+  async createUser(payload: CreateUserRequest): Promise<UserMeData> {
+    const res = await api.post('/api/users', payload);
+    return res.data;
+  }
+
+  async inviteUser(payload: InviteUserRequest): Promise<UserMeData> {
+    const res = await api.post('/api/users/invite', payload);
+    return res.data;
+  }
+
+  async updateUser(id: string, payload: UpdateUserRequest): Promise<UserMeData> {
+    const res = await api.put(`/api/users/${id}`, payload);
+    return res.data;
+  }
+
+  async deleteUser(id: string): Promise<{ message: string }> {
+    const res = await api.delete(`/api/users/${id}`);
     return res.data;
   }
 }

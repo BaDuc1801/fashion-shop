@@ -1,14 +1,16 @@
 import {
   AppstoreOutlined,
+  LockOutlined,
   GiftOutlined,
   HomeOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { useAuthStore } from '@shared';
-import { Button, Menu, Select } from 'antd';
-import { useMemo } from 'react';
+import { getApiErrorMessage, userService, useAuthStore } from '@shared';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Divider, Input, Menu, Modal, Select, message } from 'antd';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -17,6 +19,31 @@ const SidebarMenu = () => {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const user = useAuthStore((s) => s.user);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [changePasswordError, setChangePasswordError] = useState('');
+
+  const changePasswordMutation = useMutation({
+    mutationFn: (args: { currentPassword: string; newPassword: string }) =>
+      userService.changePassword(args),
+    onSuccess: () => {
+      message.success(t('admin.auth.changePasswordSuccess'));
+      setChangePasswordOpen(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setChangePasswordError('');
+      useAuthStore.getState().clearSession();
+      navigate('/login');
+    },
+    onError: (error) => {
+      setChangePasswordError(
+        getApiErrorMessage(error, t('admin.auth.changePasswordFailed')),
+      );
+    },
+  });
 
   const items = useMemo(
     () => [
@@ -67,6 +94,23 @@ const SidebarMenu = () => {
   const selectedKey =
     items.find((item) => location.pathname.startsWith(item.key))?.key || '';
 
+  const handleChangePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setChangePasswordError(t('admin.auth.requiredChangePasswordFields'));
+      return;
+    }
+    if (newPassword.length < 6) {
+      setChangePasswordError(t('admin.auth.passwordMin'));
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setChangePasswordError(t('admin.auth.passwordNotMatch'));
+      return;
+    }
+    setChangePasswordError('');
+    await changePasswordMutation.mutateAsync({ currentPassword, newPassword });
+  };
+
   return (
     <div className="border-r border-gray-200 fixed flex h-screen w-80 flex-col bg-white">
       <div className="text-lg font-semibold mt-4 ms-7">
@@ -96,7 +140,21 @@ const SidebarMenu = () => {
         />
         <Button
           block
+          icon={<LockOutlined />}
           className="mt-3"
+          onClick={() => {
+            setChangePasswordOpen(true);
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setChangePasswordError('');
+          }}
+        >
+          {t('admin.auth.changePassword')}
+        </Button>
+        <Divider className="my-3" />
+        <Button
+          block
           onClick={() => {
             useAuthStore.getState().clearSession();
             navigate('/login');
@@ -105,6 +163,40 @@ const SidebarMenu = () => {
           {t('admin.auth.logout')}
         </Button>
       </div>
+      <Modal
+        title={t('admin.auth.changePassword')}
+        open={changePasswordOpen}
+        onCancel={() => setChangePasswordOpen(false)}
+        onOk={() => void handleChangePassword()}
+        okText={t('admin.auth.changePassword')}
+        cancelText={t('admin.common.cancel')}
+        confirmLoading={changePasswordMutation.isPending}
+        destroyOnHidden
+      >
+        <div className="space-y-3 pt-2">
+          <Input.Password
+            size="large"
+            value={currentPassword}
+            onChange={(event) => setCurrentPassword(event.target.value)}
+            placeholder={t('admin.auth.currentPassword')}
+          />
+          <Input.Password
+            size="large"
+            value={newPassword}
+            onChange={(event) => setNewPassword(event.target.value)}
+            placeholder={t('admin.auth.newPassword')}
+          />
+          <Input.Password
+            size="large"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            placeholder={t('admin.auth.confirmNewPassword')}
+          />
+          {changePasswordError ? (
+            <p className="text-sm text-red-600">{changePasswordError}</p>
+          ) : null}
+        </div>
+      </Modal>
     </div>
   );
 };

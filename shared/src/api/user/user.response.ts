@@ -27,6 +27,8 @@ export interface UserMeData {
   name: string;
   email: string;
   avatar: string;
+  phone?: string;
+  salary?: number;
   addresses: unknown[];
   role: string;
   provider: string;
@@ -49,6 +51,7 @@ export interface RegisterResponse {
     name: string;
     email: string;
     avatar: string;
+    salary?: number;
     addresses: unknown[];
     role: string;
     provider: string;
@@ -79,4 +82,11 @@ export interface ResetPasswordResponse {
 
 export interface ChangePasswordResponse {
   message: string;
+}
+
+export interface GetUsersResponse {
+  data: UserMeData[];
+  total: number;
+  page?: number;
+  totalPages?: number;
 }

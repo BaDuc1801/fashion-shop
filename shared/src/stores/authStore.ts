@@ -11,9 +11,11 @@ export type AuthUser = {
 };
 
 export const ADMIN_PANEL_ROLE = 'admin' as const;
+export const STAFF_ROLE = 'staff' as const;
 
 export const isAdminUser = (user: AuthUser | null | undefined) =>
-  user?.role?.toLowerCase() === ADMIN_PANEL_ROLE;
+  user?.role?.toLowerCase() === ADMIN_PANEL_ROLE ||
+  user?.role?.toLowerCase() === STAFF_ROLE;
 
 type AuthState = {
   token: string | null;

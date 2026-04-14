@@ -1,58 +1,117 @@
-import { Avatar, Input, Switch, Table } from 'antd';
+import { Avatar, Input, Switch, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ConfirmModal, UserMeData, userService, useTableQuery } from '@shared';
+import dayjs from 'dayjs';
 import AddNewButton from '../../components/common/AddNewButton';
-import { Employee, employees } from './employeesMockData';
 
 const EmployeeManagementPage = () => {
   const { t } = useTranslation();
-  const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [pendingStatusUpdate, setPendingStatusUpdate] = useState<{
+    id: string;
+    nextStatus: string;
+    userName: string;
+  } | null>(null);
 
-  const filteredData = employees.filter(
-    (emp) =>
-      emp.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      emp.phone.includes(searchText),
-  );
+  const { page, limit, search, searchText, setSearchText, onPageChange } =
+    useTableQuery({
+      defaultLimit: 10,
+    });
 
-  const columns: ColumnsType<Employee> = useMemo(
+  const queryParams = {
+    search,
+    page,
+    limit,
+    role: 'staff',
+  };
+
+  const adminQueryParams = {
+    search,
+    page,
+    limit,
+    role: 'admin',
+  };
+
+  const { data: staffData, isLoading: staffLoading } = useQuery({
+    queryKey: ['users', queryParams],
+    queryFn: () => userService.getUsers(queryParams),
+  });
+  const { data: adminData, isLoading: adminLoading } = useQuery({
+    queryKey: ['users', adminQueryParams],
+    queryFn: () => userService.getUsers(adminQueryParams),
+  });
+
+  const staffUsers = staffData?.data || [];
+  const adminUsers = adminData?.data || [];
+  const staffTotal = staffData?.total || 0;
+  const adminTotal = adminData?.total || 0;
+  const total = staffTotal + adminTotal;
+
+  const updateStatusMutation = useMutation({
+    mutationFn: ({
+      id,
+      status,
+    }: {
+      id: string;
+      status: 'active' | 'inactive';
+    }) => userService.updateUser(id, { status }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      message.success(t('admin.confirmModal.updateSuccess'));
+      setPendingStatusUpdate(null);
+    },
+    onError: () => {
+      setPendingStatusUpdate(null);
+    },
+  });
+
+  const columns: ColumnsType<UserMeData> = useMemo(
     () => [
       {
-        title: t('admin.employee.col.employee'),
+        title: t('admin.user.col.user'),
         key: 'name',
         render: (_, record) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Avatar src={record.avatar.url} />
+            <Avatar src={record.avatar} />
             <div>{record.name}</div>
           </div>
         ),
       },
+      { title: t('admin.user.col.email'), dataIndex: 'email' },
       {
-        title: t('admin.employee.col.email'),
-        dataIndex: 'email',
+        title: t('admin.user.col.role'),
+        dataIndex: 'role',
+        render: (role: string) => role.charAt(0).toUpperCase() + role.slice(1),
       },
       {
-        title: t('admin.employee.col.phone'),
+        title: t('admin.user.col.phone'),
         dataIndex: 'phone',
+        render: (val: string) => val || '-',
       },
       {
-        title: t('admin.employee.col.joinDate'),
-        dataIndex: 'joinDate',
-        render: (joinDate: Employee['joinDate']) => joinDate.format('DD/MM/YYYY'),
-        sorter: (a, b) =>
-          a.joinDate.toDate().getTime() - b.joinDate.toDate().getTime(),
+        title: t('admin.user.col.joinDate'),
+        dataIndex: 'createdAt',
+        render: (val: string) => dayjs(val).format('DD/MM/YYYY'),
       },
       {
-        title: t('admin.employee.col.status'),
+        title: t('admin.user.col.status'),
         dataIndex: 'status',
-        render: (status: Employee['status'], record) => (
+        render: (status: 'active' | 'inactive', record) => (
           <Switch
             checked={status === 'active'}
             onChange={(checked) => {
-              console.log('Toggle:', record.id, checked);
+              setPendingStatusUpdate({
+                id: record._id,
+                nextStatus: checked ? 'active' : 'inactive',
+                userName: record.name,
+              });
             }}
+            onClick={(_, e) => e?.stopPropagation()}
           />
         ),
       },
@@ -60,30 +119,60 @@ const EmployeeManagementPage = () => {
     [t],
   );
 
+  const handleConfirmStatusUpdate = () => {
+    if (!pendingStatusUpdate) return;
+    updateStatusMutation.mutate({
+      id: pendingStatusUpdate.id,
+      status: pendingStatusUpdate.nextStatus as 'active' | 'inactive',
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <span className="text-xl font-semibold">{t('admin.employee.title')}</span>
+        <span className="text-xl font-semibold">
+          {t('admin.employee.title')}
+        </span>
         <AddNewButton to="/employees/add-new" label={t('admin.employee.add')} />
       </div>
+
       <div className="flex items-center justify-end">
         <Input
           size="large"
           placeholder={t('admin.employee.searchPlaceholder')}
           className="w-96"
+          value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
+
       <Table
         className="w-full"
+        loading={staffLoading || adminLoading}
         columns={columns}
-        dataSource={filteredData}
-        rowKey="id"
-        pagination={{ pageSize: 5, position: ['bottomCenter'] }}
+        dataSource={[...adminUsers, ...staffUsers]}
+        rowKey="_id"
+        pagination={{
+          current: page,
+          pageSize: limit,
+          total,
+          onChange: onPageChange,
+          position: ['bottomCenter'],
+        }}
         onRow={(record) => ({
-          onClick: () => navigate(`/employees/${record.id}`),
+          onClick: () => navigate(`/employees/${record._id}`),
           style: { cursor: 'pointer' },
         })}
+      />
+      <ConfirmModal
+        open={Boolean(pendingStatusUpdate)}
+        title={t('admin.confirmModal.title')}
+        userName={pendingStatusUpdate?.userName}
+        confirmText={t('admin.confirmModal.confirmText')}
+        cancelText={t('admin.confirmModal.cancelText')}
+        loading={updateStatusMutation.isPending}
+        onCancel={() => setPendingStatusUpdate(null)}
+        onConfirm={handleConfirmStatusUpdate}
       />
     </div>
   );
