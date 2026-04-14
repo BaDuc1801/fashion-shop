@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Button, Card, Input, List } from 'antd';
-import { useMemo, useState } from 'react';
+import { Button, Card, Input, List, Popconfirm } from 'antd';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -8,7 +8,10 @@ import {
   type ReturnToAddNewState,
 } from '../../constants/addNewReturn';
 import VoucherForm from './VoucherForm';
-import { vouchers } from './vouchersMockData';
+import { useDebouncedValue, voucherService } from '@shared';
+import { useQuery } from '@tanstack/react-query';
+import { useUpdateVoucher } from './hooks/useUpdateVoucher';
+import { useDeleteVoucher } from './hooks/useDeleteVoucher';
 
 const VoucherDetailPage = () => {
   const { t } = useTranslation();
@@ -18,14 +21,35 @@ const VoucherDetailPage = () => {
   const returnTo = (location.state as ReturnToAddNewState | null)?.returnTo;
   const isFromAddPage = returnTo === ADD_NEW_PATH.vouchers;
   const [searchText, setSearchText] = useState('');
-  const voucher = vouchers.find((item) => item.id === id);
-  const filteredVouchers = useMemo(
-    () =>
-      vouchers.filter((item) =>
-        item.code.toLowerCase().includes(searchText.toLowerCase()),
-      ),
-    [searchText],
-  );
+  const debouncedSearch = useDebouncedValue(searchText, 400);
+
+  const { data: listResponse, isLoading: isListLoading } = useQuery({
+    queryKey: ['vouchers', 'detail-list', debouncedSearch],
+    queryFn: () =>
+      voucherService.getVouchers({
+        search: debouncedSearch,
+        page: 1,
+        limit: 100,
+      }),
+  });
+
+  const { data: voucherResponse, isLoading: isVoucherLoading } = useQuery({
+    queryKey: ['vouchers', 'detail-by-id', id],
+    enabled: Boolean(id),
+    retry: false,
+    queryFn: () => {
+      if (!id) throw new Error('Missing voucher id');
+      return voucherService.getVoucherById(id);
+    },
+  });
+
+  const updateVoucherMutation = useUpdateVoucher({
+    voucherId: voucherResponse?._id,
+    currentVoucherId: id,
+  });
+  const deleteVoucherMutation = useDeleteVoucher({
+    voucherId: voucherResponse?._id,
+  });
 
   return (
     <div>
@@ -42,8 +66,31 @@ const VoucherDetailPage = () => {
           : t('admin.voucher.detail.back')}
       </Button>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <Card title={t('admin.voucher.form.editTitle')}>
-          <VoucherForm initialValues={voucher} isEdit showTitle={false} />
+        <Card
+          title={t('admin.voucher.form.editTitle')}
+          loading={isVoucherLoading}
+          extra={
+            <Popconfirm
+              title={t('admin.voucher.form.deleteConfirm')}
+              okText={t('admin.confirmModal.confirmText')}
+              cancelText={t('admin.confirmModal.cancelText')}
+              onConfirm={() => deleteVoucherMutation.mutate()}
+            >
+              <Button danger loading={deleteVoucherMutation.isPending}>
+                {t('admin.voucher.form.delete')}
+              </Button>
+            </Popconfirm>
+          }
+        >
+          <VoucherForm
+            initialValues={voucherResponse}
+            isEdit
+            showTitle={false}
+            submitting={updateVoucherMutation.isPending}
+            onSubmit={async (values) => {
+              await updateVoucherMutation.mutateAsync(values);
+            }}
+          />
         </Card>
         <Card title={t('admin.voucher.detail.listTitle')} className="h-fit">
           <Input
@@ -55,15 +102,16 @@ const VoucherDetailPage = () => {
           <div className="max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden overscroll-y-contain">
             <List
               bordered
-              dataSource={filteredVouchers}
+              dataSource={listResponse?.data}
+              loading={isListLoading}
               locale={{ emptyText: t('admin.common.noData') }}
               renderItem={(item) => (
                 <List.Item
                   className={`cursor-pointer ${
-                    item.id === id ? 'bg-slate-100 font-medium' : ''
+                    item._id === id ? 'bg-slate-100 font-medium' : ''
                   }`}
                   onClick={() =>
-                    navigate(`/vouchers/${item.id}`, { state: location.state })
+                    navigate(`/vouchers/${item._id}`, { state: location.state })
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">

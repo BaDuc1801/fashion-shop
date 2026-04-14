@@ -36,6 +36,7 @@ const CategoryDetailPage = () => {
   const { data: categoryResponse, isLoading: isCategoryLoading } = useQuery({
     queryKey: ['categories', 'detail-by-id', categoryId],
     enabled: Boolean(categoryId),
+    retry: false,
     queryFn: () => {
       if (!categoryId) throw new Error('Missing category id');
       return categoryService.getCategoryById(categoryId);

@@ -67,12 +67,12 @@ export const ImageUploader = ({
         )}
       </Upload>
       <Image
-        wrapperStyle={{ display: 'none' }}
+        styles={{ root: { display: 'none' } }}
         preview={{
-          visible: previewOpen,
-          onVisibleChange: (visible) => setPreviewOpen(visible),
+          open: previewOpen,
+          onOpenChange: (open) => setPreviewOpen(open),
         }}
-        src={previewImage}
+        src={previewImage || undefined}
       />
     </>
   );

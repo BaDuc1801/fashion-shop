@@ -36,6 +36,7 @@ const UserDetailPage = () => {
   const { data: userResponse, isLoading: isUserLoading } = useQuery({
     queryKey: ['users', 'detail-by-id', id],
     enabled: Boolean(id),
+    retry: false,
     queryFn: () => {
       if (!id) throw new Error('Missing user id');
       return userService.getUserById(id);

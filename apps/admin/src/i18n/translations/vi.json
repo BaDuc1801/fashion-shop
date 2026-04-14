@@ -295,7 +295,7 @@
       "form": {
         "editTitle": "Sửa voucher",
         "addTitle": "Thêm voucher",
-        "image": "Ảnh voucher (tối đa 1)",
+        "image": "Ảnh voucher",
         "code": "Mã",
         "discountPercent": "Giảm (%)",
         "maxDiscount": "Giảm tối đa (USD)",
@@ -304,7 +304,15 @@
         "active": "Đang hoạt động",
         "placeholderCode": "Nhập mã voucher",
         "submitCreate": "Tạo voucher",
-        "submitUpdate": "Cập nhật voucher"
+        "submitUpdate": "Cập nhật voucher",
+        "createSuccess": "Tạo voucher thành công",
+        "createFailed": "Tạo voucher thất bại",
+        "updateSuccess": "Cập nhật voucher thành công",
+        "updateFailed": "Cập nhật voucher thất bại",
+        "delete": "Xóa voucher",
+        "deleteConfirm": "Bạn có chắc muốn xóa voucher này?",
+        "deleteSuccess": "Xóa voucher thành công",
+        "deleteFailed": "Xóa voucher thất bại"
       }
     },
     "collection": {
@@ -341,7 +349,7 @@
         "editTitle": "Sửa bộ sưu tập",
         "addTitle": "Thêm bộ sưu tập",
         "name": "Tên bộ sưu tập",
-        "banner": "Ảnh bìa (tối đa 1)",
+        "banner": "Ảnh bìa",
         "slug": "Slug",
         "productsCount": "Số sản phẩm",
         "startDate": "Ngày bắt đầu",
@@ -445,6 +453,8 @@
       "title": "Xác nhận",
       "descriptionPrefix": "Bạn có chắc chắn muốn cập nhật trạng thái sản phẩm",
       "descriptionPrefixCategory": "Bạn có chắc chắn muốn cập nhật trạng thái danh mục",
+      "descriptionPrefixUser": "Bạn có chắc chắn muốn cập nhật trạng thái người dùng",
+      "descriptionPrefixVoucher": "Bạn có chắc chắn muốn cập nhật trạng thái voucher",
       "descriptionSuffix": "không?",
       "updateSuccess": "Cập nhật sản phẩm thành công",
       "confirmText": "Đồng ý",

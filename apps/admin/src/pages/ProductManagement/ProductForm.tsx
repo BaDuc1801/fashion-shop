@@ -19,7 +19,12 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { categoryService, FormItem, ImageUploader, ProductData } from '@shared';
+import {
+  categoryService,
+  FormItem,
+  ImageUploader,
+  Product,
+} from '@shared';
 import { PRODUCT_SIZE_SELECT_OPTIONS } from './constants/productSizeOptions';
 import {
   addNewProductSchemaDefaultValues,
@@ -31,7 +36,7 @@ import { useProductDetail } from './hooks/useProductDetail';
 const DEFAULT_SWATCH = '#1677ff';
 
 interface ProductFormProps {
-  initialValues?: ProductData;
+  initialValues?: Product;
   isEdit?: boolean;
   showTitle?: boolean;
   submitting?: boolean;

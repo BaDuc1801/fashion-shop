@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const HeroContent = () => {
@@ -16,16 +15,7 @@ const HeroContent = () => {
           {t('hero.titleLine2')}
         </h1>
 
-        <p className="mt-4 text-base md:text-lg">
-          {t('hero.description')}
-        </p>
-
-        <Link
-          to="/collection/holiday-2026-women"
-          className="inline-flex items-center justify-center mt-5 bg-black text-white px-8 py-4 rounded-sm text-base font-semibold hover:opacity-90 transition-opacity"
-        >
-          {t('hero.viewCollection')}
-        </Link>
+        <p className="mt-4 text-base md:text-lg">{t('hero.description')}</p>
       </div>
     </div>
   );

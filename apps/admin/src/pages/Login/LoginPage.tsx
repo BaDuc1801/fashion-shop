@@ -220,9 +220,7 @@ const LoginPage = () => {
       useAuthStore.getState().setSessionFromLogin(response);
       try {
         const me = await userService.getCurrentUser();
-        if (me?.data) {
-          useAuthStore.getState().mergeUserFromMe(me.data);
-        }
+        useAuthStore.getState().mergeUserFromMe(me);
       } catch {
         /* bỏ qua */
       }

@@ -2,7 +2,8 @@ import { useRef } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import CategoryCard from './CategoryCard';
-import { categoryData } from './categoryData';
+import { categoryService } from '@shared';
+import { useQuery } from '@tanstack/react-query';
 
 const CategorySection = () => {
   const { t } = useTranslation();
@@ -23,6 +24,11 @@ const CategorySection = () => {
       behavior: 'smooth',
     });
   };
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => categoryService.getCategories({ page: 1, limit: 100 }),
+  });
 
   return (
     <section className="mt-20 mx-[200px]">
@@ -52,14 +58,17 @@ const CategorySection = () => {
         ref={scrollRef}
         className="flex w-full overflow-x-auto scroll-smooth snap-x snap-mandatory gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {categoryData.map((category) => (
-          <div
-            key={category.id}
-            className="w-[calc((100%-96px)/4)] shrink-0 snap-start"
-          >
-            <CategoryCard category={category} />
-          </div>
-        ))}
+        {categories?.data
+          ?.slice()
+          .reverse()
+          .map((category) => (
+            <div
+              key={category._id}
+              className="w-[calc((100%-96px)/4)] shrink-0 snap-start"
+            >
+              <CategoryCard category={category} />
+            </div>
+          ))}
       </div>
     </section>
   );

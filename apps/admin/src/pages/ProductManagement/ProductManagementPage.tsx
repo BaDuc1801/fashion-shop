@@ -7,7 +7,7 @@ import AddNewButton from '../../components/common/AddNewButton';
 import { ConfirmModal, useTableQuery } from '@shared';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ProductData, productService } from '@shared';
+import { Product, productService } from '@shared';
 import dayjs from 'dayjs';
 
 const ProductManagementPage = () => {
@@ -60,7 +60,7 @@ const ProductManagementPage = () => {
     });
   };
 
-  const columns: ColumnsType<ProductData> = useMemo(
+  const columns: ColumnsType<Product> = useMemo(
     () => [
       {
         title: t('admin.product.col.product'),
@@ -77,7 +77,8 @@ const ProductManagementPage = () => {
         title: t('admin.product.col.category'),
         key: 'category',
         render: (_, record) => {
-          return record.categoryId ? record.categoryId.name : '-';
+          if (!record.categoryId) return '-';
+          return record.categoryId.name;
         },
       },
       {

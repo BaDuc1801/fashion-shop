@@ -20,7 +20,6 @@ import {
   RegisterResponse,
   SendOtpResponse,
   UserMeData,
-  UserMeApiResponse,
   VerifyOtpResponse,
   GetUsersResponse,
 } from './user.response';
@@ -31,7 +30,7 @@ class UserService {
     return res.data;
   }
 
-  async getCurrentUser(): Promise<UserMeApiResponse> {
+  async getCurrentUser(): Promise<UserMeData> {
     const res = await api.get('/api/users/me');
     return res.data;
   }
@@ -90,7 +89,10 @@ class UserService {
     return res.data;
   }
 
-  async updateUser(id: string, payload: UpdateUserRequest): Promise<UserMeData> {
+  async updateUser(
+    id: string,
+    payload: UpdateUserRequest,
+  ): Promise<UserMeData> {
     const res = await api.put(`/api/users/${id}`, payload);
     return res.data;
   }

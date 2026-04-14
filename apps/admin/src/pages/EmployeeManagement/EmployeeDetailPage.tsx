@@ -28,6 +28,7 @@ const EmployeeDetailPage = () => {
   const { data: employeeResponse, isLoading: isEmployeeLoading } = useQuery({
     queryKey: ['users', 'employee-detail-by-id', id],
     enabled: Boolean(id),
+    retry: false,
     queryFn: () => {
       if (!id) throw new Error('Missing employee id');
       return userService.getUserById(id);

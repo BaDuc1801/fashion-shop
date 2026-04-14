@@ -7,12 +7,12 @@ import {
 
 import {
   GetProductsResponse,
-  ProductResponse,
+  Product,
   DeleteProductResponse,
 } from './product.response';
 
 class ProductService {
-  async createProduct(payload: CreateProductRequest): Promise<ProductResponse> {
+  async createProduct(payload: CreateProductRequest): Promise<Product> {
     const res = await api.post('/api/products', payload);
     return res.data;
   }
@@ -22,12 +22,12 @@ class ProductService {
     return res.data;
   }
 
-  async getProductById(id: string): Promise<ProductResponse> {
+  async getProductById(id: string): Promise<Product> {
     const res = await api.get(`/api/products/${id}`);
     return res.data;
   }
 
-  async getProductBySku(sku: string): Promise<ProductResponse> {
+  async getProductBySku(sku: string): Promise<Product> {
     const res = await api.get(`/api/products/sku/${sku}`);
     return res.data;
   }
@@ -35,7 +35,7 @@ class ProductService {
   async updateProduct(
     id: string,
     payload: UpdateProductRequest,
-  ): Promise<ProductResponse> {
+  ): Promise<Product> {
     const res = await api.put(`/api/products/${id}`, payload);
     return res.data;
   }

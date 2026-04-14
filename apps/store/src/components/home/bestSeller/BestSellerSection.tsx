@@ -7,7 +7,7 @@ import BestSellerCard from './BestSellerCard';
 
 const PAGE_SIZE = 8;
 
-const BestSellerSection = () => {
+const OutProductsSection = () => {
   const { t } = useTranslation();
   const [activeKey, setActiveKey] = useState('1');
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +30,7 @@ const BestSellerSection = () => {
   return (
     <section className="mt-20 flex flex-col justify-center mx-[200px]">
       <h2 className="text-2xl font-bold w-full text-center">
-        {t('home.bestSellers')}
+        {t('home.outProducts')}
       </h2>
       <Tabs
         activeKey={activeKey}
@@ -77,4 +77,4 @@ const BestSellerSection = () => {
   );
 };
 
-export default BestSellerSection;
+export default OutProductsSection;

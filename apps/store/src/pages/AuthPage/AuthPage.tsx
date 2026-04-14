@@ -93,9 +93,7 @@ const AuthPage = () => {
       useAuthStore.getState().setSessionFromLogin(response);
       try {
         const me = await userService.getCurrentUser();
-        if (me?.data) {
-          useAuthStore.getState().mergeUserFromMe(me.data);
-        }
+        useAuthStore.getState().mergeUserFromMe(me);
       } catch {
         /* vẫn đăng nhập được nếu chỉ /users/me lỗi */
       }

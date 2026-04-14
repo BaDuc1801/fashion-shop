@@ -291,7 +291,7 @@
       "form": {
         "editTitle": "Edit voucher",
         "addTitle": "Add new voucher",
-        "image": "Voucher image (max 1)",
+        "image": "Voucher image",
         "code": "Code",
         "discountPercent": "Discount (%)",
         "maxDiscount": "Max discount (USD)",
@@ -300,7 +300,15 @@
         "active": "Active",
         "placeholderCode": "Enter voucher code",
         "submitCreate": "Create voucher",
-        "submitUpdate": "Update voucher"
+        "submitUpdate": "Update voucher",
+        "createSuccess": "Create voucher successfully",
+        "createFailed": "Create voucher failed",
+        "updateSuccess": "Update voucher successfully",
+        "updateFailed": "Update voucher failed",
+        "delete": "Delete voucher",
+        "deleteConfirm": "Are you sure you want to delete this voucher?",
+        "deleteSuccess": "Delete voucher successfully",
+        "deleteFailed": "Delete voucher failed"
       }
     },
     "collection": {
@@ -337,7 +345,7 @@
         "editTitle": "Edit collection",
         "addTitle": "Add new collection",
         "name": "Collection name",
-        "banner": "Banner image (max 1)",
+        "banner": "Banner image",
         "slug": "Slug",
         "productsCount": "Products count",
         "startDate": "Start date",
@@ -442,6 +450,7 @@
       "descriptionPrefix": "Are you sure you want to update the status of product",
       "descriptionPrefixCategory": "Are you sure you want to update the status of category",
       "descriptionPrefixUser": "Are you sure you want to update the status of user",
+      "descriptionPrefixVoucher": "Are you sure you want to update the status of voucher",
       "descriptionPrefixProduct": "Are you sure you want to update the status of product",
       "descriptionSuffix": "?",
       "updateSuccess": "Product updated successfully",

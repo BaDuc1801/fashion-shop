@@ -3,7 +3,7 @@ import { Badge, Button, Dropdown, message } from 'antd';
 import type { MenuProps } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaRegHeart, FaRegUser } from 'react-icons/fa';
+import { FaRegHeart } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
 import { MdSearch } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
@@ -92,6 +92,13 @@ const NavBar = () => {
 
   const userMenuItems: MenuProps['items'] = [
     {
+      key: 'my-account',
+      label: t('auth.myAccount'),
+      onClick: () => {
+        navigate('/account');
+      },
+    },
+    {
       key: 'change-password',
       label: t('auth.changePassword'),
       onClick: () => {
@@ -137,9 +144,9 @@ const NavBar = () => {
       </div>
       <nav className="flex items-center gap-6 text-2xl font-medium">
         <MdSearch className="text-3xl cursor-pointer hover:font-semibold" />
-        <Link to="/account" className="leading-none">
+        {/* <Link to="/account" className="leading-none">
           <FaRegUser className="cursor-pointer hover:font-semibold" />
-        </Link>
+        </Link> */}
         <Link to="/wishlist" className="leading-none">
           <Badge count={wishlistCount} size="small" offset={[0, 2]}>
             <FaRegHeart className="text-2xl cursor-pointer hover:font-semibold" />

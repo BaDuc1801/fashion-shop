@@ -1,4 +1,3 @@
-import { ProductResponse } from '@fashion-monorepo/shared';
+import { Product } from '@shared';
 
-export const getProductCoverImage = (product: ProductResponse) =>
-  product.images?.[0];
+export const getProductCoverImage = (product: Product) => product.images?.[0];

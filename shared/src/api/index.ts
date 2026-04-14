@@ -8,3 +8,6 @@ export * from './category/category.api';
 export * from './category/category.request';
 export * from './category/category.response';
 export * from './upload/upload.api';
+export * from './voucher/voucher.api';
+export * from './voucher/voucher.request';
+export * from './voucher/voucher.response';

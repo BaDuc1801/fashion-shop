@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import type { UploadFile } from 'antd';
-import type { ProductData } from '@shared';
+import type { Product } from '@shared';
 import type { UseFormReset } from 'react-hook-form';
 import type { AddNewProductFormValues } from '../schemas/addNewProductSchema';
 
@@ -8,7 +8,7 @@ const DEFAULT_SWATCH = '#1677ff';
 const HEX_COLOR_REGEX = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/;
 
 type UseProductDetailArgs = {
-  initialValues?: ProductData;
+  initialValues?: Product;
   reset: UseFormReset<AddNewProductFormValues>;
 };
 
@@ -21,7 +21,7 @@ export const useProductDetail = ({
 
     reset({
       name: initialValues.name,
-      categoryId: initialValues.categoryId._id,
+      categoryId: initialValues?.categoryId?._id ?? '',
       sku: initialValues.sku,
       price: initialValues.price,
       status: initialValues.status === 'active',

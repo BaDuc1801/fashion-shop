@@ -22,7 +22,7 @@
     "viewCollection": "View Collection"
   },
   "home": {
-    "bestSellers": "Best Sellers",
+    "outProducts": "Out Products",
     "shopByCategories": "Shop by Categories"
   },
   "filters": {
@@ -92,7 +92,8 @@
     "logout": "Log out",
     "changePassword": "Change password",
     "changePasswordSuccess": "Password changed successfully. Please log in again.",
-    "changePasswordFailed": "Failed to change password."
+    "changePasswordFailed": "Failed to change password.",
+    "myAccount": "My Account"
   },
   "cart": {
     "bag": "Bag",
@@ -121,11 +122,14 @@
       "orders": "My Orders"
     },
     "profile": {
+      "avatar": "Avatar",
       "name": "Full name",
       "email": "Email",
       "phone": "Phone number",
       "address": "Address",
-      "update": "Update"
+      "update": "Update",
+      "updateSuccess": "Profile updated successfully",
+      "updateFailed": "Failed to update profile"
     },
     "orders": {
       "code": "Order code",

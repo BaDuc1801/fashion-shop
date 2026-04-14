@@ -8,6 +8,7 @@ export interface ConfirmModalProps {
   productName?: string;
   categoryName?: string;
   userName?: string;
+  voucherCode?: string;
   confirmText?: string;
   cancelText?: string;
   loading?: boolean;
@@ -21,6 +22,7 @@ export const ConfirmModal = ({
   productName,
   categoryName,
   userName,
+  voucherCode,
   confirmText,
   cancelText,
   loading = false,
@@ -74,6 +76,13 @@ export const ConfirmModal = ({
           <>
             {t('admin.confirmModal.descriptionPrefixUser')}{' '}
             <span className="font-semibold">{userName}</span>?
+          </>
+        )}
+
+        {voucherCode && (
+          <>
+            {t('admin.confirmModal.descriptionPrefixVoucher')}{' '}
+            <span className="font-semibold">{voucherCode}</span>?
           </>
         )}
       </span>

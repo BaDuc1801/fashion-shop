@@ -1,166 +1,115 @@
 import { Button, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
 import type { UploadFile } from 'antd';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageUploader } from '@shared';
-import type { Voucher } from './vouchersMockData';
-
-type VoucherFormValues = {
-  code: string;
-  discountPercent: number;
-  maxDiscount: number;
-  minOrderValue: number;
-  expiresAt: Voucher['expiresAt'];
-  status: boolean;
-  images: UploadFile[];
-};
-
-const VoucherImageField = ({
-  value,
-  onChange,
-  uploadLabel,
-}: {
-  value?: UploadFile[];
-  onChange?: (v: UploadFile[]) => void;
-  uploadLabel: string;
-}) => (
-  <ImageUploader
-    fileList={value || []}
-    onChange={(fileList) => onChange?.(fileList.slice(0, 1))}
-    maxCount={1}
-    uploadLabel={uploadLabel}
-    multiple={false}
-  />
-);
-
+import { CreateVoucherRequest, FormItem, ImageUploader } from '@shared';
+import { FormProvider, useForm } from 'react-hook-form';
+import {
+  createVoucherFormSchema,
+  voucherFormSchemaDefaultValues,
+  type VoucherFormValues,
+} from './schema/createVoucherFormSchema';
+import { useVoucherDetail } from './hooks/useVoucherDetail';
+import { zodResolver } from '@hookform/resolvers/zod';
 interface VoucherFormProps {
-  initialValues?: Voucher;
+  initialValues?: CreateVoucherRequest;
   isEdit?: boolean;
   showTitle?: boolean;
+  onSubmit?: (values: VoucherFormValues) => void | Promise<void>;
+  submitting?: boolean;
 }
 
 const VoucherForm = ({
   initialValues,
   isEdit,
   showTitle = true,
+  onSubmit,
+  submitting,
 }: VoucherFormProps) => {
   const { t } = useTranslation();
-  const [form] = Form.useForm<VoucherFormValues>();
+  const voucherSchema = createVoucherFormSchema(t);
+  const form = useForm<VoucherFormValues>({
+    resolver: zodResolver(voucherSchema),
+    mode: 'onSubmit',
+    defaultValues: voucherFormSchemaDefaultValues,
+  });
 
-  useEffect(() => {
-    if (initialValues) {
-      form.setFieldsValue({
-        code: initialValues.code,
-        discountPercent: initialValues.discountPercent,
-        maxDiscount: initialValues.maxDiscount,
-        minOrderValue: initialValues.minOrderValue,
-        expiresAt: initialValues.expiresAt,
-        status: initialValues.status === 'active',
-        images: initialValues.image
-          ? [
-              {
-                uid: initialValues.id,
-                name: initialValues.code,
-                status: 'done',
-                url: initialValues.image,
-              },
-            ]
-          : [],
-      });
-    } else {
-      form.setFieldsValue({ images: [] });
-    }
-  }, [form, initialValues]);
-
-  const handleFinish = (values: VoucherFormValues) => {
-    console.log('Voucher payload:', values);
+  const { handleSubmit, reset } = form;
+  useVoucherDetail({ initialValues, reset });
+  const handleFinish = async (values: VoucherFormValues) => {
+    await onSubmit?.(values);
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={handleFinish}
-      className="max-w-2xl space-y-2"
-      initialValues={{ images: [] as UploadFile[] }}
-    >
-      {showTitle ? (
-        <h2 className="text-xl font-semibold">
-          {isEdit
-            ? t('admin.voucher.form.editTitle')
-            : t('admin.voucher.form.addTitle')}
-        </h2>
-      ) : null}
-      <Form.Item name="images" label={t('admin.voucher.form.image')}>
-        <VoucherImageField uploadLabel={t('admin.product.form.upload')} />
-      </Form.Item>
-      <Form.Item
-        name="code"
-        label={t('admin.voucher.form.code')}
-        rules={[
-          {
-            required: true,
-            message: t('admin.validation.requiredVoucherCode'),
-          },
-        ]}
+    <FormProvider {...form}>
+      <Form
+        layout="vertical"
+        onFinish={handleSubmit(handleFinish)}
+        className="max-w-2xl space-y-2"
       >
-        <Input
-          placeholder={t('admin.voucher.form.placeholderCode')}
+        {showTitle ? (
+          <h2 className="text-xl font-semibold">
+            {isEdit
+              ? t('admin.voucher.form.editTitle')
+              : t('admin.voucher.form.addTitle')}
+          </h2>
+        ) : null}
+        <FormItem name="image" label={t('admin.voucher.form.image')}>
+          {({ field }) => (
+            <ImageUploader
+              fileList={(field.value as UploadFile[]) || []}
+              onChange={(fileList) => field.onChange(fileList.slice(0, 1))}
+              maxCount={1}
+              uploadLabel={t('admin.product.form.upload')}
+            />
+          )}
+        </FormItem>
+        <FormItem name="code" label={t('admin.voucher.form.code')}>
+          <Input
+            placeholder={t('admin.voucher.form.placeholderCode')}
+            size="large"
+          />
+        </FormItem>
+        <FormItem
+          name="discountPercent"
+          label={t('admin.voucher.form.discountPercent')}
+        >
+          <InputNumber min={1} max={100} className="w-full" size="large" />
+        </FormItem>
+        <FormItem
+          name="maxDiscount"
+          label={t('admin.voucher.form.maxDiscount')}
+        >
+          <InputNumber min={0} className="w-full" size="large" />
+        </FormItem>
+        <FormItem
+          name="minOrderValue"
+          label={t('admin.voucher.form.minOrderValue')}
+        >
+          <InputNumber min={0} className="w-full" size="large" />
+        </FormItem>
+        <FormItem name="expiresAt" label={t('admin.voucher.form.expireDate')}>
+          <DatePicker className="w-full" size="large" />
+        </FormItem>
+        <FormItem
+          name="status"
+          label={t('admin.voucher.form.active')}
+          valuePropName="checked"
+        >
+          <Switch />
+        </FormItem>
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
           size="large"
-        />
-      </Form.Item>
-      <Form.Item
-        name="discountPercent"
-        label={t('admin.voucher.form.discountPercent')}
-        rules={[
-          { required: true, message: t('admin.validation.requiredDiscount') },
-        ]}
-      >
-        <InputNumber min={1} max={100} className="w-full" size="large" />
-      </Form.Item>
-      <Form.Item
-        name="maxDiscount"
-        label={t('admin.voucher.form.maxDiscount')}
-        rules={[
-          {
-            required: true,
-            message: t('admin.validation.requiredMaxDiscount'),
-          },
-        ]}
-      >
-        <InputNumber min={0} className="w-full" size="large" />
-      </Form.Item>
-      <Form.Item
-        name="minOrderValue"
-        label={t('admin.voucher.form.minOrderValue')}
-        rules={[
-          { required: true, message: t('admin.validation.requiredMinOrder') },
-        ]}
-      >
-        <InputNumber min={0} className="w-full" size="large" />
-      </Form.Item>
-      <Form.Item
-        name="expiresAt"
-        label={t('admin.voucher.form.expireDate')}
-        rules={[
-          { required: true, message: t('admin.validation.selectExpireDate') },
-        ]}
-      >
-        <DatePicker className="w-full" size="large" />
-      </Form.Item>
-      <Form.Item
-        name="status"
-        label={t('admin.voucher.form.active')}
-        valuePropName="checked"
-      >
-        <Switch />
-      </Form.Item>
-      <Button type="primary" htmlType="submit" block size="large">
-        {isEdit
-          ? t('admin.voucher.form.submitUpdate')
-          : t('admin.voucher.form.submitCreate')}
-      </Button>
-    </Form>
+          loading={submitting}
+        >
+          {isEdit
+            ? t('admin.voucher.form.submitUpdate')
+            : t('admin.voucher.form.submitCreate')}
+        </Button>
+      </Form>
+    </FormProvider>
   );
 };
 

@@ -22,7 +22,7 @@
     "viewCollection": "Xem bộ sưu tập"
   },
   "home": {
-    "bestSellers": "Bán chạy",
+    "outProducts": "Sản phẩm của chúng tôi",
     "shopByCategories": "Mua theo danh mục"
   },
   "filters": {
@@ -92,7 +92,8 @@
     "logout": "Đăng xuất",
     "changePassword": "Đổi mật khẩu",
     "changePasswordSuccess": "Đổi mật khẩu thành công. Vui lòng đăng nhập lại.",
-    "changePasswordFailed": "Đổi mật khẩu thất bại."
+    "changePasswordFailed": "Đổi mật khẩu thất bại.",
+    "myAccount": "Tài khoản của tôi"
   },
   "cart": {
     "bag": "Giỏ hàng",
@@ -121,11 +122,14 @@
       "orders": "Đơn hàng của tôi"
     },
     "profile": {
+      "avatar": "Ảnh đại diện",
       "name": "Họ tên",
       "email": "Email",
       "phone": "Số điện thoại",
       "address": "Địa chỉ",
-      "update": "Cập nhật"
+      "update": "Cập nhật",
+      "updateSuccess": "Cập nhật thông tin thành công",
+      "updateFailed": "Cập nhật thông tin thất bại"
     },
     "orders": {
       "code": "Mã đơn",

@@ -34,6 +34,7 @@ const ProductDetailPage = () => {
   const { data: productResponse, isLoading: isProductLoading } = useQuery({
     queryKey: ['products', 'detail-by-sku', productSku],
     enabled: Boolean(productSku),
+    retry: false,
     queryFn: () => {
       if (!productSku) throw new Error('Missing product sku');
       return productService.getProductBySku(productSku);
