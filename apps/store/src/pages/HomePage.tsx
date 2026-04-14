@@ -1,4 +1,4 @@
-import OutProductsSection from '../components/home/bestSeller/BestSellerSection';
+import OutProductsSection from '../components/home/products/ProductSection';
 import CategorySection from '../components/home/category/CategorySection';
 import HeroSection from '../components/hero/HeroSection';
 

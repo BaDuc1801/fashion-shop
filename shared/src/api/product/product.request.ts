@@ -35,4 +35,6 @@ export interface GetProductsRequest {
   maxPrice?: number;
   status?: string;
   search?: string;
+  categoryName?: string;
+  categoryId?: string;
 }

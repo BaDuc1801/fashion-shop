@@ -19,12 +19,7 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  categoryService,
-  FormItem,
-  ImageUploader,
-  Product,
-} from '@shared';
+import { categoryService, FormItem, ImageUploader, Product } from '@shared';
 import { PRODUCT_SIZE_SELECT_OPTIONS } from './constants/productSizeOptions';
 import {
   addNewProductSchemaDefaultValues,
@@ -120,7 +115,7 @@ const ProductForm = ({
   const { data: categoriesResponse, isLoading: isCategoriesLoading } = useQuery(
     {
       queryKey: ['categories', 'product-form'],
-      queryFn: () => categoryService.getCategories({ page: 1, limit: 100 }),
+      queryFn: () => categoryService.getCategories({ limit: 100 }),
     },
   );
 

@@ -1,23 +1,18 @@
-import type { BestSellerProduct } from './bestSellerData';
+import { Product } from '@shared';
 
-type BestSellerCardProps = {
-  product: BestSellerProduct;
+type ProductCardProps = {
+  product: Product;
 };
 
-const BestSellerCard = ({ product }: BestSellerCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <article className="rounded-sm overflow-hidden">
       <div className="relative">
         <img
-          src={product.imageUrl}
+          src={product.images[0]}
           alt={product.name}
           className="h-[300px] w-full object-cover"
         />
-        {product.isHot ? (
-          <span className="absolute top-2 left-2 rounded-full bg-[#ffb3c6] px-3 py-1 text-[11px] font-semibold text-black">
-            HOT
-          </span>
-        ) : null}
       </div>
       <div className="mt-2">
         <h3 className="text-sm font-semibold text-slate-900 truncate">
@@ -31,4 +26,4 @@ const BestSellerCard = ({ product }: BestSellerCardProps) => {
   );
 };
 
-export default BestSellerCard;
+export default ProductCard;
