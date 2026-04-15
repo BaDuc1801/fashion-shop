@@ -41,7 +41,8 @@
     "selectSize": "Select Size",
     "selectColor": "Select Color",
     "addToCart": "Add to Cart",
-    "favorited": "Favorited"
+    "favorited": "Favorited",
+    "stock": "Stock"
   },
   "productReviews": {
     "title": "Customer Reviews",

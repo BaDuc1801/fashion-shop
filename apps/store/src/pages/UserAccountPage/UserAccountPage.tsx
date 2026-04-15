@@ -11,7 +11,7 @@ import {
   useAccountProfile,
   useUpdateAccountProfile,
   type AccountProfileFormValues,
-} from './UserAccountPage/hooks/useAccountProfile';
+} from './hooks/useAccountProfile';
 
 type OrderRecord = {
   key: string;

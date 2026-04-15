@@ -4,6 +4,7 @@ import { ProductSizeVariant } from './product.request';
 export interface Product {
   _id: string;
   name: string;
+  description: string;
   categoryId: Category;
   sku: string;
   price: number;

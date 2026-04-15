@@ -41,7 +41,8 @@
     "selectSize": "Chọn size",
     "selectColor": "Chọn màu",
     "addToCart": "Thêm vào giỏ",
-    "favorited": "Đã thích"
+    "favorited": "Đã thích",
+    "stock": "Tồn kho"
   },
   "productReviews": {
     "title": "Đánh giá khách hàng",

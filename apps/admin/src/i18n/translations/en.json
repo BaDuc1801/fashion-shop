@@ -185,7 +185,9 @@
         "createFailed": "Product creation failed",
         "updateFailed": "Product update failed",
         "deleteSuccess": "Product deleted successfully",
-        "deleteFailed": "Product deletion failed"
+        "deleteFailed": "Product deletion failed",
+        "description": "Description",
+        "placeholderDescription": "Enter description"
       }
     },
     "user": {
@@ -412,6 +414,7 @@
       }
     },
     "validation": {
+      "requiredDescription": "Please enter description",
       "requiredName": "Please enter name",
       "requiredEmail": "Please enter email",
       "invalidEmail": "Invalid email",

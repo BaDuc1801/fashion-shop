@@ -27,6 +27,7 @@ export const useUpdateProduct = ({
       const imageUrls = await resolveImageUrls(values.images);
       return productService.updateProduct(productId, {
         name: values.name,
+        description: values.description,
         categoryId: values.categoryId,
         sku: values.sku,
         price: values.price,

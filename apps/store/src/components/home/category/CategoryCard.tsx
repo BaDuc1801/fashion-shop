@@ -8,7 +8,7 @@ type CategoryCardProps = {
 const CategoryCard = ({ category }: CategoryCardProps) => {
   return (
     <Link
-      to={`/category/${category._id}`}
+      to={`/category/${category.slug}`}
       className="block w-full shrink-0 rounded-sm"
     >
       <article className="w-full shrink-0 relative">

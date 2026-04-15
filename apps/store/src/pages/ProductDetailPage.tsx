@@ -1,62 +1,70 @@
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NotFoundPage } from './NotFoundPage';
-import {
-  getMockProductById,
-  type CategoryProduct,
-} from '../components/home/category/categoryProductsData';
 import { CiHeart } from 'react-icons/ci';
 import ProductReviewList from '../components/productDetail/ProductReviewList';
-
-const colorNameToHex = (name: string) => {
-  const v = name.trim().toLowerCase();
-  if (v === 'blue') return '#3b82f6';
-  if (v === 'black') return '#111827';
-  if (v === 'red') return '#ef4444';
-  if (v === 'green') return '#22c55e';
-  if (v === 'white') return '#f9fafb';
-  if (v === 'brown') return '#8b5e34';
-  return '#d1d5db';
-};
+import { productService } from '@shared';
+import { useQuery } from '@tanstack/react-query';
 
 const ProductDetailPage = () => {
   const { t } = useTranslation();
-  const { productId } = useParams<{ productId: string }>();
-
-  const product: CategoryProduct | null = useMemo(
-    () => (productId ? getMockProductById(productId) : null),
-    [productId],
-  );
+  const { sku } = useParams<{ sku: string }>();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColorId, setSelectedColorId] = useState<string>('');
 
-  useEffect(() => {
-    setActiveImageIndex(0);
-    if (!product) return;
-    setSelectedSize(product.sizes[0]?.id ?? '');
-    setSelectedColorId(product.colors[0]?.id ?? '');
-  }, [product]);
+  const { data, isLoading } = useQuery({
+    queryKey: ['product', sku],
+    queryFn: () => {
+      if (!sku) throw new Error('Missing product sku');
+      return productService.getProductBySku(sku);
+    },
+    enabled: !!sku,
+  });
 
-  const activeImage =
-    product?.galleryImages?.[activeImageIndex] ?? product?.imageUrl ?? '';
-  const selectedColor = useMemo(
-    () => product?.colors.find((c) => c.id === selectedColorId),
-    [product, selectedColorId],
+  useEffect(() => {
+    if (!data) return;
+    setActiveImageIndex(0);
+    const firstSize = data.sizeVariants[0];
+    setSelectedSize(firstSize?.size ?? '');
+  }, [data]);
+
+  const selectedSizeVariant = useMemo(
+    () => data?.sizeVariants.find((s) => s.size === selectedSize),
+    [data, selectedSize],
   );
 
-  if (!product) return <NotFoundPage />;
+  useEffect(() => {
+    if (!selectedSizeVariant) return;
+    setSelectedColorId(selectedSizeVariant.colors[0]?.name ?? '');
+  }, [selectedSizeVariant]);
+
+  const selectedVariant = useMemo(
+    () => selectedSizeVariant?.colors.find((c) => c.name === selectedColorId),
+    [selectedSizeVariant, selectedColorId],
+  );
+
+  const activeImage = data?.images?.[activeImageIndex] ?? '';
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-[600px]">
+        <Spin />
+      </div>
+    );
+
+  if (!sku || !data) return <NotFoundPage />;
 
   return (
     <section className="py-6 mx-[200px]">
       <div className="flex items-start gap-10">
         {/* Gallery */}
         <div className="flex gap-6">
-          <div className="flex flex-col gap-3">
-            {product.galleryImages.map((img, i) => (
+          <div className="flex flex-col justify-between">
+            {data.images.map((img, i) => (
               <button
                 key={img + i}
                 type="button"
@@ -70,67 +78,64 @@ const ProductDetailPage = () => {
               >
                 <img
                   src={img}
-                  alt={`${product.name} ${i + 1}`}
+                  alt={`${data.name} ${i + 1}`}
                   className="h-full w-full object-cover object-top"
                 />
               </button>
             ))}
           </div>
 
-          <div className="w-[520px] max-w-[520px] rounded-sm border border-slate-200 overflow-hidden bg-white">
+          <div className="w-[520px] rounded-sm border border-slate-200 overflow-hidden bg-white">
             <img
               src={activeImage}
-              alt={product.name}
+              alt={data.name}
               className="h-[520px] w-full object-cover object-top"
             />
           </div>
         </div>
 
         {/* Info */}
-        <div className="flex-1">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-semibold text-slate-900">
-                {product.name}
-                {selectedColor ? ` (${selectedColor.name})` : null}
-              </h1>
-              <p className="mt-2 max-w-[520px] text-sm text-slate-600">
-                {product.description}
-              </p>
-            </div>
-          </div>
+        <div className="flex-1 flex flex-col justify-between h-[520px]">
+          <h1 className="text-2xl font-semibold text-slate-900">{data.name}</h1>
+
+          <p className="text-base text-slate-600 max-w-[520px]">
+            {data.description}
+          </p>
 
           {/* Price */}
-          <div className="mt-6">
-            <div className="text-sm font-semibold text-slate-900">
-              {t('product.price')}
-            </div>
-            <div className="mt-2 text-2xl font-bold text-slate-900">
-              ${product.price}
+          <div>
+            <div className="text-sm font-semibold">{t('product.price')}</div>
+            <div className="text-2xl font-bold">${data.price}</div>
+          </div>
+
+          {/* Stock */}
+          <div>
+            <div className="text-sm font-semibold">{t('product.stock')}</div>
+            <div className="text-xl font-bold">
+              {selectedVariant?.quantity ?? 0}
             </div>
           </div>
 
           {/* Size */}
-          <div className="mt-6">
-            <div className="text-sm font-semibold text-slate-900">
+          <div>
+            <div className="text-sm font-semibold">
               {t('product.selectSize')}
             </div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {product.sizes.map((s) => {
-                const active = s.id === selectedSize;
+            <div className="flex flex-wrap gap-2">
+              {data.sizeVariants.map((s) => {
+                const active = s.size === selectedSize;
                 return (
                   <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => setSelectedSize(s.id)}
+                    key={s.size}
+                    onClick={() => setSelectedSize(s.size)}
                     className={[
-                      'h-10 min-w-[40px] rounded-full border px-3 text-sm font-medium',
+                      'h-10 px-3 rounded-full border',
                       active
-                        ? 'border-pink-300 bg-pink-50 text-slate-900'
-                        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-400',
+                        ? 'border-pink-300 bg-pink-50'
+                        : 'border-slate-200',
                     ].join(' ')}
                   >
-                    {s.label}
+                    {s.size}
                   </button>
                 );
               })}
@@ -138,46 +143,43 @@ const ProductDetailPage = () => {
           </div>
 
           {/* Color */}
-          <div className="mt-6">
-            <div className="text-sm font-semibold text-slate-900">
+          <div>
+            <div className="text-sm font-semibold">
               {t('product.selectColor')}
             </div>
-            <div className="mt-2 flex items-center gap-3">
-              {product.colors.map((c) => {
-                const active = c.id === selectedColorId;
-                const swatch = colorNameToHex(c.name);
+            <div className="flex gap-3">
+              {selectedSizeVariant?.colors.map((c) => {
+                const active = c.name === selectedColorId;
                 return (
                   <button
-                    key={c.id}
-                    type="button"
-                    onClick={() => setSelectedColorId(c.id)}
+                    key={c.name}
+                    onClick={() => setSelectedColorId(c.name)}
                     className={[
-                      'h-10 w-10 rounded-sm border transition-colors',
+                      'h-10 w-10 border rounded-sm',
                       active
                         ? 'border-pink-300 ring-2 ring-pink-100'
-                        : 'border-slate-200 hover:border-slate-400',
+                        : 'border-slate-200',
                     ].join(' ')}
-                    style={{ backgroundColor: swatch }}
-                  >
-                    <span className="sr-only">{c.name}</span>
-                  </button>
+                    style={{ backgroundColor: c.name }}
+                  />
                 );
               })}
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-4">
-            <Button type="primary" size="large" className="w-full rounded-sm">
+          {/* Actions */}
+          <div className="flex flex-col gap-2">
+            <Button type="primary" size="large">
               {t('product.addToCart')}
             </Button>
-            <Button size="large" className="w-full rounded-sm">
+            <Button size="large">
               {t('product.favorited')} <CiHeart />
             </Button>
           </div>
         </div>
       </div>
 
-      <ProductReviewList productId={product.id} />
+      <ProductReviewList productId={data._id} />
     </section>
   );
 };

@@ -59,7 +59,7 @@ const OutProductsSection = () => {
                   data?.data.map((p) => (
                     <Link
                       key={p._id}
-                      to={`/product/${p._id}`}
+                      to={`/product/${p.sku}`}
                       className="block"
                     >
                       <ProductCard product={p} />

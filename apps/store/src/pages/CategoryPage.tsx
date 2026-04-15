@@ -10,7 +10,7 @@ const PAGE_SIZE = 8;
 
 const CategoryPage = () => {
   const { t } = useTranslation();
-  const { categoryId } = useParams<{ categoryId?: string }>();
+  const { slug } = useParams<{ slug?: string }>();
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,20 +30,20 @@ const CategoryPage = () => {
   const categories = useMemo(() => categoryRes?.data || [], [categoryRes]);
 
   const category = useMemo(
-    () => categories.find((c) => c._id === categoryId),
-    [categories, categoryId],
+    () => categories.find((c) => c.slug === slug),
+    [categories, slug],
   );
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [categoryId, debouncedSearch, sortBy]);
+  }, [slug, debouncedSearch, sortBy]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [categoryId]);
+  }, [slug]);
 
   const { data, isLoading } = useGetProduct({
-    categoryId,
+    categorySlug: slug,
     page: currentPage,
     limit: PAGE_SIZE,
     search: debouncedSearch,
@@ -79,7 +79,7 @@ const CategoryPage = () => {
               </div>
             ) : (
               categories.map((c) => {
-                const checked = categoryId === c._id;
+                const checked = slug === c.slug;
                 return (
                   <button
                     key={c._id}
@@ -143,7 +143,7 @@ const CategoryPage = () => {
               </div>
             ) : hasData ? (
               data?.data?.map((p) => (
-                <Link key={p._id} to={`/product/${p._id}`}>
+                <Link key={p._id} to={`/product/${p.sku}`}>
                   <div className="border rounded overflow-hidden">
                     <img
                       alt={p.name}
@@ -155,7 +155,7 @@ const CategoryPage = () => {
                         {p.name}
                       </div>
                       <div className="font-bold">
-                        {p.price.toLocaleString()} ₫
+                        ${p.price.toLocaleString()}
                       </div>
                     </div>
                   </div>

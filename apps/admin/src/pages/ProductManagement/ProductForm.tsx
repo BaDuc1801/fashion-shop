@@ -212,6 +212,16 @@ const ProductForm = ({
         </FormItem>
 
         <FormItem
+          name="description"
+          label={t('admin.product.form.description')}
+        >
+          <Input.TextArea
+            placeholder={t('admin.product.form.placeholderDescription')}
+            size="large"
+          />
+        </FormItem>
+
+        <FormItem
           name="price"
           label={t('admin.product.form.price')}
           getValueFromEvent={(value) => (value as number | null) ?? 0}

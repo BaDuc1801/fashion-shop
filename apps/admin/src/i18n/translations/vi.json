@@ -189,7 +189,9 @@
         "createFailed": "Tạo sản phẩm thất bại",
         "updateFailed": "Cập nhật sản phẩm thất bại",
         "deleteSuccess": "Xóa sản phẩm thành công",
-        "deleteFailed": "Xóa sản phẩm thất bại"
+        "deleteFailed": "Xóa sản phẩm thất bại",
+        "description": "Mô tả",
+        "placeholderDescription": "Nhập mô tả"
       }
     },
     "user": {
@@ -416,6 +418,7 @@
       }
     },
     "validation": {
+      "requiredDescription": "Vui lòng nhập mô tả",
       "requiredName": "Vui lòng nhập họ tên",
       "requiredEmail": "Vui lòng nhập email",
       "invalidEmail": "Email không hợp lệ",

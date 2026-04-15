@@ -21,8 +21,9 @@ export const useProductDetail = ({
 
     reset({
       name: initialValues.name,
-      categoryId: initialValues?.categoryId?.name,
+      categoryId: initialValues?.categoryId?._id,
       sku: initialValues.sku,
+      description: initialValues.description,
       price: initialValues.price,
       status: initialValues.status === 'active',
       images: initialValues.images?.length

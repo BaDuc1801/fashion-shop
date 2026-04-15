@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaRegHeart } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
-import { MdSearch } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import { getApiErrorMessage, useAuthStore, userService } from '@shared';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
 import { mockCartItems } from './mockCart';
 import { mockWishlist } from './mockWishlist';
+import SearchProduct from './SearchProduct';
 
 const NavBar = () => {
   const { i18n, t } = useTranslation();
@@ -129,21 +129,33 @@ const NavBar = () => {
         >
           MonoChic
         </Link>
-        <Link to="/" className="text-base font-medium hover:font-semibold">
+        <Link
+          to="/category/men"
+          className="text-base font-medium hover:font-semibold"
+        >
           {t('nav.men')}
         </Link>
-        <Link to="/" className="text-base font-medium hover:font-semibold">
+        <Link
+          to="/category/women"
+          className="text-base font-medium hover:font-semibold"
+        >
           {t('nav.women')}
         </Link>
-        <Link to="/" className="text-base font-medium hover:font-semibold">
+        <Link
+          to="/category/new-arrivals"
+          className="text-base font-medium hover:font-semibold"
+        >
           {t('nav.newArrivals')}
         </Link>
-        <Link to="/" className="text-base font-medium hover:font-semibold">
+        <Link
+          to="/category/sale"
+          className="text-base font-medium hover:font-semibold"
+        >
           {t('nav.sale')}
         </Link>
       </div>
       <nav className="flex items-center gap-6 text-2xl font-medium">
-        <MdSearch className="text-3xl cursor-pointer hover:font-semibold" />
+        <SearchProduct />
         {/* <Link to="/account" className="leading-none">
           <FaRegUser className="cursor-pointer hover:font-semibold" />
         </Link> */}

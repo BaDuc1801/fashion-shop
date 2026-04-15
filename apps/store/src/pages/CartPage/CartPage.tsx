@@ -1,40 +1,38 @@
 import { Button } from 'antd';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import VoucherCard from '../components/cart/VoucherCard';
-import { mockCartItems } from '../components/navbar/mockCart';
-import { mockVouchers } from '../components/navbar/mockVouchers';
+import { mockCartItems } from '../../components/navbar/mockCart';
+import VoucherSection from './components/VoucherSection';
+import { voucherService } from '@shared';
+import { useQuery } from '@tanstack/react-query';
+import { getVoucherDiscount } from './utils/getDiscountVoucher';
 
 const CartPage = () => {
   const { t } = useTranslation();
   const [cartItems, setCartItems] = useState(mockCartItems);
   const [selectedVoucherId, setSelectedVoucherId] = useState<string>();
 
+  const { data: vouchersData } = useQuery({
+    queryKey: ['vouchers'],
+    queryFn: () => voucherService.getVouchers(),
+  });
+
+  const vouchers = useMemo(() => vouchersData?.data ?? [], [vouchersData]);
+
   const subtotal = cartItems.reduce(
     (sum, it) => sum + it.price * it.quantity,
     0,
   );
   const selectedVoucher = useMemo(
-    () => mockVouchers.find((v) => v.id === selectedVoucherId),
-    [selectedVoucherId],
+    () => vouchers.find((v) => v._id === selectedVoucherId),
+    [vouchers, selectedVoucherId],
   );
-  const getVoucherDiscount = useCallback(
-    (voucherId: string) => {
-      const voucher = mockVouchers.find((v) => v.id === voucherId);
-      if (!voucher) return 0;
-      if (voucher.minOrderValue && subtotal < voucher.minOrderValue) return 0;
-      if (voucher.type === 'fixed') return Math.min(subtotal, voucher.value);
-      const rawPercentDiscount = Math.floor((subtotal * voucher.value) / 100);
-      if (voucher.maxDiscount)
-        return Math.min(rawPercentDiscount, voucher.maxDiscount);
-      return rawPercentDiscount;
-    },
-    [subtotal],
-  );
+
   const discount = useMemo(() => {
     if (!selectedVoucher) return 0;
-    return getVoucherDiscount(selectedVoucher.id);
-  }, [getVoucherDiscount, selectedVoucher]);
+    return getVoucherDiscount(subtotal, vouchers, selectedVoucher._id);
+  }, [selectedVoucher, subtotal, vouchers]);
+
   const total = Math.max(0, subtotal - discount);
 
   const handleIncreaseQuantity = (itemId: string) => {
@@ -149,36 +147,12 @@ const CartPage = () => {
                 </span>
               </div>
               <div className="space-y-2 pt-1">
-                <span className="text-slate-700">
-                  {t('cart.selectVoucher')}
-                </span>
-                <div className="overflow-x-auto pb-2">
-                  <div className="flex w-max gap-3">
-                    {mockVouchers.map((voucher) => {
-                      const isEligible =
-                        !voucher.minOrderValue ||
-                        subtotal >= voucher.minOrderValue;
-                      const disabledReason =
-                        !isEligible && voucher.minOrderValue
-                          ? t('cart.voucherMinOrder', {
-                              amount: voucher.minOrderValue,
-                            })
-                          : undefined;
-                      return (
-                        <VoucherCard
-                          key={voucher.id}
-                          voucher={voucher}
-                          selected={selectedVoucherId === voucher.id}
-                          disabled={!isEligible}
-                          disabledReason={disabledReason}
-                          onSelect={(voucherId) =>
-                            setSelectedVoucherId(voucherId)
-                          }
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
+                <VoucherSection
+                  vouchers={vouchers}
+                  subtotal={subtotal}
+                  selectedVoucherId={selectedVoucherId}
+                  onSelect={(voucherId) => setSelectedVoucherId(voucherId)}
+                />
               </div>
               <div className="flex items-center justify-between text-slate-700">
                 <span>{t('cart.discount')}</span>

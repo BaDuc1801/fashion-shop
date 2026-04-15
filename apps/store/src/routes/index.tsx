@@ -2,13 +2,13 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { RootLayout } from '../components/layout/RootLayout';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import CategoryPage from '../pages/CategoryPage';
-import CartPage from '../pages/CartPage';
+import CartPage from '../pages/CartPage/CartPage';
 import CollectionPage from '../pages/CollectionPage';
 import ProductDetailPage from '../pages/ProductDetailPage';
 import WishlistPage from '../pages/WishlistPage';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import { HomePage } from '../pages/HomePage';
-import UserAccountPage from '../pages/UserAccountPage';
+import UserAccountPage from '../pages/UserAccountPage/UserAccountPage';
 
 const AppRoutes = () => {
   return (
@@ -21,8 +21,8 @@ const AppRoutes = () => {
         <Route path="home" element={<Navigate to="/" replace />} />
         <Route path="account" element={<UserAccountPage />} />
         <Route path="category" element={<CategoryPage />} />
-        <Route path="category/:categoryId" element={<CategoryPage />} />
-        <Route path="product/:productId" element={<ProductDetailPage />} />
+        <Route path="category/:slug" element={<CategoryPage />} />
+        <Route path="product/:sku" element={<ProductDetailPage />} />
         <Route path="collection/:collectionId" element={<CollectionPage />} />
         <Route path="wishlist" element={<WishlistPage />} />
         <Route path="cart" element={<CartPage />} />
