@@ -1,28 +1,46 @@
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { mockCartItems } from '../../components/navbar/mockCart';
+import { Trans, useTranslation } from 'react-i18next';
 import VoucherSection from './components/VoucherSection';
-import { voucherService } from '@shared';
-import { useQuery } from '@tanstack/react-query';
+import { CartItem, userService, voucherService } from '@shared';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getVoucherDiscount } from './utils/getDiscountVoucher';
 
 const CartPage = () => {
   const { t } = useTranslation();
-  const [cartItems, setCartItems] = useState(mockCartItems);
-  const [selectedVoucherId, setSelectedVoucherId] = useState<string>();
+  const queryClient = useQueryClient();
+
+  const { data: cartData } = useQuery({
+    queryKey: ['cart'],
+    queryFn: () => userService.getCart(),
+  });
 
   const { data: vouchersData } = useQuery({
     queryKey: ['vouchers'],
     queryFn: () => voucherService.getVouchers(),
   });
 
+  const updateCart = useMutation({
+    mutationFn: userService.updateCartItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+
+  const removeCart = useMutation({
+    mutationFn: userService.removeFromCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+
+  const [selectedVoucherId, setSelectedVoucherId] = useState<string>();
+
   const vouchers = useMemo(() => vouchersData?.data ?? [], [vouchersData]);
 
-  const subtotal = cartItems.reduce(
-    (sum, it) => sum + it.price * it.quantity,
-    0,
-  );
+  const subtotal =
+    cartData?.reduce((sum, it) => sum + it.quantity * it.product.price, 0) ?? 0;
+
   const selectedVoucher = useMemo(
     () => vouchers.find((v) => v._id === selectedVoucherId),
     [vouchers, selectedVoucherId],
@@ -35,24 +53,6 @@ const CartPage = () => {
 
   const total = Math.max(0, subtotal - discount);
 
-  const handleIncreaseQuantity = (itemId: string) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item,
-      ),
-    );
-  };
-
-  const handleDecreaseQuantity = (itemId: string) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId
-          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-          : item,
-      ),
-    );
-  };
-
   useEffect(() => {
     if (!selectedVoucher) return;
     if (
@@ -63,6 +63,51 @@ const CartPage = () => {
     }
   }, [selectedVoucher, subtotal]);
 
+  const handleDecrease = (it: CartItem) => {
+    if (it.quantity === 1) {
+      Modal.confirm({
+        title: t('product.removeItem'),
+        content: (
+          <span className="text-sm">
+            <Trans
+              i18nKey="product.removeItemConfirm"
+              values={{ name: it.product.name }}
+              components={[<span className="font-semibold" />]}
+            />
+          </span>
+        ),
+        okText: t('product.remove'),
+        cancelText: t('product.cancel'),
+        okButtonProps: { danger: true },
+
+        onOk: () =>
+          removeCart.mutate({
+            productId: it.product._id,
+            size: it.size,
+            color: it.color,
+          }),
+      });
+    } else {
+      updateCart.mutate({
+        productId: it.product._id,
+        size: it.size,
+        color: it.color,
+        quantity: it.quantity - 1,
+      });
+    }
+  };
+
+  const handleIncrease = (it: CartItem) => {
+    updateCart.mutate({
+      productId: it.product._id,
+      size: it.size,
+      color: it.color,
+      quantity: it.quantity + 1,
+    });
+  };
+
+  const isLoading = updateCart.isPending || removeCart.isPending;
+
   return (
     <section className="py-8 mx-[200px]">
       <h1 className="text-2xl font-bold text-slate-900">{t('cart.bag')}</h1>
@@ -70,54 +115,65 @@ const CartPage = () => {
       <div className="flex items-start gap-8">
         <div className="flex-1">
           <div className="mt-6 space-y-6">
-            {cartItems.map((it) => (
+            {cartData?.map((it) => (
               <div
-                key={it.id}
+                key={`${it.product._id}-${it.size}-${it.color}`}
                 className="flex gap-5 border-b border-slate-200 pb-6"
               >
                 <div className="h-28 w-28 overflow-hidden rounded-sm bg-slate-100">
                   <img
-                    src={it.imageUrl}
-                    alt={it.name}
+                    src={it.product.images?.[0] ?? ''}
+                    alt={it.product.name}
                     className="h-full w-full object-cover"
                   />
                 </div>
+
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="text-sm font-semibold text-slate-900">
-                        {it.name}
+                        {it.product.name}
                       </div>
+
                       <div className="mt-1 text-xs text-slate-500">
-                        {it.categoryLabel}
+                        {t('product.selectSize')}{' '}
+                        <span className="font-semibold text-slate-900">
+                          {it.size}
+                        </span>
                       </div>
-                      <div className="mt-1 text-xs text-slate-500">
-                        {it.color}
-                      </div>
-                      <div className="mt-1 text-xs text-slate-500">
-                        {t('product.selectSize')} {it.size}
+
+                      <div className="mt-1 text-xs text-slate-500 flex items-center gap-2">
+                        {t('product.selectColor')}
+                        <div
+                          className="size-4 rounded-md"
+                          style={{ backgroundColor: it.color }}
+                        />
                       </div>
                     </div>
+
                     <div className="text-sm font-semibold text-slate-900">
-                      ${it.price}
+                      ${it.product.price * it.quantity}
                     </div>
                   </div>
 
+                  {/* Quantity */}
                   <div className="mt-4 flex items-center gap-2">
                     <button
-                      type="button"
-                      onClick={() => handleDecreaseQuantity(it.id)}
-                      className="h-8 w-8 rounded-full border border-slate-300 text-slate-700"
+                      disabled={isLoading}
+                      onClick={() => handleDecrease(it)}
+                      className="h-8 w-8 rounded-full border border-slate-300"
                     >
                       −
                     </button>
-                    <div className="min-w-6 text-center text-sm font-semibold text-slate-900">
+
+                    <div className="min-w-6 text-center text-sm font-semibold">
                       {it.quantity}
                     </div>
+
                     <button
-                      type="button"
-                      onClick={() => handleIncreaseQuantity(it.id)}
-                      className="h-8 w-8 rounded-full border border-slate-300 text-slate-700"
+                      disabled={isLoading}
+                      onClick={() => handleIncrease(it)}
+                      className="h-8 w-8 rounded-full border border-slate-300"
                     >
                       +
                     </button>
@@ -128,48 +184,48 @@ const CartPage = () => {
           </div>
         </div>
 
+        {/* SUMMARY */}
         <aside className="w-[340px] shrink-0">
           <div className="rounded-lg border border-slate-200 p-4">
             <div className="text-sm font-semibold text-slate-900">
               {t('cart.summary')}
             </div>
+
             <div className="mt-4 space-y-3 text-sm">
-              <div className="flex items-center justify-between text-slate-700">
+              <div className="flex justify-between">
                 <span>{t('cart.subtotal')}</span>
-                <span className="font-semibold text-slate-900">
-                  ${subtotal}
-                </span>
+                <span className="font-semibold">${subtotal}</span>
               </div>
-              <div className="flex items-center justify-between text-slate-700">
+
+              <div className="flex justify-between">
                 <span>{t('cart.estimatedDelivery')}</span>
-                <span className="font-semibold text-slate-900">
-                  {t('cart.free')}
-                </span>
+                <span className="font-semibold">{t('cart.free')}</span>
               </div>
-              <div className="space-y-2 pt-1">
-                <VoucherSection
-                  vouchers={vouchers}
-                  subtotal={subtotal}
-                  selectedVoucherId={selectedVoucherId}
-                  onSelect={(voucherId) => setSelectedVoucherId(voucherId)}
-                />
-              </div>
-              <div className="flex items-center justify-between text-slate-700">
+
+              <VoucherSection
+                vouchers={vouchers}
+                subtotal={subtotal}
+                selectedVoucherId={selectedVoucherId}
+                onSelect={setSelectedVoucherId}
+              />
+
+              <div className="flex justify-between">
                 <span>{t('cart.discount')}</span>
-                <span className="font-semibold text-emerald-600">
+                <span className="text-emerald-600 font-semibold">
                   -${discount}
                 </span>
               </div>
-              <div className="my-3 h-px bg-slate-200" />
-              <div className="flex items-center justify-between text-slate-900">
-                <span className="font-semibold">{t('cart.total')}</span>
-                <span className="font-semibold">${total}</span>
+
+              <div className="border-t pt-3 flex justify-between font-semibold">
+                <span>{t('cart.total')}</span>
+                <span>${total}</span>
               </div>
             </div>
 
             <Button
+              loading={isLoading}
               type="primary"
-              className="mt-5 w-full rounded-full bg-black text-white hover:!bg-black/90"
+              className="mt-5 w-full rounded-full bg-black text-white"
             >
               {t('cart.memberCheckout')}
             </Button>

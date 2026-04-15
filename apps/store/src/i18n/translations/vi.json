@@ -42,7 +42,12 @@
     "selectColor": "Chọn màu",
     "addToCart": "Thêm vào giỏ",
     "favorited": "Đã thích",
-    "stock": "Tồn kho"
+    "stock": "Tồn kho",
+    "addToCartSuccess": "Thêm vào giỏ hàng thành công",
+    "removeItem": "Xóa sản phẩm",
+    "remove": "Xóa",
+    "cancel": "Huỷ",
+    "removeItemConfirm": "Bạn có chắc muốn xóa sản phẩm <0>{{name}}</0> khỏi giỏ hàng?"
   },
   "productReviews": {
     "title": "Đánh giá khách hàng",

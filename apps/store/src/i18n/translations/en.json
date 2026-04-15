@@ -42,7 +42,12 @@
     "selectColor": "Select Color",
     "addToCart": "Add to Cart",
     "favorited": "Favorited",
-    "stock": "Stock"
+    "stock": "Stock",
+    "addToCartSuccess": "Product added to cart successfully",
+    "removeItem": "Remove item",
+    "remove": "Remove",
+    "cancel": "Cancel",
+    "removeItemConfirm": "Are you sure you want to remove the item <0>{{name}}</0> from the cart?"
   },
   "productReviews": {
     "title": "Customer Reviews",

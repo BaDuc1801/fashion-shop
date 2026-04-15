@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Badge, Button, Dropdown, message } from 'antd';
 import type { MenuProps } from 'antd';
 import { useState } from 'react';
@@ -9,8 +9,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import { getApiErrorMessage, useAuthStore, userService } from '@shared';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
-import { mockCartItems } from './mockCart';
-import { mockWishlist } from './mockWishlist';
 import SearchProduct from './SearchProduct';
 
 const NavBar = () => {
@@ -28,9 +26,16 @@ const NavBar = () => {
     const next = i18n.language === 'en' ? 'vi' : 'en';
     i18n.changeLanguage(next);
   };
-
-  const cartCount = mockCartItems.reduce((sum, it) => sum + it.quantity, 0);
-  const wishlistCount = mockWishlist.length;
+  const { data: wishlistData } = useQuery({
+    queryKey: ['wishlist'],
+    queryFn: () => userService.getWishlist(),
+  });
+  const { data: cartData } = useQuery({
+    queryKey: ['cart'],
+    queryFn: () => userService.getCart(),
+  });
+  const cartCount = cartData?.reduce((sum, it) => sum + it.quantity, 0) || 0;
+  const wishlistCount = wishlistData?.length || 0;
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');

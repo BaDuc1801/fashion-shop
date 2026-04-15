@@ -14,6 +14,7 @@ export interface Product {
   sizeVariants: ProductSizeVariant[];
   createdAt: string;
   updatedAt: string;
+  inWishlist?: boolean;
   __v: number;
 }
 

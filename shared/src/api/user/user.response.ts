@@ -4,6 +4,26 @@ export interface SendOtpResponse {
   serverTime?: string;
 }
 
+export interface WishlistItem {
+  _id: string;
+  name: string;
+  price: number;
+  images: string[];
+  sku: string;
+}
+
+export interface CartItem {
+  product: {
+    _id: string;
+    name: string;
+    price: number;
+    images: string[];
+  };
+  size: string;
+  color: string;
+  quantity: number;
+}
+
 export interface LoginApiResponse {
   user: {
     _id: string;

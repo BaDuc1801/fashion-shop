@@ -4,11 +4,11 @@ import { NotFoundPage } from '../pages/NotFoundPage';
 import CategoryPage from '../pages/CategoryPage';
 import CartPage from '../pages/CartPage/CartPage';
 import CollectionPage from '../pages/CollectionPage';
-import ProductDetailPage from '../pages/ProductDetailPage';
-import WishlistPage from '../pages/WishlistPage';
+import ProductDetailPage from '../pages/ProductDetailPage/ProductDetailPage';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import { HomePage } from '../pages/HomePage';
 import UserAccountPage from '../pages/UserAccountPage/UserAccountPage';
+import WishlistPage from '../pages/WishListPage/WishlistPage';
 
 const AppRoutes = () => {
   return (

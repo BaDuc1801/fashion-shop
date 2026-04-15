@@ -2,11 +2,14 @@ import { Button, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { NotFoundPage } from './NotFoundPage';
+import { NotFoundPage } from '../NotFoundPage';
 import { CiHeart } from 'react-icons/ci';
-import ProductReviewList from '../components/productDetail/ProductReviewList';
+import ProductReviewList from '../../components/productDetail/ProductReviewList';
 import { productService } from '@shared';
 import { useQuery } from '@tanstack/react-query';
+import { FaHeart } from 'react-icons/fa';
+import { useToggleWishlist } from './hooks/useWishList';
+import { useToggleCart } from './hooks/useAddToCart';
 
 const ProductDetailPage = () => {
   const { t } = useTranslation();
@@ -24,6 +27,9 @@ const ProductDetailPage = () => {
     },
     enabled: !!sku,
   });
+
+  const toggleWishlist = useToggleWishlist();
+  const toggleCart = useToggleCart();
 
   useEffect(() => {
     if (!data) return;
@@ -127,12 +133,16 @@ const ProductDetailPage = () => {
                 return (
                   <button
                     key={s.size}
+                    disabled={s.colors.every((c) => c.quantity === 0)}
                     onClick={() => setSelectedSize(s.size)}
                     className={[
                       'h-10 px-3 rounded-full border',
                       active
                         ? 'border-pink-300 bg-pink-50'
                         : 'border-slate-200',
+                      s.colors.every((c) => c.quantity === 0)
+                        ? 'cursor-not-allowed opacity-60'
+                        : '',
                     ].join(' ')}
                   >
                     {s.size}
@@ -154,11 +164,13 @@ const ProductDetailPage = () => {
                   <button
                     key={c.name}
                     onClick={() => setSelectedColorId(c.name)}
+                    disabled={c.quantity === 0}
                     className={[
                       'h-10 w-10 border rounded-sm',
                       active
                         ? 'border-pink-300 ring-2 ring-pink-100'
                         : 'border-slate-200',
+                      c.quantity === 0 ? 'cursor-not-allowed opacity-60' : '',
                     ].join(' ')}
                     style={{ backgroundColor: c.name }}
                   />
@@ -169,11 +181,34 @@ const ProductDetailPage = () => {
 
           {/* Actions */}
           <div className="flex flex-col gap-2">
-            <Button type="primary" size="large">
+            <Button
+              type="primary"
+              size="large"
+              onClick={() =>
+                toggleCart.mutate({
+                  productId: data._id,
+                  size: selectedSize,
+                  color: selectedColorId,
+                })
+              }
+            >
               {t('product.addToCart')}
             </Button>
-            <Button size="large">
-              {t('product.favorited')} <CiHeart />
+            <Button
+              size="large"
+              onClick={() =>
+                toggleWishlist.mutate({
+                  productId: data._id,
+                  inWishlist: data.inWishlist ?? false,
+                })
+              }
+            >
+              {t('product.favorited')}{' '}
+              {data.inWishlist ? (
+                <FaHeart className="text-[#fb6f92]" />
+              ) : (
+                <CiHeart />
+              )}
             </Button>
           </div>
         </div>

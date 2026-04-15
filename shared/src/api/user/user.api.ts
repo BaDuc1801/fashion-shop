@@ -22,6 +22,8 @@ import {
   UserMeData,
   VerifyOtpResponse,
   GetUsersResponse,
+  WishlistItem,
+  CartItem,
 } from './user.response';
 
 class UserService {
@@ -99,6 +101,60 @@ class UserService {
 
   async deleteUser(id: string): Promise<{ message: string }> {
     const res = await api.delete(`/api/users/${id}`);
+    return res.data;
+  }
+
+  async addToWishlist(productId: string): Promise<{ message: string }> {
+    const res = await api.post(`/api/users/wishlist`, { productId });
+    return res.data;
+  }
+
+  async removeFromWishlist(productId: string): Promise<{ message: string }> {
+    const res = await api.delete(`/api/users/wishlist/${productId}`);
+    return res.data;
+  }
+
+  async getWishlist(): Promise<WishlistItem[]> {
+    const res = await api.get(`/api/users/me/wishlist`);
+    return res.data;
+  }
+
+  async getCart(): Promise<CartItem[]> {
+    const res = await api.get(`/api/users/me/cart`);
+    return res.data;
+  }
+
+  async addToCart(payload: {
+    productId: string;
+    size: string;
+    color: string;
+    quantity?: number;
+  }): Promise<{ message: string; cart: CartItem[] }> {
+    const res = await api.post(`/api/users/cart`, payload);
+    return res.data;
+  }
+
+  async updateCartItem(payload: {
+    productId: string;
+    size: string;
+    color: string;
+    quantity: number;
+  }): Promise<{ message: string; cart: CartItem[] }> {
+    const res = await api.put(`/api/users/me/cart`, payload);
+    return res.data;
+  }
+
+  async removeFromCart(payload: {
+    productId: string;
+    size: string;
+    color: string;
+  }): Promise<{ message: string; cart: CartItem[] }> {
+    const res = await api.delete(`/api/users/cart/${payload.productId}`, {
+      data: {
+        size: payload.size,
+        color: payload.color,
+      },
+    });
     return res.data;
   }
 }
