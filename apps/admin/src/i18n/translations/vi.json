@@ -450,7 +450,9 @@
       "requiredMaxDiscount": "Vui lòng nhập giảm tối đa",
       "requiredMinOrder": "Vui lòng nhập giá trị đơn tối thiểu",
       "selectExpireDate": "Vui lòng chọn ngày hết hạn",
-      "requiredCategory": "Vui lòng chọn danh mục"
+      "requiredCategory": "Vui lòng chọn danh mục",
+      "requiredAddress": "Vui lòng nhập địa chỉ",
+      "requiredPaymentMethod": "Vui lòng chọn phương thức thanh toán"
     },
     "confirmModal": {
       "title": "Xác nhận",

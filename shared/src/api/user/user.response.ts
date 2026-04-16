@@ -24,6 +24,20 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface PurchaseHistoryItem {
+  orderId: string;
+  purchasedAt: string;
+  totalAmount: number;
+  status: string;
+  items: {
+    productName: string;
+    quantity: number;
+    unitPrice: number;
+    size: string;
+    color: string;
+  }[];
+}
+
 export interface LoginApiResponse {
   user: {
     _id: string;
@@ -54,6 +68,7 @@ export interface UserMeData {
   provider: string;
   isVerified: boolean;
   status: string;
+  purchaseHistory: PurchaseHistoryItem[];
   createdAt: string;
   updatedAt: string;
 }

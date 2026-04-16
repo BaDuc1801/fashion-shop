@@ -5,10 +5,12 @@ import VoucherSection from './components/VoucherSection';
 import { CartItem, userService, voucherService } from '@shared';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getVoucherDiscount } from './utils/getDiscountVoucher';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: cartData } = useQuery({
     queryKey: ['cart'],
@@ -225,7 +227,13 @@ const CartPage = () => {
             <Button
               loading={isLoading}
               type="primary"
-              className="mt-5 w-full rounded-full bg-black text-white"
+              size="large"
+              className="mt-5 w-full rounded-full"
+              onClick={() =>
+                navigate('/checkout', {
+                  state: { voucherId: selectedVoucherId },
+                })
+              }
             >
               {t('cart.memberCheckout')}
             </Button>

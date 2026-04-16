@@ -99,7 +99,8 @@
     "changePassword": "Đổi mật khẩu",
     "changePasswordSuccess": "Đổi mật khẩu thành công. Vui lòng đăng nhập lại.",
     "changePasswordFailed": "Đổi mật khẩu thất bại.",
-    "myAccount": "Tài khoản của tôi"
+    "myAccount": "Tài khoản của tôi",
+    "address": "Địa chỉ"
   },
   "cart": {
     "bag": "Giỏ hàng",
@@ -112,7 +113,9 @@
     "discount": "Giảm giá",
     "voucherMinOrder": "Đơn từ ${{amount}} mới dùng được voucher này",
     "total": "Tổng",
-    "memberCheckout": "Thanh toán"
+    "memberCheckout": "Thanh toán",
+    "minOrder": "Đơn từ",
+    "maxDiscount": "Giảm tối đa"
   },
   "collection": {
     "notFound": "Không tìm thấy bộ sưu tập"
@@ -143,5 +146,20 @@
       "status": "Trạng thái",
       "total": "Tổng tiền"
     }
-  }
+  },
+  "placeOrder": "Đặt hàng",
+  "delivery": "Giao hàng",
+  "paymentMethod": "Phương thức thanh toán",
+  "bankingTransfer": "Chuyển khoản QR Code",
+  "cashOnDelivery": "Thanh toán khi nhận hàng (COD)",
+  "vnpay": "Thanh toán VNPay",
+  "momo": "Thanh toán MoMo",
+  "size": "Size",
+  "color": "Màu",
+  "quantity": "Số lượng",
+  "requiredName": "Vui lòng nhập họ tên",
+  "invalidEmail": "Email không hợp lệ",
+  "requiredPhone": "Vui lòng nhập số điện thoại",
+  "requiredAddress": "Vui lòng nhập địa chỉ",
+  "requiredPaymentMethod": "Vui lòng chọn phương thức thanh toán"
 }

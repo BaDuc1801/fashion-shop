@@ -73,10 +73,9 @@ const EmployeeForm = ({
               {({ field }) => (
                 <ImageUploader
                   squareFullWidth
-                  fileList={((field.value as UploadFile[] | undefined) ?? []).slice(
-                    0,
-                    1,
-                  )}
+                  fileList={(
+                    (field.value as UploadFile[] | undefined) ?? []
+                  ).slice(0, 1)}
                   onChange={(fileList) => field.onChange(fileList.slice(0, 1))}
                   maxCount={1}
                   multiple={false}

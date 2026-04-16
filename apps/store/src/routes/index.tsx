@@ -9,6 +9,7 @@ import AuthPage from '../pages/AuthPage/AuthPage';
 import { HomePage } from '../pages/HomePage';
 import UserAccountPage from '../pages/UserAccountPage/UserAccountPage';
 import WishlistPage from '../pages/WishListPage/WishlistPage';
+import CheckoutPage from '../pages/CheckoutPage/CheckoutPage';
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="collection/:collectionId" element={<CollectionPage />} />
         <Route path="wishlist" element={<WishlistPage />} />
         <Route path="cart" element={<CartPage />} />
+        <Route path="checkout" element={<CheckoutPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

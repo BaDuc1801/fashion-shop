@@ -31,12 +31,15 @@ const VoucherSection = ({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between">
+      <div
+        className="flex items-center justify-between cursor-pointer"
+        onClick={() => setOpen(true)}
+      >
         <div className="flex items-center gap-2">
           <LuTicket className="size-4" />
           <span className="text-slate-700">{t('cart.selectVoucher')}</span>
         </div>
-        <div onClick={() => setOpen(true)} className="cursor-pointer">
+        <div className="cursor-pointer">
           <FaAngleDoubleRight />
         </div>
       </div>
@@ -91,7 +94,7 @@ const VoucherSection = ({
                       </div>
                     </div>
                     <div className="text-sm text-slate-500">
-                      Min order: ${v.minOrderValue ?? 0}
+                      {t('cart.minOrder')} ${v.minOrderValue ?? 0}
                     </div>
                   </div>
                 </div>

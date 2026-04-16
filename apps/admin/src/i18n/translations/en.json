@@ -446,7 +446,9 @@
       "requiredMaxDiscount": "Please enter max discount",
       "requiredMinOrder": "Please enter min order value",
       "selectExpireDate": "Please select expire date",
-      "requiredCategory": "Please select category"
+      "requiredCategory": "Please select category",
+      "requiredAddress": "Please enter address",
+      "requiredPaymentMethod": "Please select payment method"
     },
     "confirmModal": {
       "title": "Confirm",

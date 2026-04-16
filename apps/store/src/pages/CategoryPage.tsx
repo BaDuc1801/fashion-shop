@@ -83,7 +83,7 @@ const CategoryPage = () => {
                 return (
                   <button
                     key={c._id}
-                    onClick={() => navigate(`/category/${c._id}`)}
+                    onClick={() => navigate(`/category/${c.slug}`)}
                     className={`w-full flex justify-between px-3 py-2 rounded border ${
                       checked
                         ? 'border-pink-300 bg-pink-50'

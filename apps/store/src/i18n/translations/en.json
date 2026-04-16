@@ -99,7 +99,8 @@
     "changePassword": "Change password",
     "changePasswordSuccess": "Password changed successfully. Please log in again.",
     "changePasswordFailed": "Failed to change password.",
-    "myAccount": "My Account"
+    "myAccount": "My Account",
+    "address": "Address"
   },
   "cart": {
     "bag": "Bag",
@@ -112,7 +113,9 @@
     "discount": "Discount",
     "voucherMinOrder": "Order from ${{amount}} to use this voucher",
     "total": "Total",
-    "memberCheckout": "Member Checkout"
+    "memberCheckout": "Member Checkout",
+    "minOrder": "Min order",
+    "maxDiscount": "Max discount"
   },
   "collection": {
     "notFound": "Collection not found"
@@ -143,5 +146,20 @@
       "status": "Status",
       "total": "Total"
     }
-  }
+  },
+  "placeOrder": "Place Order",
+  "delivery": "Delivery",
+  "paymentMethod": "Payment Method",
+  "bankingTransfer": "Banking Transfer",
+  "cashOnDelivery": "Cash on Delivery",
+  "vnpay": "VNPay",
+  "momo": "MoMo",
+  "size": "Size",
+  "color": "Color",
+  "quantity": "Quantity",
+  "requiredName": "Please enter name",
+  "invalidEmail": "Invalid email",
+  "requiredPhone": "Please enter phone",
+  "requiredAddress": "Please enter address",
+  "requiredPaymentMethod": "Please select payment method"
 }
