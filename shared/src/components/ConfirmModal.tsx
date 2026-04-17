@@ -12,6 +12,7 @@ export interface ConfirmModalProps {
   confirmText?: string;
   cancelText?: string;
   loading?: boolean;
+  isRating?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -26,6 +27,7 @@ export const ConfirmModal = ({
   confirmText,
   cancelText,
   loading = false,
+  isRating = false,
   onConfirm,
   onCancel,
 }: ConfirmModalProps) => {
@@ -85,6 +87,8 @@ export const ConfirmModal = ({
             <span className="font-semibold">{voucherCode}</span>?
           </>
         )}
+
+        {isRating && <>{t('areYouSureYouWantToChangeTheStatusOfThisReview')}</>}
       </span>
     </Modal>
   );

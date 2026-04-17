@@ -19,6 +19,7 @@ import OrderDetailPage from '../pages/OrderManagement/OrderDetailPage';
 import CategoryManagementPage from '../pages/CategoryManagement/CategoryManagementPage';
 import CategoryAddPage from '../pages/CategoryManagement/CategoryAddPage';
 import CategoryDetailPage from '../pages/CategoryManagement/CategoryDetailPage';
+import RatingManagementPage from '../pages/RatingManagement/RatingManagementPage';
 
 const AppRoutes = () => {
   return (
@@ -44,6 +45,7 @@ const AppRoutes = () => {
         <Route path="/vouchers" element={<VoucherManagementPage />} />
         <Route path="/vouchers/add-new" element={<VoucherAddPage />} />
         <Route path="/vouchers/:id" element={<VoucherDetailPage />} />
+        <Route path="/ratings" element={<RatingManagementPage />} />
       </Route>
     </Routes>
   );

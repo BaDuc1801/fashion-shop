@@ -260,7 +260,10 @@ const ProductDetailPage = () => {
         </div>
       </div>
 
-      <ProductReviewList productId={data._id} />
+      <ProductReviewList
+        reviews={data.reviews}
+        ratingStats={data.ratingStats}
+      />
     </section>
   );
 };

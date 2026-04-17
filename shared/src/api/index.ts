@@ -14,3 +14,6 @@ export * from './voucher/voucher.response';
 export * from './order/order.api';
 export * from './order/order.request';
 export * from './order/order.response';
+export * from './rating/rating.api';
+export * from './rating/rating.request';
+export * from './rating/rating.response';

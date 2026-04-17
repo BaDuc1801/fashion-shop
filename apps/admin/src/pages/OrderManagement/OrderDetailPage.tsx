@@ -67,6 +67,7 @@ const OrderDetailPage = () => {
     {
       title: t('product'),
       key: 'product',
+      width: 400,
       render: (_, row) => (
         <div className="flex items-center gap-3">
           <Avatar

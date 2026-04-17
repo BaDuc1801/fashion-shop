@@ -40,7 +40,7 @@ const OrderManagementPage = () => {
         title: t('admin.order.col.orderId'),
         dataIndex: 'orderCode',
         key: 'id',
-        width: 120,
+        width: 180,
       },
       {
         title: t('admin.order.col.customer'),

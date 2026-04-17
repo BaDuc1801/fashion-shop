@@ -12,6 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Divider, Input, Menu, Modal, Select, message } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MdOutlineRateReview } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const SidebarMenu = () => {
@@ -61,6 +62,11 @@ const SidebarMenu = () => {
         key: '/orders',
         icon: <ShoppingCartOutlined className="!text-base" />,
         label: t('admin.nav.orders'),
+      },
+      {
+        key: '/ratings',
+        icon: <MdOutlineRateReview className="!text-base" />,
+        label: t('ratingAndReview'),
       },
       {
         key: '/employees',

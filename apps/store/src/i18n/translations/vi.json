@@ -51,7 +51,7 @@
   },
   "productReviews": {
     "title": "Đánh giá khách hàng",
-    "basedOn": "{{rating}} / 5 dựa trên {{count}} đánh giá",
+    "basedOn": "{{rating}} / 5.0 dựa trên {{count}} đánh giá",
     "verifiedPurchase": "Đã mua hàng",
     "previous": "Trước",
     "next": "Sau"
@@ -100,7 +100,11 @@
     "changePasswordSuccess": "Đổi mật khẩu thành công. Vui lòng đăng nhập lại.",
     "changePasswordFailed": "Đổi mật khẩu thất bại.",
     "myAccount": "Tài khoản của tôi",
-    "address": "Địa chỉ"
+    "address": "Địa chỉ",
+    "sessionExpired": "Phiên làm việc đã hết hạn",
+    "sessionExpiredContent": "Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.",
+    "agree": "Đồng ý",
+    "cancel": "Huỷ"
   },
   "cart": {
     "bag": "Giỏ hàng",
@@ -184,5 +188,17 @@
   "discountCode": "Mã giảm giá",
   "noteKeepTransferContent": "Lưu ý: Vui lòng giữ nguyên nội dung chuyển khoản.",
   "amount": "Số tiền",
-  "content": "Nội dung"
+  "content": "Nội dung",
+  "or": "Hoặc",
+  "cancelPayment": "Huỷ thanh toán",
+  "cancelPaymentSuccess": "Huỷ thanh toán thành công",
+  "reviewSubmitted": "Đánh giá đã được gửi thành công",
+  "submitFailed": "Gửi đánh giá thất bại",
+  "addReview": "Thêm đánh giá",
+  "rating": "Đánh giá",
+  "comment": "Bình luận",
+  "images": "Ảnh",
+  "submit": "Gửi",
+  "orderNotCompleted": "Đơn hàng chưa hoàn thành",
+  "alreadyReviewed": "Đã đánh giá"
 }

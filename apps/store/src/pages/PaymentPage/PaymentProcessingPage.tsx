@@ -1,6 +1,6 @@
 import { orderService } from '@shared';
 import { useQuery } from '@tanstack/react-query';
-import { Spin } from 'antd';
+import { Button, message, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -28,6 +28,12 @@ const PaymentProcessingPage = () => {
     },
   });
 
+  const handleCancelPayment = async () => {
+    await orderService.cancelOrder(orderId as string);
+    navigate('/', { replace: true });
+    message.success(t('cancelPaymentSuccess'));
+  };
+
   useEffect(() => {
     if (!orderId) {
       navigate('/', { replace: true });
@@ -52,12 +58,18 @@ const PaymentProcessingPage = () => {
 
   return (
     <div className="h-[calc(100vh-80px)] flex items-center justify-center bg-pink-50">
-      <div className="flex flex-col items-center justify-center gap-8 p-8 bg-white rounded-lg shadow-sm mb-20">
-        <h1 className="text-2xl font-semibold">{t('paymentProcessing')}</h1>
-        <Spin size="large" />
-        <div className="text-center">
-          <p className="text-gray-600">{t('paymentProcessingDescription')}</p>
+      <div className="flex flex-col items-center justify-center gap-4 p-8 bg-white rounded-lg shadow-sm mb-20">
+        <div className="flex flex-col items-center justify-center gap-8">
+          <h1 className="text-2xl font-semibold">{t('paymentProcessing')}</h1>
+          <Spin size="large" />
+          <div className="text-center">
+            <p className="text-gray-600">{t('paymentProcessingDescription')}</p>
+          </div>
         </div>
+        <div className="text-center">{t('or')}</div>
+        <Button type="primary" size="large" onClick={handleCancelPayment}>
+          {t('cancelPayment')}
+        </Button>
       </div>
     </div>
   );

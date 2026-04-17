@@ -91,6 +91,7 @@ const UserOrderPage = () => {
               items={record.items ?? []}
               t={t}
               discount={record.discount}
+              orderId={record._id}
             />
           ),
         }}

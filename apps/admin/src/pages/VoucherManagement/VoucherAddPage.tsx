@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Card, Input, List } from 'antd';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -8,20 +8,24 @@ import {
   type ReturnToAddNewState,
 } from '../../constants/addNewReturn';
 import VoucherForm from './VoucherForm';
-import { vouchers } from './vouchersMockData';
+import { useDebouncedValue, voucherService } from '@shared';
+import { useQuery } from '@tanstack/react-query';
 
 const VoucherAddPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
+  const debouncedSearch = useDebouncedValue(searchText, 400);
 
-  const filteredVouchers = useMemo(
-    () =>
-      vouchers.filter((item) =>
-        item.code.toLowerCase().includes(searchText.toLowerCase()),
-      ),
-    [searchText],
-  );
+  const { data: listResponse, isLoading: isListLoading } = useQuery({
+    queryKey: ['vouchers', 'add-list', debouncedSearch],
+    queryFn: () =>
+      voucherService.getVouchers({
+        search: debouncedSearch,
+        page: 1,
+        limit: 100,
+      }),
+  });
 
   const fromAddState: ReturnToAddNewState = {
     returnTo: ADD_NEW_PATH.vouchers,
@@ -54,13 +58,14 @@ const VoucherAddPage = () => {
           <div className="max-h-[calc(100vh-280px)] overflow-y-auto overflow-x-hidden overscroll-y-contain">
             <List
               bordered
-              dataSource={filteredVouchers}
+              dataSource={listResponse?.data}
+              loading={isListLoading}
               locale={{ emptyText: t('admin.common.noData') }}
               renderItem={(item) => (
                 <List.Item
                   className="cursor-pointer"
                   onClick={() =>
-                    navigate(`/vouchers/${item.id}`, { state: fromAddState })
+                    navigate(`/vouchers/${item._id}`, { state: fromAddState })
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">

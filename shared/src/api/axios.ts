@@ -18,7 +18,7 @@ let refreshPromise: Promise<void> | null = null;
 
 const refreshAccessToken = async () => {
   if (!refreshPromise) {
-    refreshPromise = axios
+    refreshPromise = api
       .post(
         `${import.meta.env.VITE_API_URL}/api/users/refresh`,
         {},

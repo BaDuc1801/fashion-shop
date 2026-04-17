@@ -51,7 +51,7 @@
   },
   "productReviews": {
     "title": "Customer Reviews",
-    "basedOn": "{{rating}} / 5 based on {{count}} reviews",
+    "basedOn": "{{rating}} / 5.0 based on {{count}} reviews",
     "verifiedPurchase": "Verified Purchase",
     "previous": "Previous",
     "next": "Next"
@@ -100,7 +100,11 @@
     "changePasswordSuccess": "Password changed successfully. Please log in again.",
     "changePasswordFailed": "Failed to change password.",
     "myAccount": "My Account",
-    "address": "Address"
+    "address": "Address",
+    "sessionExpired": "Session Expired",
+    "sessionExpiredContent": "Your session has expired. Please log in again.",
+    "agree": "Agree",
+    "cancel": "Cancel"
   },
   "cart": {
     "bag": "Bag",
@@ -184,5 +188,17 @@
   "discountCode": "Discount Code",
   "noteKeepTransferContent": "Note: Please keep the transfer content unchanged.",
   "amount": "Amount",
-  "content": "Content"
+  "content": "Content",
+  "or": "Or",
+  "cancelPayment": "Cancel payment",
+  "cancelPaymentSuccess": "Payment cancelled successfully",
+  "reviewSubmitted": "Review submitted successfully",
+  "submitFailed": "Failed to submit review",
+  "addReview": "Add Review",
+  "rating": "Rating",
+  "comment": "Comment",
+  "images": "Images",
+  "submit": "Submit",
+  "orderNotCompleted": "Order not completed",
+  "alreadyReviewed": "Already reviewed"
 }
