@@ -10,7 +10,7 @@ import {
   Tag,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -33,7 +33,6 @@ const OrderDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [searchText, setSearchText] = useState('');
   const [status, setStatus] = useState<string>();
 
   const { data: order, isLoading } = useQuery({
@@ -63,16 +62,6 @@ const OrderDetailPage = () => {
       setStatus(order.orderStatus);
     }
   }, [order]);
-
-  const filteredItems = useMemo(() => {
-    if (!order?.items) return [];
-
-    return order.items.filter(
-      (item: OrderItem) =>
-        item.nameSnapshot?.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.skuSnapshot?.toLowerCase().includes(searchText.toLowerCase()),
-    );
-  }, [order?.items, searchText]);
 
   const itemColumns: ColumnsType<OrderItem> = [
     {
@@ -141,6 +130,8 @@ const OrderDetailPage = () => {
           ? 'gold'
           : 'red';
 
+  const isCodPayment = order.paymentMethod === 'cod';
+
   return (
     <div>
       <Button
@@ -167,21 +158,22 @@ const OrderDetailPage = () => {
 
               <Descriptions.Item label={t('orderStatus')}>
                 <div className="flex items-center gap-3">
-                  <Select
-                    value={status}
-                    onChange={setStatus}
-                    style={{ width: 160 }}
-                    disabled={order.paymentMethod !== 'cod'}
-                    options={[
-                      { value: 'pending', label: t('pending') },
-                      { value: 'processing', label: t('processing') },
-                      { value: 'shipping', label: t('shipping') },
-                      { value: 'completed', label: t('completed') },
-                      { value: 'cancelled', label: t('cancelled') },
-                    ]}
-                  />
-
-                  <Tag color={statusColor}>{status}</Tag>
+                  {isCodPayment && (
+                    <Select
+                      value={status}
+                      onChange={setStatus}
+                      style={{ width: 160 }}
+                      disabled={!isCodPayment}
+                      options={[
+                        { value: 'pending', label: t('pending') },
+                        { value: 'processing', label: t('processing') },
+                        { value: 'shipping', label: t('shipping') },
+                        { value: 'completed', label: t('completed') },
+                        { value: 'cancelled', label: t('cancelled') },
+                      ]}
+                    />
+                  )}
+                  {!isCodPayment && <Tag color={statusColor}>{status}</Tag>}
                 </div>
               </Descriptions.Item>
 
@@ -197,9 +189,13 @@ const OrderDetailPage = () => {
                 <b>{formatUsd(order.total)}</b>
               </Descriptions.Item>
             </Descriptions>
-            <Button type="primary" onClick={handleUpdateStatus}>
-              {t('updateStatus')}
-            </Button>
+            {isCodPayment && (
+              <div className="flex justify-end">
+                <Button type="primary" onClick={handleUpdateStatus}>
+                  {t('updateStatus')}
+                </Button>
+              </div>
+            )}
           </Card>
         </div>
 
@@ -208,7 +204,7 @@ const OrderDetailPage = () => {
           <Table
             rowKey={(r) => r.productId + r.size + r.color}
             columns={itemColumns}
-            dataSource={filteredItems}
+            dataSource={order?.items}
             pagination={false}
           />
         </Card>

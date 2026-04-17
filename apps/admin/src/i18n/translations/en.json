@@ -482,5 +482,6 @@
   "processing": "Processing",
   "shipping": "Shipping",
   "completed": "Completed",
-  "cancelled": "Cancelled"
+  "cancelled": "Cancelled",
+  "updateStatus": "Update status"
 }

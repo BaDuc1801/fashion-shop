@@ -485,5 +485,6 @@
   "processing": "Đang xử lý",
   "shipping": "Đang giao",
   "completed": "Hoàn thành",
-  "cancelled": "Đã hủy"
+  "cancelled": "Đã hủy",
+  "updateStatus": "Cập nhật trạng thái"
 }
