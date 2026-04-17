@@ -64,7 +64,7 @@ const UserForm = ({
       <Form
         layout="vertical"
         onFinish={handleSubmit(handleFinish)}
-        className="max-w-2xl space-y-2"
+        className=" space-y-2"
       >
         {showTitle ? (
           <h2 className="text-xl font-semibold">

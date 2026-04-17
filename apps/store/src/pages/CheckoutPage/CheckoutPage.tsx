@@ -20,6 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 const CheckoutPage = () => {
   const { t } = useTranslation();
   const { state } = useLocation();
+  const { buyNowItem } = state ?? {};
 
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema(t)),
@@ -34,6 +35,7 @@ const CheckoutPage = () => {
   const { data: cartData } = useQuery({
     queryKey: ['cart'],
     queryFn: userService.getCart,
+    enabled: !state?.buyNowItem,
   });
 
   const { data: vouchersData } = useQuery({
@@ -43,8 +45,31 @@ const CheckoutPage = () => {
 
   const voucherId = watch('voucherId');
 
+  const displayItems = useMemo(() => {
+    if (buyNowItem) {
+      return [
+        {
+          product: {
+            _id: buyNowItem.productId,
+            name: buyNowItem.name,
+            images: [buyNowItem.image],
+            price: buyNowItem.price,
+          },
+          size: buyNowItem.size,
+          color: buyNowItem.color,
+          quantity: buyNowItem.quantity,
+        },
+      ];
+    }
+
+    return cartData ?? [];
+  }, [buyNowItem, cartData]);
+
   const subtotal =
-    cartData?.reduce((sum, it) => sum + it.quantity * it.product.price, 0) ?? 0;
+    displayItems?.reduce(
+      (sum, it) => sum + it.quantity * it.product.price,
+      0,
+    ) ?? 0;
 
   const selectedVoucher = useMemo(
     () => vouchersData?.data?.find((v) => v._id === voucherId),
@@ -64,7 +89,7 @@ const CheckoutPage = () => {
 
   const { createOrder, isLoading } = useCreateOrder();
   const { onCheckoutSubmit } = useOrderSubmit({
-    cartData,
+    cartData: displayItems,
     selectedVoucher,
     createOrder,
   });
@@ -155,7 +180,7 @@ const CheckoutPage = () => {
 
             {/* CART LIST */}
             <div className="border px-4 rounded-lg max-h-[500px] overflow-y-auto mt-4">
-              {cartData?.map((it) => (
+              {displayItems?.map((it) => (
                 <div
                   key={`${it.product._id}-${it.size}-${it.color}`}
                   className="flex gap-4 justify-between border-b pb-4 mt-4"

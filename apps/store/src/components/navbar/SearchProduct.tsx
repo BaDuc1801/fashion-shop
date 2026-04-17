@@ -46,7 +46,7 @@ const SearchProduct = () => {
             products?.data?.map((p) => (
               <div
                 key={p._id}
-                onClick={() => navigate(`/product/${p.sku}`)}
+                onClick={() => navigate(`/products/${p.sku}`)}
                 className="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
               >
                 <img

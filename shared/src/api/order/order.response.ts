@@ -1,4 +1,5 @@
 import { UserMeData } from '../user/user.response';
+import { Voucher } from '../voucher/voucher.response';
 
 export interface CreateOrderResponse {
   message: string;
@@ -32,6 +33,11 @@ export interface UserOrderData {
   createdAt: string;
 }
 
+export interface OrderDetailDiscount {
+  voucherId: Voucher;
+  discountAmount: number;
+}
+
 export interface OrderDetailData {
   _id: string;
   orderCode: string;
@@ -39,15 +45,14 @@ export interface OrderDetailData {
     productId: string;
     nameSnapshot: string;
     imageSnapshot: string;
+    skuSnapshot: string;
     price: number;
     quantity: number;
     size: string;
     color: string;
   }[];
   subtotal: number;
-  discount: {
-    discountAmount: number;
-  };
+  discount: OrderDetailDiscount;
   total: number;
   paymentMethod: string;
   paymentStatus: string;
@@ -57,11 +62,21 @@ export interface OrderDetailData {
     phone: string;
     address: string;
   };
+  payment?: {
+    method: string;
+    bankName: string;
+    accountNumber: string;
+    accountName: string;
+    amount: number;
+    content: string;
+    qr: string;
+  };
   userId: UserMeData;
+  createdAt: string;
 }
 
 export interface GetListOrdersResponse {
-  data: OrderDetailData[];
+  orders: OrderDetailData[];
   total: number;
   page: number;
   totalPages: number;

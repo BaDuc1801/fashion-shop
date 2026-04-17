@@ -10,6 +10,12 @@ import { HomePage } from '../pages/HomePage';
 import UserAccountPage from '../pages/UserAccountPage/UserAccountPage';
 import WishlistPage from '../pages/WishListPage/WishlistPage';
 import CheckoutPage from '../pages/CheckoutPage/CheckoutPage';
+import PaymentProcessingPage from '../pages/PaymentPage/PaymentProcessingPage';
+import PaymentSuccessPage from '../pages/PaymentPage/PaymentSuccessPage';
+import PaymentFailedPage from '../pages/PaymentPage/PaymentFailedPage';
+import UserOrderPage from '../pages/UserAccountPage/UserOrderPage';
+import OrderSuccessPage from '../pages/PaymentPage/OrderSuccessPage';
+import QrBankPage from '../pages/PaymentPage/QrBankPage';
 
 const AppRoutes = () => {
   return (
@@ -23,11 +29,17 @@ const AppRoutes = () => {
         <Route path="account" element={<UserAccountPage />} />
         <Route path="category" element={<CategoryPage />} />
         <Route path="category/:slug" element={<CategoryPage />} />
-        <Route path="product/:sku" element={<ProductDetailPage />} />
+        <Route path="products/:sku" element={<ProductDetailPage />} />
+        <Route path="payment/sepay" element={<QrBankPage />} />
         <Route path="collection/:collectionId" element={<CollectionPage />} />
         <Route path="wishlist" element={<WishlistPage />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
+        <Route path="payment/processing" element={<PaymentProcessingPage />} />
+        <Route path="payment/success" element={<PaymentSuccessPage />} />
+        <Route path="payment/failed" element={<PaymentFailedPage />} />
+        <Route path="order-success" element={<OrderSuccessPage />} />
+        <Route path="user/orders" element={<UserOrderPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

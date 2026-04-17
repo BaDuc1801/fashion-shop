@@ -1,4 +1,4 @@
-import { Button, Modal } from 'antd';
+import { Button, Empty, Modal } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import VoucherSection from './components/VoucherSection';
@@ -112,78 +112,84 @@ const CartPage = () => {
 
   return (
     <section className="py-8 mx-[200px]">
-      <h1 className="text-2xl font-bold text-slate-900">{t('cart.bag')}</h1>
+      <h1 className="text-2xl font-bold text-slate-900">{t('nav.cart')}</h1>
 
       <div className="flex items-start gap-8">
         <div className="flex-1">
-          <div className="mt-6 space-y-6">
-            {cartData?.map((it) => (
-              <div
-                key={`${it.product._id}-${it.size}-${it.color}`}
-                className="flex gap-5 border-b border-slate-200 pb-6"
-              >
-                <div className="h-28 w-28 overflow-hidden rounded-sm bg-slate-100">
-                  <img
-                    src={it.product.images?.[0] ?? ''}
-                    alt={it.product.name}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
+          {cartData?.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-[50vh]">
+              <Empty description={t('cartEmpty')} />
+            </div>
+          ) : (
+            <div className="mt-6 space-y-6">
+              {cartData?.map((it) => (
+                <div
+                  key={`${it.product._id}-${it.size}-${it.color}`}
+                  className="flex gap-5 border-b border-slate-200 pb-6"
+                >
+                  <div className="h-28 w-28 overflow-hidden rounded-sm bg-slate-100">
+                    <img
+                      src={it.product.images?.[0] ?? ''}
+                      alt={it.product.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
 
-                <div className="flex-1">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="text-sm font-semibold text-slate-900">
+                          {it.product.name}
+                        </div>
+
+                        <div className="mt-1 text-xs text-slate-500">
+                          {t('product.selectSize')}{' '}
+                          <span className="font-semibold text-slate-900">
+                            {it.size}
+                          </span>
+                        </div>
+
+                        <div className="mt-1 text-xs text-slate-500 flex items-center gap-2">
+                          {t('product.selectColor')}
+                          <div
+                            className="size-4 rounded-md"
+                            style={{ backgroundColor: it.color }}
+                          />
+                        </div>
+                      </div>
+
                       <div className="text-sm font-semibold text-slate-900">
-                        {it.product.name}
-                      </div>
-
-                      <div className="mt-1 text-xs text-slate-500">
-                        {t('product.selectSize')}{' '}
-                        <span className="font-semibold text-slate-900">
-                          {it.size}
-                        </span>
-                      </div>
-
-                      <div className="mt-1 text-xs text-slate-500 flex items-center gap-2">
-                        {t('product.selectColor')}
-                        <div
-                          className="size-4 rounded-md"
-                          style={{ backgroundColor: it.color }}
-                        />
+                        ${it.product.price * it.quantity}
                       </div>
                     </div>
 
-                    <div className="text-sm font-semibold text-slate-900">
-                      ${it.product.price * it.quantity}
+                    {/* Quantity */}
+                    <div className="mt-4 flex items-center gap-2">
+                      <button
+                        disabled={isLoading}
+                        onClick={() => handleDecrease(it)}
+                        className="h-8 w-8 rounded-full border border-slate-300"
+                      >
+                        −
+                      </button>
+
+                      <div className="min-w-6 text-center text-sm font-semibold">
+                        {it.quantity}
+                      </div>
+
+                      <button
+                        disabled={isLoading}
+                        onClick={() => handleIncrease(it)}
+                        className="h-8 w-8 rounded-full border border-slate-300"
+                      >
+                        +
+                      </button>
                     </div>
-                  </div>
-
-                  {/* Quantity */}
-                  <div className="mt-4 flex items-center gap-2">
-                    <button
-                      disabled={isLoading}
-                      onClick={() => handleDecrease(it)}
-                      className="h-8 w-8 rounded-full border border-slate-300"
-                    >
-                      −
-                    </button>
-
-                    <div className="min-w-6 text-center text-sm font-semibold">
-                      {it.quantity}
-                    </div>
-
-                    <button
-                      disabled={isLoading}
-                      onClick={() => handleIncrease(it)}
-                      className="h-8 w-8 rounded-full border border-slate-300"
-                    >
-                      +
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* SUMMARY */}

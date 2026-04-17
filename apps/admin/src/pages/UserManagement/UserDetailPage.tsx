@@ -11,6 +11,7 @@ import {
 import UserForm from './UserForm';
 import { userService, useDebouncedValue } from '@shared';
 import { useUpdateUser } from './hooks/useUpdateUser';
+import UserOrderHistory from './UserOrderHistory';
 
 const UserDetailPage = () => {
   const { t } = useTranslation();
@@ -104,6 +105,7 @@ const UserDetailPage = () => {
           </div>
         </Card>
       </div>
+      <UserOrderHistory />
     </div>
   );
 };

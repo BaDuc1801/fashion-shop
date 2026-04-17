@@ -462,5 +462,25 @@
       "confirmText": "Confirm",
       "cancelText": "Cancel"
     }
-  }
+  },
+  "orderHistory": "Order history",
+  "orderCode": "Order Code",
+  "orderDate": "Order Date",
+  "paymentMethod": "Payment Method",
+  "orderStatus": "Status",
+  "orderTotal": "Total",
+  "recipientName": "Recipient name",
+  "searchItemsTitle": "Search items",
+  "product": "Product",
+  "quantity": "Quantity",
+  "price": "Price",
+  "subtotal": "Subtotal",
+  "summaryTitle": "Summary Order",
+  "itemsTitle": "Items in this order",
+  "filterStatus": "Filter status",
+  "pending": "Pending",
+  "processing": "Processing",
+  "shipping": "Shipping",
+  "completed": "Completed",
+  "cancelled": "Cancelled"
 }

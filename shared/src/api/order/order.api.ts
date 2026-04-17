@@ -20,8 +20,23 @@ class OrderService {
     return res.data;
   }
 
-  async getMyOrders(): Promise<GetListOrdersResponse> {
-    const res = await api.get('/api/orders/my-orders');
+  async getUserOrders(
+    userId: string,
+    params: {
+      page: number;
+      limit: number;
+      search: string;
+    },
+  ): Promise<GetListOrdersResponse> {
+    const res = await api.get(`/api/orders/user/${userId}`, { params });
+    return res.data;
+  }
+
+  async getMyOrders(params: {
+    page: number;
+    limit: number;
+  }): Promise<GetListOrdersResponse> {
+    const res = await api.get('/api/orders/my-orders', { params });
     return res.data;
   }
 
@@ -32,6 +47,24 @@ class OrderService {
 
   async cancelOrder(id: string): Promise<{ message: string }> {
     const res = await api.put(`/api/orders/cancel/${id}`);
+    return res.data;
+  }
+
+  async sepayWebhook(payload: {
+    content: string;
+    amount: number;
+  }): Promise<{ message: string }> {
+    const res = await api.post('/api/payments/sepay/webhook', payload);
+    return res.data;
+  }
+
+  async updateOrderStatus(
+    id: string,
+    orderStatus: string,
+  ): Promise<{ message: string }> {
+    const res = await api.put(`/api/orders/update-status/${id}`, {
+      orderStatus,
+    });
     return res.data;
   }
 }

@@ -97,6 +97,13 @@ const NavBar = () => {
 
   const userMenuItems: MenuProps['items'] = [
     {
+      key: 'my-orders',
+      label: t('myOrders'),
+      onClick: () => {
+        navigate('/user/orders');
+      },
+    },
+    {
       key: 'my-account',
       label: t('auth.myAccount'),
       onClick: () => {

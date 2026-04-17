@@ -40,7 +40,7 @@ const WishlistPage = () => {
           data.map((it) => (
             <Link
               key={it._id}
-              to={`/product/${it.sku}`}
+              to={`/products/${it.sku}`}
               className="rounded-sm overflow-hidden border border-slate-200 bg-white hover:bg-slate-50"
             >
               <div className="relative">

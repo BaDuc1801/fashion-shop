@@ -1,6 +1,6 @@
 import { Button, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NotFoundPage } from '../NotFoundPage';
 import { CiHeart } from 'react-icons/ci';
@@ -14,6 +14,7 @@ import { useToggleCart } from './hooks/useAddToCart';
 const ProductDetailPage = () => {
   const { t } = useTranslation();
   const { sku } = useParams<{ sku: string }>();
+  const navigate = useNavigate();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -34,8 +35,10 @@ const ProductDetailPage = () => {
   useEffect(() => {
     if (!data) return;
     setActiveImageIndex(0);
-    const firstSize = data.sizeVariants[0];
-    setSelectedSize(firstSize?.size ?? '');
+    const firstAvailableSize = data.sizeVariants.find((s) =>
+      s.colors.some((c) => c.quantity > 0),
+    );
+    setSelectedSize(firstAvailableSize?.size ?? '');
   }, [data]);
 
   const selectedSizeVariant = useMemo(
@@ -45,7 +48,11 @@ const ProductDetailPage = () => {
 
   useEffect(() => {
     if (!selectedSizeVariant) return;
-    setSelectedColorId(selectedSizeVariant.colors[0]?.name ?? '');
+    const firstAvailableColor = selectedSizeVariant.colors.find(
+      (c) => c.quantity > 0,
+    );
+
+    setSelectedColorId(firstAvailableColor?.name ?? '');
   }, [selectedSizeVariant]);
 
   const selectedVariant = useMemo(
@@ -102,7 +109,30 @@ const ProductDetailPage = () => {
 
         {/* Info */}
         <div className="flex-1 flex flex-col justify-between h-[520px]">
-          <h1 className="text-2xl font-semibold text-slate-900">{data.name}</h1>
+          <div className="flex items-start justify-between">
+            <h1 className="text-2xl font-semibold text-slate-900">
+              {data.name}
+            </h1>
+            <Button
+              size="large"
+              onClick={() =>
+                toggleWishlist.mutate({
+                  productId: data._id,
+                  inWishlist: data.inWishlist ?? false,
+                })
+              }
+              className={`hover:text-[#fb6f92] ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
+            >
+              <text className={`${data.inWishlist ? 'text-[#fb6f92]' : ''}`}>
+                {t('product.favorited')}
+              </text>
+              {data.inWishlist ? (
+                <FaHeart className="text-[#fb6f92]" />
+              ) : (
+                <CiHeart />
+              )}
+            </Button>
+          </div>
 
           <p className="text-base text-slate-600 max-w-[520px]">
             {data.description}
@@ -122,63 +152,75 @@ const ProductDetailPage = () => {
             </div>
           </div>
 
-          {/* Size */}
-          <div>
-            <div className="text-sm font-semibold">
-              {t('product.selectSize')}
+          <div className="flex gap-8">
+            {/* Size */}
+            <div>
+              <div className="text-sm font-semibold">
+                {t('product.selectSize')}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {data.sizeVariants.map((s) => {
+                  const active = s.size === selectedSize;
+                  return (
+                    <button
+                      key={s.size}
+                      disabled={s.colors.every((c) => c.quantity === 0)}
+                      onClick={() => setSelectedSize(s.size)}
+                      className={[
+                        'relative h-10 px-3 rounded-full border flex items-center justify-center',
+                        active
+                          ? 'border-pink-300 bg-pink-50'
+                          : 'border-slate-200',
+                        s.colors.every((c) => c.quantity === 0)
+                          ? 'cursor-not-allowed opacity-60'
+                          : '',
+                      ].join(' ')}
+                    >
+                      {s.size}
+                      {s.colors.every((c) => c.quantity === 0) && (
+                        <span className="absolute text-red-400 text-xl font-bold">
+                          ✕
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {data.sizeVariants.map((s) => {
-                const active = s.size === selectedSize;
-                return (
-                  <button
-                    key={s.size}
-                    disabled={s.colors.every((c) => c.quantity === 0)}
-                    onClick={() => setSelectedSize(s.size)}
-                    className={[
-                      'h-10 px-3 rounded-full border',
-                      active
-                        ? 'border-pink-300 bg-pink-50'
-                        : 'border-slate-200',
-                      s.colors.every((c) => c.quantity === 0)
-                        ? 'cursor-not-allowed opacity-60'
-                        : '',
-                    ].join(' ')}
-                  >
-                    {s.size}
-                  </button>
-                );
-              })}
+
+            {/* Color */}
+            <div>
+              <div className="text-sm font-semibold">
+                {t('product.selectColor')}
+              </div>
+              <div className="flex gap-3">
+                {selectedSizeVariant?.colors.map((c) => {
+                  const active = c.name === selectedColorId;
+                  return (
+                    <button
+                      key={c.name}
+                      onClick={() => setSelectedColorId(c.name)}
+                      disabled={c.quantity === 0}
+                      className={[
+                        'relative h-10 w-10 border rounded-sm flex items-center justify-center',
+                        active
+                          ? 'border-pink-300 ring-2 ring-pink-100'
+                          : 'border-slate-200',
+                        c.quantity === 0 ? 'cursor-not-allowed opacity-60' : '',
+                      ].join(' ')}
+                      style={{ backgroundColor: c.name }}
+                    >
+                      {c.quantity === 0 && (
+                        <span className="absolute text-red-400 text-xl font-bold">
+                          ✕
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
-
-          {/* Color */}
-          <div>
-            <div className="text-sm font-semibold">
-              {t('product.selectColor')}
-            </div>
-            <div className="flex gap-3">
-              {selectedSizeVariant?.colors.map((c) => {
-                const active = c.name === selectedColorId;
-                return (
-                  <button
-                    key={c.name}
-                    onClick={() => setSelectedColorId(c.name)}
-                    disabled={c.quantity === 0}
-                    className={[
-                      'h-10 w-10 border rounded-sm',
-                      active
-                        ? 'border-pink-300 ring-2 ring-pink-100'
-                        : 'border-slate-200',
-                      c.quantity === 0 ? 'cursor-not-allowed opacity-60' : '',
-                    ].join(' ')}
-                    style={{ backgroundColor: c.name }}
-                  />
-                );
-              })}
-            </div>
-          </div>
-
           {/* Actions */}
           <div className="flex flex-col gap-2">
             <Button
@@ -197,18 +239,22 @@ const ProductDetailPage = () => {
             <Button
               size="large"
               onClick={() =>
-                toggleWishlist.mutate({
-                  productId: data._id,
-                  inWishlist: data.inWishlist ?? false,
+                navigate('/checkout', {
+                  state: {
+                    buyNowItem: {
+                      productId: data._id,
+                      name: data.name,
+                      image: data.images?.[0],
+                      price: data.price,
+                      size: selectedSize,
+                      color: selectedColorId,
+                      quantity: 1,
+                    },
+                  },
                 })
               }
             >
-              {t('product.favorited')}{' '}
-              {data.inWishlist ? (
-                <FaHeart className="text-[#fb6f92]" />
-              ) : (
-                <CiHeart />
-              )}
+              {t('byNow')}
             </Button>
           </div>
         </div>

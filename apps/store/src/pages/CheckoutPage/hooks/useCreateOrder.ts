@@ -30,6 +30,7 @@ export const useCreateOrder = () => {
       }
 
       if (res?.paymentUrl) {
+        navigate(`/payment/processing?orderId=${res.order._id}`);
         window.location.href = res.paymentUrl;
         return;
       }

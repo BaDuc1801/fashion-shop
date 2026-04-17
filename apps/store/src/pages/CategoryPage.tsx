@@ -1,25 +1,31 @@
 import { Input, Pagination, Select, Spin, Empty } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { categoryService, useDebouncedValue } from '@shared';
+import { categoryService, useTableQuery } from '@shared';
 import { useGetProduct } from '../hooks/useGetProduct';
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12;
 
 const CategoryPage = () => {
   const { t } = useTranslation();
   const { slug } = useParams<{ slug?: string }>();
   const navigate = useNavigate();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc'>(
-    'featured',
-  );
-  const [searchText, setSearchText] = useState('');
-
-  const debouncedSearch = useDebouncedValue(searchText, 400);
+  const {
+    page,
+    limit,
+    search,
+    searchText,
+    setSearchText,
+    onPageChange,
+    sortPrice,
+    sortPriceState,
+    onSortPriceChange,
+  } = useTableQuery({
+    defaultLimit: PAGE_SIZE,
+  });
 
   const { data: categoryRes, isLoading: isCategoryLoading } = useQuery({
     queryKey: ['categories'],
@@ -35,19 +41,15 @@ const CategoryPage = () => {
   );
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [slug, debouncedSearch, sortBy]);
-
-  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [slug]);
 
   const { data, isLoading } = useGetProduct({
     categorySlug: slug,
-    page: currentPage,
-    limit: PAGE_SIZE,
-    search: debouncedSearch,
-    // sortBy,
+    page,
+    limit,
+    search,
+    sortPrice,
   });
 
   const hasData = data?.data && data.data.length > 0;
@@ -61,9 +63,8 @@ const CategoryPage = () => {
             <h2 className="text-sm font-semibold">{t('filters.title')}</h2>
             <button
               onClick={() => {
-                setSortBy('featured');
                 setSearchText('');
-                setCurrentPage(1);
+                onPageChange(1);
                 navigate('/category');
               }}
               className="text-xs text-slate-500"
@@ -123,12 +124,11 @@ const CategoryPage = () => {
               />
 
               <Select
-                value={sortBy}
-                onChange={(v) => setSortBy(v)}
+                value={sortPriceState}
+                onChange={(v) => onSortPriceChange(v)}
                 options={[
-                  { value: 'featured', label: t('filters.featured') },
-                  { value: 'price-asc', label: t('filters.priceLowToHigh') },
-                  { value: 'price-desc', label: t('filters.priceHighToLow') },
+                  { value: 'asc', label: t('filters.priceLowToHigh') },
+                  { value: 'desc', label: t('filters.priceHighToLow') },
                 ]}
                 style={{ width: 220 }}
               />
@@ -143,7 +143,7 @@ const CategoryPage = () => {
               </div>
             ) : hasData ? (
               data?.data?.map((p) => (
-                <Link key={p._id} to={`/product/${p.sku}`}>
+                <Link key={p._id} to={`/products/${p.sku}`}>
                   <div className="border rounded overflow-hidden">
                     <img
                       alt={p.name}
@@ -171,10 +171,10 @@ const CategoryPage = () => {
           {/* PAGINATION */}
           <div className="mt-6 flex justify-center">
             <Pagination
-              current={currentPage}
-              pageSize={PAGE_SIZE}
+              current={page}
+              pageSize={limit}
               total={data?.total || 0}
-              onChange={(page) => setCurrentPage(page)}
+              onChange={onPageChange}
               showSizeChanger={false}
             />
           </div>

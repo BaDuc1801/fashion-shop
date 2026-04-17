@@ -40,4 +40,5 @@ export interface GetProductsRequest {
   categoryName?: string;
   categoryId?: string;
   categorySlug?: string;
+  sortPrice?: 'asc' | 'desc';
 }

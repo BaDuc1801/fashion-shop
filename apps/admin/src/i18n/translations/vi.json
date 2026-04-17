@@ -465,5 +465,25 @@
       "confirmText": "Đồng ý",
       "cancelText": "Hủy"
     }
-  }
+  },
+  "orderHistory": "Lịch sử đơn hàng",
+  "orderCode": "Mã đơn",
+  "orderDate": "Ngày đặt",
+  "paymentMethod": "Phương thức thanh toán",
+  "orderStatus": "Trạng thái",
+  "orderTotal": "Tổng tiền",
+  "recipientName": "Tên người nhận",
+  "searchItemsTitle": "Tìm kiếm sản phẩm",
+  "product": "Sản phẩm",
+  "quantity": "Số lượng",
+  "price": "Giá",
+  "subtotal": "Thành tiền",
+  "summaryTitle": "Thông tin đơn hàng",
+  "itemsTitle": "Sản phẩm trong đơn",
+  "filterStatus": "Lọc trạng thái",
+  "pending": "Chờ xử lý",
+  "processing": "Đang xử lý",
+  "shipping": "Đang giao",
+  "completed": "Hoàn thành",
+  "cancelled": "Đã hủy"
 }
