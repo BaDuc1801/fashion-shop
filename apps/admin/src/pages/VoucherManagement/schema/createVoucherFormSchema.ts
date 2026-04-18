@@ -16,7 +16,8 @@ export const createVoucherFormSchema = (t: TFunction) =>
     status: z.boolean(),
     image: z
       .array(z.custom<UploadFile>())
-      .min(1, t('admin.validation.minOneImage')),
+      .min(1, t('admin.validation.minOneImage'))
+      .optional(),
   });
 
 export const voucherFormSchemaDefaultValues = {

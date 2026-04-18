@@ -1,16 +1,13 @@
-const HEX_3_OR_6_REGEX = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
-
-const expandHex = (hex: string) =>
-  hex.length === 3 ? hex.split('').map((c) => `${c}${c}`).join('') : hex;
-
 export const useHexColorPayload = () => {
-  const normalizeHexColor = (value: string) => {
-    const raw = value.trim();
-    const matched = raw.match(HEX_3_OR_6_REGEX);
-    if (!matched) return '#000000';
+  const normalizeHexColor = (rgb: string) => {
+    const result = rgb.match(/\d+/g);
+    if (!result || result.length < 3) return '#000000';
 
-    const fullHex = expandHex(matched[1]).toLowerCase();
-    return `#${fullHex}`;
+    const [r, g, b] = result.map(Number);
+
+    const toHex = (n: number) => n.toString(16).padStart(2, '0');
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
   };
 
   return { normalizeHexColor };

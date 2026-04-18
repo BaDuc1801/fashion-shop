@@ -40,7 +40,7 @@ export const mapProfileToFormValues = (
   name: profile?.name ?? '',
   email: profile?.email ?? '',
   phone: profile?.phone ?? '',
-  address: '',
+  address: profile?.address ?? '',
 });
 
 export const useUpdateAccountProfile = () => {
@@ -60,6 +60,7 @@ export const useUpdateAccountProfile = () => {
         name: values.name.trim(),
         phone: values.phone.trim(),
         avatar: avatarUrls[0] ?? '',
+        address: values.address.trim(),
       });
     },
     onSuccess: async (updatedUser) => {

@@ -65,6 +65,7 @@ export interface UpdateUserRequest {
   name?: string;
   email?: string;
   phone?: string;
+  address?: string;
   salary?: number;
   avatar?: string;
   role?: string;

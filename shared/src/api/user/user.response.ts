@@ -44,7 +44,7 @@ export interface LoginApiResponse {
     name: string;
     email: string;
     avatar: string;
-    addresses: unknown[];
+    address: string;
     role: string;
     provider: string;
     isVerified: boolean;
@@ -63,7 +63,7 @@ export interface UserMeData {
   avatar: string;
   phone?: string;
   salary?: number;
-  addresses: unknown[];
+  address: string;
   role: string;
   provider: string;
   isVerified: boolean;
@@ -87,7 +87,7 @@ export interface RegisterResponse {
     email: string;
     avatar: string;
     salary?: number;
-    addresses: unknown[];
+    address: string;
     role: string;
     provider: string;
     isVerified: boolean;

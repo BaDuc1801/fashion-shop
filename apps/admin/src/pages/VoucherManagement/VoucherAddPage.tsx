@@ -10,6 +10,7 @@ import {
 import VoucherForm from './VoucherForm';
 import { useDebouncedValue, voucherService } from '@shared';
 import { useQuery } from '@tanstack/react-query';
+import { useCreateVoucher } from './hooks/useCreateVoucher';
 
 const VoucherAddPage = () => {
   const { t } = useTranslation();
@@ -31,6 +32,8 @@ const VoucherAddPage = () => {
     returnTo: ADD_NEW_PATH.vouchers,
   };
 
+  const createVoucherMutation = useCreateVoucher();
+
   return (
     <div>
       <Button
@@ -43,7 +46,22 @@ const VoucherAddPage = () => {
       </Button>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Card title={t('admin.voucher.form.addTitle')} className="h-fit">
-          <VoucherForm isEdit={false} showTitle={false} />
+          <VoucherForm
+            isEdit={false}
+            showTitle={false}
+            submitting={createVoucherMutation.isPending}
+            onSubmit={async (values) => {
+              await createVoucherMutation.mutateAsync({
+                code: values.code,
+                discountPercent: values.discountPercent,
+                maxDiscount: values.maxDiscount,
+                minOrderValue: values.minOrderValue,
+                expiresAt: values.expiresAt.toISOString(),
+                status: values.status ? 'active' : 'inactive',
+                image: values.image?.[0]?.url,
+              });
+            }}
+          />
         </Card>
         <Card
           title={t('admin.voucher.addPage.existingListTitle')}
