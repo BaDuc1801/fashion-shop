@@ -31,9 +31,6 @@ export default defineConfig(() => {
       commonjsOptions: {
         transformMixedEsModules: true,
       },
-      rollupOptions: {
-        external: ['react-router-dom'],
-      },
     },
     test: {
       name: '@fashion-monorepo/store',
