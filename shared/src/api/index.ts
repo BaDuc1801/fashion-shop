@@ -17,3 +17,6 @@ export * from './order/order.response';
 export * from './rating/rating.api';
 export * from './rating/rating.request';
 export * from './rating/rating.response';
+export * from './dashboard/dashboard.api';
+export * from './dashboard/dashboard.request';
+export * from './dashboard/dashboard.response';

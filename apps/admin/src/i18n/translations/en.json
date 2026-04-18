@@ -502,5 +502,17 @@
   "confirmPublishReview": "Confirm publish review",
   "confirmHideReview": "Confirm hide review",
   "confirm": "Confirm",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "revenue": "Revenue",
+  "orders": "Orders",
+  "users": "Users",
+  "cancelledOrders": "Cancelled Orders",
+  "dashboard": "Dashboard",
+  "today": "Today",
+  "week": "Week",
+  "month": "1 Month",
+  "3Months": "3 Months",
+  "6Months": "6 Months",
+  "year": "Year",
+  "salesChart": "Sales Chart"
 }

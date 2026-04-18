@@ -505,5 +505,17 @@
   "confirmPublishReview": "Xác nhận xuất bản đánh giá",
   "confirmHideReview": "Xác nhận ẩn đánh giá",
   "confirm": "Xác nhận",
-  "cancel": "Hủy"
+  "cancel": "Hủy",
+  "revenue": "Doanh thu",
+  "orders": "Đơn hàng",
+  "users": "Người dùng",
+  "cancelledOrders": "Đơn hàng đã hủy",
+  "dashboard": "Tổng quan",
+  "today": "Hôm nay",
+  "week": "Tuần",
+  "month": "1 Tháng",
+  "3Months": "3 Tháng",
+  "6Months": "6 Tháng",
+  "year": "Năm",
+  "salesChart": "Biểu đồ doanh thu"
 }

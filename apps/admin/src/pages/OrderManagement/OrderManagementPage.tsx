@@ -95,7 +95,7 @@ const OrderManagementPage = () => {
       },
       {
         title: t('admin.order.col.placedAt'),
-        dataIndex: 'placedAt',
+        dataIndex: 'createdAt',
         key: 'placedAt',
         width: 150,
         render: (d: OrderDetailData['createdAt']) =>

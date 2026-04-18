@@ -9,6 +9,7 @@ import {
   GetProductsResponse,
   Product,
   DeleteProductResponse,
+  BestSellerProductResponse,
 } from './product.response';
 
 class ProductService {
@@ -42,6 +43,14 @@ class ProductService {
 
   async deleteProduct(id: string): Promise<DeleteProductResponse> {
     const res = await api.delete(`/api/products/${id}`);
+    return res.data;
+  }
+
+  async getBestSellerProducts(params: {
+    page: number;
+    limit: number;
+  }): Promise<BestSellerProductResponse> {
+    const res = await api.get('/api/products/admin/top-purchased', { params });
     return res.data;
   }
 }

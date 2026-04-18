@@ -31,3 +31,20 @@ export interface GetProductsResponse {
 export interface DeleteProductResponse {
   message: string;
 }
+
+export interface BestSellerProduct {
+  totalSold: number;
+  totalRevenue: number;
+  productId: string;
+  name: string;
+  sku: string;
+  image: string;
+  price: number;
+}
+
+export interface BestSellerProductResponse {
+  data: BestSellerProduct[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
