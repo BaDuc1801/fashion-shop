@@ -28,8 +28,10 @@ class ProductService {
     return res.data;
   }
 
-  async getProductBySku(sku: string): Promise<Product> {
-    const res = await api.get(`/api/products/sku/${sku}`);
+  async getProductBySku(sku: string, lang?: string): Promise<Product> {
+    const res = await api.get(`/api/products/sku/${sku}`, {
+      params: { lang },
+    });
     return res.data;
   }
 

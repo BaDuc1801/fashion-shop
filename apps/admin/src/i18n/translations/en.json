@@ -514,5 +514,12 @@
   "3Months": "3 Months",
   "6Months": "6 Months",
   "year": "Year",
-  "salesChart": "Sales Chart"
+  "salesChart": "Sales Chart",
+  "vietnamese": "Vietnamese",
+  "english": "English",
+  "productName": "Product name (VI)",
+  "productNameEn": "Product name (EN)",
+  "description": "Description (VI)",
+  "descriptionEn": "Description (EN)",
+  "requiredBothLanguages": "Please enter both Vietnamese and English"
 }

@@ -4,13 +4,16 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
   Select,
   Switch,
+  Tabs,
 } from 'antd';
 import type { UploadFile } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import {
+  FieldErrors,
   FormProvider,
   useFieldArray,
   useForm,
@@ -155,6 +158,20 @@ const ProductForm = ({
 
   useProductDetail({ initialValues, reset });
 
+  const handleError = (errors: FieldErrors<AddNewProductFormValues>) => {
+    const fields = Object.keys(errors);
+
+    const hasViError = fields.some((f) => ['name', 'description'].includes(f));
+
+    const hasEnError = fields.some((f) =>
+      ['nameEn', 'descriptionEn'].includes(f),
+    );
+
+    if (hasViError || hasEnError) {
+      message.error('requiredBothLanguages');
+    }
+  };
+
   const handleFinish = async (values: AddNewProductFormValues) => {
     await onSubmit?.(values);
   };
@@ -163,7 +180,7 @@ const ProductForm = ({
     <FormProvider {...form}>
       <Form
         layout="vertical"
-        onFinish={handleSubmit(handleFinish)}
+        onFinish={handleSubmit(handleFinish, handleError)}
         className="max-w-2xl space-y-2"
       >
         {showTitle ? (
@@ -197,26 +214,65 @@ const ProductForm = ({
           />
         </FormItem>
 
-        <FormItem name="name" label={t('admin.product.form.name')}>
-          <Input
-            placeholder={t('admin.product.form.placeholderName')}
-            size="large"
-          />
-        </FormItem>
+        <Tabs
+          defaultActiveKey="en"
+          items={[
+            {
+              key: 'en',
+              label: t('english'),
+              children: (
+                <>
+                  <FormItem name="nameEn" label={t('productNameEn')}>
+                    <Input
+                      placeholder={t('admin.product.form.placeholderName')}
+                      size="large"
+                      className="mb-2"
+                    />
+                  </FormItem>
+
+                  <FormItem name="descriptionEn" label={t('descriptionEn')}>
+                    <Input.TextArea
+                      placeholder={t(
+                        'admin.product.form.placeholderDescription',
+                      )}
+                      size="large"
+                      rows={5}
+                    />
+                  </FormItem>
+                </>
+              ),
+            },
+            {
+              key: 'vi',
+              label: t('vietnamese'),
+              children: (
+                <>
+                  <FormItem name="name" label={t('productName')}>
+                    <Input
+                      placeholder={t('admin.product.form.placeholderName')}
+                      size="large"
+                      className="mb-2"
+                    />
+                  </FormItem>
+
+                  <FormItem name="description" label={t('description')}>
+                    <Input.TextArea
+                      placeholder={t(
+                        'admin.product.form.placeholderDescription',
+                      )}
+                      size="large"
+                      rows={5}
+                    />
+                  </FormItem>
+                </>
+              ),
+            },
+          ]}
+        />
 
         <FormItem name="sku" label={t('admin.product.form.sku')}>
           <Input
             placeholder={t('admin.product.form.placeholderSku')}
-            size="large"
-          />
-        </FormItem>
-
-        <FormItem
-          name="description"
-          label={t('admin.product.form.description')}
-        >
-          <Input.TextArea
-            placeholder={t('admin.product.form.placeholderDescription')}
             size="large"
           />
         </FormItem>
@@ -327,6 +383,7 @@ const ProductForm = ({
           block
           size="large"
           loading={submitting}
+          disabled={!form.formState.isDirty}
         >
           {isEdit
             ? t('admin.product.form.submitUpdate')

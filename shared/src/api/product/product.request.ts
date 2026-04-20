@@ -10,7 +10,9 @@ export interface ProductSizeVariant {
 
 export interface CreateProductRequest {
   name: string;
+  nameEn: string;
   description: string;
+  descriptionEn: string;
   categoryId: string;
   sku: string;
   price: number;
@@ -21,7 +23,9 @@ export interface CreateProductRequest {
 
 export interface UpdateProductRequest {
   name?: string;
+  nameEn?: string;
   description?: string;
+  descriptionEn?: string;
   categoryId?: string;
   sku?: string;
   price?: number;

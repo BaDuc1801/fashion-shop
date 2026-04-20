@@ -15,20 +15,20 @@ const ProductDetailPage = () => {
   const { t } = useTranslation();
   const { sku } = useParams<{ sku: string }>();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColorId, setSelectedColorId] = useState<string>('');
 
   const { data, isLoading } = useQuery({
-    queryKey: ['product', sku],
+    queryKey: ['product', sku, i18n.language],
     queryFn: () => {
       if (!sku) throw new Error('Missing product sku');
-      return productService.getProductBySku(sku);
+      return productService.getProductBySku(sku, i18n.language);
     },
     enabled: !!sku,
   });
-
   const toggleWishlist = useToggleWishlist();
   const toggleCart = useToggleCart();
 
@@ -103,6 +103,11 @@ const ProductDetailPage = () => {
               src={activeImage}
               alt={data.name}
               className="h-[520px] w-full object-cover object-top"
+              onClick={() =>
+                setActiveImageIndex((prev) =>
+                  data.images.length ? (prev + 1) % data.images.length : 0,
+                )
+              }
             />
           </div>
         </div>
@@ -111,7 +116,7 @@ const ProductDetailPage = () => {
         <div className="flex-1 flex flex-col justify-between h-[520px]">
           <div className="flex items-start justify-between">
             <h1 className="text-2xl font-semibold text-slate-900">
-              {data.name}
+              {i18n.language === 'en' ? data.nameEn : data.name}
             </h1>
             <Button
               size="large"
@@ -135,7 +140,7 @@ const ProductDetailPage = () => {
           </div>
 
           <p className="text-base text-slate-600 max-w-[520px]">
-            {data.description}
+            {i18n.language === 'en' ? data.descriptionEn : data.description}
           </p>
 
           {/* Price */}

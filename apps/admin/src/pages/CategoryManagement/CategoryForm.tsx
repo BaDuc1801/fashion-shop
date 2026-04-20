@@ -97,6 +97,7 @@ const CategoryForm = ({
           block
           size="large"
           loading={submitting}
+          disabled={!form.formState.isDirty}
         >
           {isEdit
             ? t('admin.category.form.submitUpdate')

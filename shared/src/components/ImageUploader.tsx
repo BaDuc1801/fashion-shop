@@ -58,6 +58,13 @@ export const ImageUploader = ({
         rootClassName={
           squareFullWidth ? 'image-uploader-square-full' : undefined
         }
+        itemRender={(originNode, file) => (
+          <img
+            src={file.url || file.thumbUrl}
+            alt={file.name}
+            className="w-full h-full object-cover object-top rounded-md"
+          />
+        )}
       >
         {fileList.length >= maxCount ? null : (
           <button type="button" className="border-none">

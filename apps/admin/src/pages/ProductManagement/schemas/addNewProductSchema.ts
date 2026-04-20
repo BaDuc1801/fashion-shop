@@ -19,7 +19,9 @@ const productSizeVariantSchema = (t: TFunction) =>
 export const createAddNewProductSchema = (t: TFunction) =>
   z.object({
     name: z.string().min(1, t('admin.validation.requiredProductName')),
+    nameEn: z.string().min(1, t('admin.validation.requiredProductName')),
     description: z.string().min(1, t('admin.validation.requiredDescription')),
+    descriptionEn: z.string().min(1, t('admin.validation.requiredDescription')),
     categoryId: z.string().min(1, t('admin.validation.requiredCategory')),
     sku: z.string().min(1, t('admin.validation.requiredSku')),
     price: z.number().min(0, t('admin.validation.priceMin')),
@@ -34,7 +36,9 @@ export const createAddNewProductSchema = (t: TFunction) =>
 
 export const addNewProductSchemaDefaultValues = {
   name: '',
+  nameEn: '',
   description: '',
+  descriptionEn: '',
   categoryId: '',
   sku: '',
   price: 0,

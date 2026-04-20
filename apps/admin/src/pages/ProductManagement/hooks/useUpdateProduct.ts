@@ -28,6 +28,8 @@ export const useUpdateProduct = ({
       console.log(values);
       return productService.updateProduct(productId, {
         name: values.name,
+        nameEn: values.nameEn,
+        descriptionEn: values.descriptionEn,
         description: values.description,
         categoryId: values.categoryId,
         sku: values.sku,

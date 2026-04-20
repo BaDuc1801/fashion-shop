@@ -1,6 +1,12 @@
 export const useHexColorPayload = () => {
-  const normalizeHexColor = (rgb: string) => {
-    const result = rgb.match(/\d+/g);
+  const normalizeHexColor = (color: string) => {
+    if (!color) return '#000000';
+
+    if (color.startsWith('#')) {
+      return color;
+    }
+
+    const result = color.match(/\d+/g);
     if (!result || result.length < 3) return '#000000';
 
     const [r, g, b] = result.map(Number);

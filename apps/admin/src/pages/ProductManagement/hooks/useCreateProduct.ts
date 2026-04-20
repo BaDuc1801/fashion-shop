@@ -17,7 +17,9 @@ export const useCreateProduct = () => {
       const imageUrls = await resolveImageUrls(values.images);
       return productService.createProduct({
         name: values.name,
+        nameEn: values.nameEn,
         description: values.description,
+        descriptionEn: values.descriptionEn,
         categoryId: values.categoryId,
         sku: values.sku,
         price: values.price,

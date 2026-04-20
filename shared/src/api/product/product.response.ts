@@ -5,7 +5,9 @@ import { RatingResponse, RatingStatsResponse } from '../rating/rating.response';
 export interface Product {
   _id: string;
   name: string;
+  nameEn: string;
   description: string;
+  descriptionEn: string;
   categoryId: Category;
   sku: string;
   price: number;

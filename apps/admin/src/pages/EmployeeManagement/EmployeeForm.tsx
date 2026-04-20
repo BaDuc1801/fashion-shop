@@ -140,6 +140,7 @@ const EmployeeForm = ({
           size="large"
           className="mt-4"
           loading={submitting}
+          disabled={!form.formState.isDirty}
         >
           {isEdit
             ? t('admin.employee.form.submitUpdate')

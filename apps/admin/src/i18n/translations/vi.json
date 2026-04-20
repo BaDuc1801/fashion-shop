@@ -517,5 +517,12 @@
   "3Months": "3 Tháng",
   "6Months": "6 Tháng",
   "year": "Năm",
-  "salesChart": "Biểu đồ doanh thu"
+  "salesChart": "Biểu đồ doanh thu",
+  "vietnamese": "Tiếng Việt",
+  "english": "Tiếng Anh",
+  "productName": "Tên sản phẩm (VI)",
+  "productNameEn": "Tên sản phẩm (EN)",
+  "description": "Mô tả (VI)",
+  "descriptionEn": "Mô tả (EN)",
+  "requiredBothLanguages": "Vui lòng nhập đầy đủ tiếng Việt và tiếng Anh"
 }

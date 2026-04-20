@@ -103,6 +103,7 @@ const VoucherForm = ({
           block
           size="large"
           loading={submitting}
+          disabled={!form.formState.isDirty}
         >
           {isEdit
             ? t('admin.voucher.form.submitUpdate')

@@ -114,6 +114,7 @@ const UserForm = ({
           block
           size="large"
           loading={submitting}
+          disabled={!form.formState.isDirty}
         >
           {isEdit
             ? t('admin.user.form.submitUpdate')
