@@ -26,7 +26,7 @@ const SePayQRCard = () => {
       return 3000;
     },
   });
-  console.log(1);
+
   useEffect(() => {
     if (!orderId) {
       navigate('/', { replace: true });

@@ -11,17 +11,18 @@ const LIMIT = 4;
 
 export interface NotificationInfinityListProps {
   setOpen?: (open: boolean) => void;
+  pages?: GetNotificationsResponse[];
 }
 
 export const NotificationInfinityList = ({
   setOpen,
+  pages,
 }: NotificationInfinityListProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  // ================= INFINITE QUERY =================
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ['notifications-infinite'],
@@ -40,7 +41,6 @@ export const NotificationInfinityList = ({
   // flatten data
   const notifications = data?.pages.flatMap((p) => p.data) || [];
 
-  // ================= INFINITE SCROLL =================
   useEffect(() => {
     if (!loaderRef.current) return;
     if (!hasNextPage) return;
@@ -56,23 +56,22 @@ export const NotificationInfinityList = ({
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // ================= CLICK NOTIFICATION =================
   const handleClick = async (item: Notification) => {
     await notificationService.markAsRead(item._id);
 
-    queryClient.setQueryData(['notifications-infinite'], (old: any) => {
-      if (!old) return old;
+    queryClient.setQueryData(
+      ['notifications-infinite'],
+      (old: GetNotificationsResponse[]) => {
+        if (!old) return old;
 
-      return {
-        ...old,
-        pages: old.pages.map((page: GetNotificationsResponse) => ({
+        return old.map((page) => ({
           ...page,
           data: page.data.map((n) =>
             n._id === item._id ? { ...n, isRead: true } : n,
           ),
-        })),
-      };
-    });
+        }));
+      },
+    );
 
     queryClient.setQueryData<{ total: number }>(
       ['unread-notifications-count'],
@@ -86,11 +85,9 @@ export const NotificationInfinityList = ({
       navigate(`/orders/${item.data.orderId}`);
     }
 
-    // close dropdown
     setOpen?.(false);
   };
 
-  // ================= UI =================
   return (
     <div className="w-80 max-h-96 overflow-y-auto rounded-lg shadow-xl border border-gray-200 bg-white">
       {notifications.map((item) => (

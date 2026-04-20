@@ -23,14 +23,12 @@ const RootLayout = () => {
   const token = useAuthStore((s) => s.token);
   const user = useAuthStore((s) => s.user);
 
-  // ================= UNREAD COUNT =================
   const { data: unreadCountData } = useQuery({
     queryKey: ['unread-notifications-count'],
     queryFn: () => notificationService.getUnreadNotificationsCount(),
     enabled: !!token,
   });
 
-  // ================= SOCKET =================
   useEffect(() => {
     if (!token) return;
 
@@ -45,28 +43,31 @@ const RootLayout = () => {
     });
 
     socket.on('new_notification', (data: Notification) => {
-      queryClient.setQueryData(['notifications-infinite'], (old: any) => {
-        if (!old) return old;
+      queryClient.setQueryData(
+        ['notifications-infinite'],
+        (old: GetNotificationsResponse[]) => {
+          if (!old) return old;
 
-        const firstPage = old.pages[0];
+          const firstPage = old[0];
 
-        const exists = firstPage.data.some(
-          (n: Notification) => n._id === data._id,
-        );
+          const exists = firstPage.data.some(
+            (n: Notification) => n._id === data._id,
+          );
 
-        if (exists) return old;
+          if (exists) return old;
 
-        const newFirstPage: GetNotificationsResponse = {
-          ...firstPage,
-          data: [{ ...data, isRead: false }, ...firstPage.data],
-        };
+          const newFirstPage: GetNotificationsResponse = {
+            ...firstPage,
+            data: [{ ...data, isRead: false }, ...firstPage.data],
+          };
 
-        return {
-          ...old,
-          pages: [newFirstPage, ...old.pages.slice(1)],
-          pageParams: old.pageParams,
-        };
-      });
+          return {
+            ...old,
+            pages: [newFirstPage, ...old.slice(1)],
+            pageParams: [1, ...old.slice(1)],
+          };
+        },
+      );
 
       queryClient.setQueryData<{ total: number }>(
         ['unread-notifications-count'],
@@ -84,7 +85,6 @@ const RootLayout = () => {
     };
   }, [token, queryClient]);
 
-  // ================= LOADING =================
   if (!hasHydrated) {
     return (
       <div className="flex min-h-dvh items-center justify-center bg-gray-50">
@@ -93,7 +93,6 @@ const RootLayout = () => {
     );
   }
 
-  // ================= AUTH =================
   if (!token || !isAdminUser(user)) {
     return <Navigate to="/login" replace />;
   }
