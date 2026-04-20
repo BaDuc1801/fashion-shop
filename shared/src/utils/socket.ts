@@ -1,9 +1,13 @@
 import { socket } from '../socket/socket';
+import { useAuthStore } from '../stores/authStore';
 
 export const connectSocket = () => {
-  if (!socket.connected) {
-    socket.connect();
-  }
+  const token = useAuthStore.getState().token;
+  socket.auth = token ? { token } : {};
+
+  if (socket.connected) return;
+
+  socket.connect();
 };
 
 export const disconnectSocket = () => {

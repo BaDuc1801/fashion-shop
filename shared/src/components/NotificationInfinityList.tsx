@@ -56,36 +56,38 @@ export const NotificationInfinityList = ({
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const handleClick = async (item: Notification) => {
-    await notificationService.markAsRead(item._id);
-
+  const handleClick = (item: Notification) => {
+    notificationService.markAsRead(item._id);
+  
     queryClient.setQueryData(
       ['notifications-infinite'],
-      (old: GetNotificationsResponse[]) => {
+      (old: any) => {
         if (!old) return old;
-
-        return old.map((page) => ({
-          ...page,
-          data: page.data.map((n) =>
-            n._id === item._id ? { ...n, isRead: true } : n,
-          ),
-        }));
-      },
+  
+        return {
+          ...old,
+          pages: old.pages.map((p: any) => ({
+            ...p,
+            data: p.data.map((n: any) =>
+              n._id === item._id ? { ...n, isRead: true } : n
+            ),
+          })),
+        };
+      }
     );
-
-    queryClient.setQueryData<{ total: number }>(
+  
+    queryClient.setQueryData(
       ['unread-notifications-count'],
-      (old) => {
-        if (!old) return old;
-        return { total: Math.max(0, old.total - 1) };
-      },
+      (old: any) => ({
+        total: Math.max(0, (old?.total ?? 1) - 1),
+      })
     );
-
+  
+    setOpen?.(false);
+  
     if (item.data?.orderId) {
       navigate(`/orders/${item.data.orderId}`);
     }
-
-    setOpen?.(false);
   };
 
   return (
