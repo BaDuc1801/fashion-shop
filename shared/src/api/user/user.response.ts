@@ -45,6 +45,7 @@ export interface LoginApiResponse {
     email: string;
     avatar: string;
     address: string;
+    phone: string;
     role: string;
     provider: string;
     isVerified: boolean;

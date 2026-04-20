@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FormItem, userService, voucherService } from '@shared';
+import { FormItem, useAuthStore, userService, voucherService } from '@shared';
 import { getVoucherDiscount } from '../CartPage/utils/getDiscountVoucher';
 import VoucherSection from '../CartPage/components/VoucherSection';
 import PaymentMethodForm from './PaymentMethodForm';
@@ -20,6 +20,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 const CheckoutPage = () => {
   const { t } = useTranslation();
   const { state } = useLocation();
+  const { user } = useAuthStore();
+
   const { buyNowItem } = state ?? {};
 
   const form = useForm<OrderFormValues>({
@@ -27,6 +29,10 @@ const CheckoutPage = () => {
     defaultValues: {
       ...orderFormSchemaDefaultValues,
       voucherId: state?.voucherId,
+      email: user?.email,
+      name: user?.name,
+      phone: user?.phone,
+      address: user?.address ?? '',
     },
   });
 

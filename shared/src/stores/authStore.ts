@@ -8,6 +8,8 @@ export type AuthUser = {
   name: string;
   role: string;
   avatar: string;
+  phone: string;
+  address: string;
 };
 
 export const ADMIN_PANEL_ROLE = 'admin' as const;
@@ -37,9 +39,11 @@ export const useAuthStore = create<AuthState>()(
         const name = data.user.name;
         const role = data.user.role;
         const avatar = data.user.avatar;
+        const phone = data.user.phone;
+        const address = data.user.address;
         set({
           token,
-          user: { userId, email, name, role, avatar },
+          user: { userId, email, name, role, avatar, phone, address },
         });
       },
       mergeUserFromMe: (me) => {
@@ -51,6 +55,8 @@ export const useAuthStore = create<AuthState>()(
             name: me.name,
             role: me.role,
             avatar: me.avatar,
+            phone: me.phone ?? '',
+            address: me.address ?? '',
           },
         });
       },
