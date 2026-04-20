@@ -148,7 +148,7 @@ const CategoryPage = () => {
                     <img
                       alt={p.name}
                       src={p.images?.[0]}
-                      className="h-[170px] w-full object-cover"
+                      className="h-[300px] w-full object-top object-cover"
                     />
                     <div className="p-2">
                       <div className="text-sm font-semibold truncate">

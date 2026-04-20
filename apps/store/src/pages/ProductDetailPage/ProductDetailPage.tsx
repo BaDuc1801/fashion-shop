@@ -193,12 +193,12 @@ const ProductDetailPage = () => {
               <div className="text-sm font-semibold">
                 {t('product.selectColor')}
               </div>
-              <div className="flex gap-3">
+              <div key={selectedSize} className="flex gap-3">
                 {selectedSizeVariant?.colors.map((c) => {
                   const active = c.name === selectedColorId;
                   return (
                     <button
-                      key={c.name}
+                      key={`${selectedSize}-${c.name}`}
                       onClick={() => setSelectedColorId(c.name)}
                       disabled={c.quantity === 0}
                       className={[
