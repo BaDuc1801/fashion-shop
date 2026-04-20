@@ -19,20 +19,20 @@ const SePayQRCard = () => {
     refetchInterval: (query) => {
       if (query.state.error) return false;
       const data = query?.state?.data?.orderStatus as string;
-      if (data === 'completed' || data === 'failed') {
+      if (data === 'paid' || data === 'failed') {
         return false;
       }
 
       return 3000;
     },
   });
-
+  console.log(1);
   useEffect(() => {
     if (!orderId) {
       navigate('/', { replace: true });
     }
 
-    if (order?.orderStatus === 'completed') {
+    if (order?.orderStatus === 'paid') {
       navigate(`/payment/success?orderId=${order.orderCode}`, {
         replace: true,
       });

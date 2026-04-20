@@ -72,14 +72,15 @@
         "revenue": "Doanh thu"
       },
       "orderStatus": {
-        "completed": "hoàn thành",
-        "pending": "chờ xử lý",
-        "cancelled": "đã hủy",
-        "shipping": "đang giao"
+        "completed": "Hoàn thành",
+        "pending": "Chờ xử lý",
+        "cancelled": "Đã hủy",
+        "shipping": "Đang giao",
+        "paid": "Đã thanh toán"
       }
     },
     "common": {
-      "noData": "Khong co du lieu",
+      "noData": "Không có dữ liệu",
       "welcome": "Chào mừng",
       "cancel": "Hủy"
     },
@@ -484,6 +485,7 @@
   "pending": "Chờ xử lý",
   "processing": "Đang xử lý",
   "shipping": "Đang giao",
+  "paid": "Đã thanh toán",
   "completed": "Hoàn thành",
   "cancelled": "Đã hủy",
   "updateStatus": "Cập nhật trạng thái",
@@ -526,5 +528,10 @@
   "descriptionEn": "Mô tả (EN)",
   "requiredBothLanguages": "Vui lòng nhập đầy đủ tiếng Việt và tiếng Anh",
   "categoryName": "Tên danh mục (VI)",
-  "categoryNameEn": "Tên danh mục (EN)"
+  "categoryNameEn": "Tên danh mục (EN)",
+  "phoneNumber": "Số điện thoại",
+  "address": "Địa chỉ",
+  "orderUpdated": "Cập nhật đơn hàng thành công",
+  "orderUpdateFailed": "Cập nhật đơn hàng thất bại",
+  "update": "Cập nhật"
 }

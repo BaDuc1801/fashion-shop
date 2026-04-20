@@ -8,14 +8,16 @@ import {
   Select,
   Table,
   Tag,
+  Input,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { orderService, formatUsd } from '@shared';
 import dayjs from 'dayjs';
+import { useForm, Controller } from 'react-hook-form';
 
 type OrderItem = {
   productId: string;
@@ -28,12 +30,16 @@ type OrderItem = {
   color: string;
 };
 
+type FormValues = {
+  status: string;
+  phone: string;
+  address: string;
+};
+
 const OrderDetailPage = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  const [status, setStatus] = useState<string>();
 
   const { data: order, isLoading } = useQuery({
     queryKey: ['order', id],
@@ -41,27 +47,48 @@ const OrderDetailPage = () => {
     enabled: !!id,
   });
 
-  const updateOrderStatusMutation = useMutation({
-    mutationFn: async (orderStatus: string) => {
-      return orderService.updateOrderStatus(id as string, orderStatus);
-    },
-    onSuccess: () => {
-      message.success(t('orderStatusUpdated'));
-    },
-    onError: () => {
-      message.error(t('orderStatusUpdateFailed'));
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<FormValues>({
+    defaultValues: {
+      status: '',
+      phone: '',
+      address: '',
     },
   });
 
-  const handleUpdateStatus = async () => {
-    await updateOrderStatusMutation.mutateAsync(status as string);
-  };
+  const updateOrderMutation = useMutation({
+    mutationFn: (data: FormValues) =>
+      orderService.updateOrderStatus(
+        id as string,
+        data.status,
+        data.phone,
+        data.address,
+      ),
+    onSuccess: () => {
+      message.success(t('orderUpdated'));
+    },
+    onError: () => {
+      message.error(t('orderUpdateFailed'));
+    },
+  });
 
   useEffect(() => {
-    if (order?.orderStatus) {
-      setStatus(order.orderStatus);
+    if (order) {
+      reset({
+        status: order.orderStatus,
+        phone: order?.shippingAddress?.phone || '',
+        address: order?.shippingAddress?.address || '',
+      });
     }
-  }, [order]);
+  }, [order, reset]);
+
+  const handleUpdate = handleSubmit((data) => {
+    updateOrderMutation.mutate(data);
+  });
 
   const itemColumns: ColumnsType<OrderItem> = [
     {
@@ -82,8 +109,12 @@ const OrderDetailPage = () => {
           <div>
             <div className="font-medium">{row.nameSnapshot}</div>
             <div className="text-xs text-slate-500">{row.skuSnapshot}</div>
-            <div className="text-xs text-slate-400">
-              {row.size} / {row.color}
+            <div className="text-xs text-slate-400 flex items-center gap-1">
+              {row.size} /
+              <div
+                className="w-3 h-3 rounded border"
+                style={{ backgroundColor: row.color }}
+              />
             </div>
           </div>
         </div>
@@ -122,17 +153,6 @@ const OrderDetailPage = () => {
     );
   }
 
-  const statusColor =
-    status === 'completed'
-      ? 'green'
-      : status === 'shipping'
-        ? 'blue'
-        : status === 'pending'
-          ? 'gold'
-          : 'red';
-
-  const isCodPayment = order.paymentMethod === 'cod';
-
   return (
     <div>
       <Button
@@ -146,66 +166,95 @@ const OrderDetailPage = () => {
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         {/* LEFT */}
-        <div className="flex flex-col gap-6">
-          <Card title={t('summaryTitle')}>
-            <Descriptions column={1} size="small">
-              <Descriptions.Item label={t('orderCode')}>
-                {order.orderCode}
-              </Descriptions.Item>
+        <Card title={t('summaryTitle')}>
+          <Descriptions column={1} size="small">
+            <Descriptions.Item label={t('orderCode')}>
+              {order.orderCode}
+            </Descriptions.Item>
 
-              <Descriptions.Item label={t('recipientName')}>
-                {order?.shippingAddress?.name || '-'}
-              </Descriptions.Item>
+            <Descriptions.Item label={t('recipientName')}>
+              {order?.shippingAddress?.name || '-'}
+            </Descriptions.Item>
 
-              <Descriptions.Item label={t('orderStatus')}>
-                <div className="flex items-center gap-3">
-                  {isCodPayment && (
-                    <Select
-                      value={status}
-                      onChange={setStatus}
-                      style={{ width: 160 }}
-                      disabled={!isCodPayment}
-                      options={[
-                        { value: 'pending', label: t('pending') },
-                        { value: 'processing', label: t('processing') },
-                        { value: 'shipping', label: t('shipping') },
-                        { value: 'completed', label: t('completed') },
-                        { value: 'cancelled', label: t('cancelled') },
-                      ]}
-                    />
-                  )}
-                  {!isCodPayment && <Tag color={statusColor}>{status}</Tag>}
-                </div>
-              </Descriptions.Item>
+            <Descriptions.Item label={t('phoneNumber')}>
+              <Controller
+                name="phone"
+                control={control}
+                render={({ field }) => <Input {...field} className="w-32" />}
+              />
+            </Descriptions.Item>
 
-              <Descriptions.Item label={t('paymentMethod')}>
-                {order.paymentMethod}
-              </Descriptions.Item>
+            <Descriptions.Item label={t('address')}>
+              <Controller
+                name="address"
+                control={control}
+                render={({ field }) => <Input.TextArea {...field} autoSize />}
+              />
+            </Descriptions.Item>
 
-              <Descriptions.Item label={t('orderDate')}>
-                {dayjs(order.createdAt).format('DD/MM/YYYY HH:mm')}
-              </Descriptions.Item>
+            <Descriptions.Item label={t('orderStatus')}>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    style={{ width: 160 }}
+                    options={[
+                      {
+                        value: 'pending',
+                        label: <Tag color="gold">Pending</Tag>,
+                      },
+                      { value: 'paid', label: <Tag color="lime">Paid</Tag> },
+                      {
+                        value: 'shipping',
+                        label: <Tag color="blue">Shipping</Tag>,
+                      },
+                      {
+                        value: 'completed',
+                        label: <Tag color="green">Completed</Tag>,
+                      },
+                      {
+                        value: 'cancelled',
+                        label: <Tag color="red">Cancelled</Tag>,
+                      },
+                    ]}
+                  />
+                )}
+              />
+            </Descriptions.Item>
 
-              <Descriptions.Item label={t('orderTotal')}>
-                <b>{formatUsd(order.total)}</b>
-              </Descriptions.Item>
-            </Descriptions>
-            {isCodPayment && (
-              <div className="flex justify-end">
-                <Button type="primary" onClick={handleUpdateStatus}>
-                  {t('updateStatus')}
-                </Button>
-              </div>
-            )}
-          </Card>
-        </div>
+            <Descriptions.Item label={t('paymentMethod')}>
+              {order.paymentMethod}
+            </Descriptions.Item>
+
+            <Descriptions.Item label={t('orderDate')}>
+              {dayjs(order.createdAt).format('DD/MM/YYYY HH:mm')}
+            </Descriptions.Item>
+
+            <Descriptions.Item label={t('orderTotal')}>
+              <b>{formatUsd(order.total)}</b>
+            </Descriptions.Item>
+          </Descriptions>
+
+          <div className="flex justify-end mt-4">
+            <Button
+              type="primary"
+              disabled={!isDirty}
+              loading={updateOrderMutation.isPending}
+              onClick={handleUpdate}
+            >
+              {t('update')}
+            </Button>
+          </div>
+        </Card>
 
         {/* RIGHT */}
         <Card title={t('itemsTitle')}>
           <Table
             rowKey={(r) => r.productId + r.size + r.color}
             columns={itemColumns}
-            dataSource={order?.items}
+            dataSource={order.items}
             pagination={false}
           />
         </Card>

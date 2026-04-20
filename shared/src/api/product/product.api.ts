@@ -49,6 +49,7 @@ class ProductService {
   }
 
   async getBestSellerProducts(params: {
+    lang?: string;
     page: number;
     limit: number;
   }): Promise<BestSellerProductResponse> {

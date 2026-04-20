@@ -42,6 +42,7 @@ export interface BestSellerProduct {
   sku: string;
   image: string;
   price: number;
+  nameEn: string;
 }
 
 export interface BestSellerProductResponse {

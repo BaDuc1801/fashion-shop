@@ -3,11 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Spin, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { productService, BestSellerProduct } from '@shared';
+import { useTranslation } from 'react-i18next';
 
 const LIMIT = 5;
 
 const BestSellerInfinityList = () => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState<BestSellerProduct[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -20,6 +22,7 @@ const BestSellerInfinityList = () => {
       productService.getBestSellerProducts({
         page,
         limit: LIMIT,
+        lang: i18n.language,
       }),
   });
 
@@ -69,7 +72,9 @@ const BestSellerInfinityList = () => {
                   alt={product.name}
                   className="w-10 h-10 object-cover rounded"
                 />
-                <div className="font-medium">{product.name}</div>
+                <div className="font-medium">
+                  {i18n.language === 'vi' ? product.name : product.nameEn}
+                </div>
               </div>
               <span>$ {product.price}</span>
               <span className="text-right">

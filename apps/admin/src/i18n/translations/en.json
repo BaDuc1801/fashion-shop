@@ -68,10 +68,11 @@
       },
       "topCol": { "product": "Product", "sold": "Sold", "revenue": "Revenue" },
       "orderStatus": {
-        "completed": "completed",
-        "pending": "pending",
-        "cancelled": "cancelled",
-        "shipping": "shipping"
+        "completed": "Completed",
+        "pending": "Pending",
+        "cancelled": "Cancelled",
+        "shipping": "Shipping",
+        "paid": "Paid"
       }
     },
     "common": {
@@ -481,6 +482,7 @@
   "pending": "Pending",
   "processing": "Processing",
   "shipping": "Shipping",
+  "paid": "Paid",
   "completed": "Completed",
   "cancelled": "Cancelled",
   "updateStatus": "Update status",
@@ -523,5 +525,10 @@
   "descriptionEn": "Description (EN)",
   "requiredBothLanguages": "Please enter both Vietnamese and English",
   "categoryName": "Category name (VI)",
-  "categoryNameEn": "Category name (EN)"
+  "categoryNameEn": "Category name (EN)",
+  "phoneNumber": "Phone number",
+  "address": "Address",
+  "orderUpdated": "Order updated successfully",
+  "orderUpdateFailed": "Failed to update order",
+  "update": "Update"
 }

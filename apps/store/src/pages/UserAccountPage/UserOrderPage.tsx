@@ -48,8 +48,20 @@ const UserOrderPage = () => {
       dataIndex: 'orderStatus',
       render: (text) => {
         const color =
-          text === 'completed' ? 'green' : text === 'pending' ? 'gold' : 'red';
-        return <Tag color={color}>{t(`${text}`)}</Tag>;
+          text === 'paid'
+            ? 'lime'
+            : text === 'completed'
+              ? 'green'
+              : text === 'pending'
+                ? 'gold'
+                : text === 'shipping'
+                  ? 'blue'
+                  : 'red';
+        return (
+          <Tag color={color} variant="outlined">
+            {t(`${text}`)}
+          </Tag>
+        );
       },
     },
     {

@@ -79,15 +79,17 @@ const OrderManagementPage = () => {
         width: 130,
         render: (status: OrderDetailData['orderStatus']) => {
           const color =
-            status === 'completed'
-              ? 'green'
-              : status === 'shipping'
-                ? 'blue'
-                : status === 'pending'
-                  ? 'gold'
-                  : 'red';
+            status === 'paid'
+              ? 'lime'
+              : status === 'completed'
+                ? 'green'
+                : status === 'shipping'
+                  ? 'blue'
+                  : status === 'pending'
+                    ? 'gold'
+                    : 'red';
           return (
-            <Tag color={color}>
+            <Tag color={color} variant="outlined">
               {t(`admin.dashboard.orderStatus.${status}`)}
             </Tag>
           );

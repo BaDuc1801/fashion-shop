@@ -20,7 +20,7 @@ const PaymentProcessingPage = () => {
     refetchInterval: (query) => {
       if (query.state.error) return false;
       const data = query?.state?.data?.orderStatus as string;
-      if (data === 'completed' || data === 'failed') {
+      if (data === 'paid' || data === 'failed') {
         return false;
       }
 
@@ -38,8 +38,8 @@ const PaymentProcessingPage = () => {
     if (!orderId) {
       navigate('/', { replace: true });
     }
-
-    if (order?.orderStatus === 'completed') {
+    console.log(order?.orderStatus);
+    if (order?.orderStatus === 'paid') {
       navigate(`/payment/success?orderId=${order.orderCode}`, {
         replace: true,
       });

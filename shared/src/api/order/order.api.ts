@@ -61,9 +61,13 @@ class OrderService {
   async updateOrderStatus(
     id: string,
     orderStatus: string,
+    phoneNumber: string,
+    address: string,
   ): Promise<{ message: string }> {
     const res = await api.put(`/api/orders/update-status/${id}`, {
       orderStatus,
+      phoneNumber,
+      address,
     });
     return res.data;
   }

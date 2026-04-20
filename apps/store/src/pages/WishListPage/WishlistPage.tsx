@@ -9,15 +9,11 @@ const WishlistPage = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['wishlist'],
     queryFn: () => {
-      console.log('CALL API WISHLIST'); // 🔥 debug
       return userService.getWishlist();
     },
     staleTime: 0,
     refetchOnMount: true,
   });
-
-  console.log('wishlist data:', data);
-  console.log('wishlist error:', error);
 
   if (isLoading) {
     return <div className="p-8">Loading...</div>;

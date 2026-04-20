@@ -20,3 +20,5 @@ export * from './rating/rating.response';
 export * from './dashboard/dashboard.api';
 export * from './dashboard/dashboard.request';
 export * from './dashboard/dashboard.response';
+export * from './notification/notification.api';
+export * from './notification/notification.response';
