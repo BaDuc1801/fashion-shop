@@ -521,5 +521,7 @@
   "productNameEn": "Product name (EN)",
   "description": "Description (VI)",
   "descriptionEn": "Description (EN)",
-  "requiredBothLanguages": "Please enter both Vietnamese and English"
+  "requiredBothLanguages": "Please enter both Vietnamese and English",
+  "categoryName": "Category name (VI)",
+  "categoryNameEn": "Category name (EN)"
 }

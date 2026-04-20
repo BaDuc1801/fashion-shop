@@ -95,10 +95,10 @@
         "status": "Trạng thái"
       },
       "detail": {
-        "back": "Quay lai danh sach nhan vien",
+        "back": "Quay lại danh sách nhân viên",
         "backToAddNew": "Quay lại trang thêm nhân viên mới",
-        "listTitle": "Danh sach nhan vien",
-        "listSearchPlaceholder": "Tim theo ten, email, so dien thoai"
+        "listTitle": "Danh sách nhân viên",
+        "listSearchPlaceholder": "Tìm theo tên, email, số điện thoại"
       },
       "addPage": {
         "existingListTitle": "Nhân viên đã tồn tại"
@@ -146,10 +146,10 @@
         "category": "Danh mục"
       },
       "detail": {
-        "back": "Quay lai danh sach san pham",
+        "back": "Quay lại danh sách sản phẩm",
         "backToAddNew": "Quay lại trang thêm sản phẩm mới",
-        "listTitle": "Danh sach san pham",
-        "listSearchPlaceholder": "Tim theo ten hoac SKU"
+        "listTitle": "Danh sách sản phẩm",
+        "listSearchPlaceholder": "Tìm theo tên hoặc SKU"
       },
       "addPage": {
         "existingListTitle": "Sản phẩm đã tồn tại"
@@ -206,10 +206,10 @@
         "role": "Chức vụ"
       },
       "detail": {
-        "back": "Quay lai danh sach nguoi dung",
+        "back": "Quay lại danh sách người dùng",
         "backToAddNew": "Quay lại trang thêm người dùng mới",
-        "listTitle": "Danh sach nguoi dung",
-        "listSearchPlaceholder": "Tim theo ten hoac so dien thoai"
+        "listTitle": "Danh sách người dùng",
+        "listSearchPlaceholder": "Tìm theo tên hoặc số điện thoại"
       },
       "addPage": {
         "existingListTitle": "Người dùng đã tồn tại"
@@ -524,5 +524,7 @@
   "productNameEn": "Tên sản phẩm (EN)",
   "description": "Mô tả (VI)",
   "descriptionEn": "Mô tả (EN)",
-  "requiredBothLanguages": "Vui lòng nhập đầy đủ tiếng Việt và tiếng Anh"
+  "requiredBothLanguages": "Vui lòng nhập đầy đủ tiếng Việt và tiếng Anh",
+  "categoryName": "Tên danh mục (VI)",
+  "categoryNameEn": "Tên danh mục (EN)"
 }

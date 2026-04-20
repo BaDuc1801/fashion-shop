@@ -15,6 +15,7 @@ export const useCreateCategory = () => {
       const imageUrls = await resolveImageUrls(values.images);
       return categoryService.createCategory({
         name: values.name,
+        nameEn: values.nameEn,
         slug: values.slug,
         status: values.status ? 'active' : 'inactive',
         image: imageUrls[0],

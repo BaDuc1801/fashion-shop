@@ -1,6 +1,7 @@
 export interface Category {
   _id: string;
   name: string;
+  nameEn: string;
   slug: string;
   image: string;
   status: 'active' | 'inactive';

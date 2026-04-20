@@ -18,6 +18,7 @@ export const useCategoryDetail = ({
 
     reset({
       name: initialValues.name,
+      nameEn: initialValues.nameEn,
       slug: initialValues.slug,
       status: initialValues.status === 'active',
       images: initialValues.image

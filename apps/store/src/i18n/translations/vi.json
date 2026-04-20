@@ -3,7 +3,8 @@
     "clearAll": "Xoá tất cả",
     "items": "{{count}} sản phẩm",
     "backToHome": "Về trang chủ",
-    "cancel": "Huỷ"
+    "cancel": "Huỷ",
+    "noData": "Không có dữ liệu"
   },
   "nav": {
     "store": "Cửa hàng",
@@ -12,7 +13,8 @@
     "newArrivals": "Hàng mới",
     "sale": "Giảm giá",
     "wishlist": "Đã thích",
-    "cart": "Giỏ hàng"
+    "cart": "Giỏ hàng",
+    "kids": "Trẻ em"
   },
   "hero": {
     "subtitle": "HOLIDAY 2026",
@@ -41,7 +43,7 @@
     "selectSize": "Chọn size",
     "selectColor": "Chọn màu",
     "addToCart": "Thêm vào giỏ",
-    "favorited": "Đã thích",
+    "favorited": "Yêu thích",
     "stock": "Tồn kho",
     "addToCartSuccess": "Thêm vào giỏ hàng thành công",
     "removeItem": "Xóa sản phẩm",

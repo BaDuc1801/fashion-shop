@@ -25,6 +25,7 @@ export const useUpdateCategory = ({
       const imageUrls = await resolveImageUrls(values.images);
       return categoryService.updateCategory(categoryId, {
         name: values.name,
+        nameEn: values.nameEn,
         slug: values.slug,
         status: values.status ? 'active' : 'inactive',
         image: imageUrls[0],

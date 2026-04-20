@@ -9,7 +9,7 @@ import { useGetProduct } from '../hooks/useGetProduct';
 const PAGE_SIZE = 12;
 
 const CategoryPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug?: string }>();
   const navigate = useNavigate();
 
@@ -50,6 +50,7 @@ const CategoryPage = () => {
     limit,
     search,
     sortPrice,
+    lang: i18n.language,
   });
 
   const hasData = data?.data && data.data.length > 0;
@@ -91,7 +92,7 @@ const CategoryPage = () => {
                         : 'border-slate-200 hover:bg-slate-50'
                     }`}
                   >
-                    <span>{c.name}</span>
+                    <span>{i18n.language === 'vi' ? c.name : c.nameEn}</span>
                     <span className="text-xs text-slate-500">
                       {c.productCount ?? 0}
                     </span>
@@ -107,7 +108,9 @@ const CategoryPage = () => {
           <div className="mb-4 flex justify-between gap-4">
             <div>
               <h1 className="text-2xl font-bold">
-                {category?.name ?? t('filters.allProducts')}
+                {i18n.language === 'vi'
+                  ? category?.name
+                  : (category?.nameEn ?? t('filters.allProducts'))}
               </h1>
               <p className="text-sm text-slate-500">
                 {t('common.items', { count: data?.total || 0 })}
@@ -152,7 +155,7 @@ const CategoryPage = () => {
                     />
                     <div className="p-2">
                       <div className="text-sm font-semibold truncate">
-                        {p.name}
+                        {i18n.language === 'vi' ? p.name : p.nameEn}
                       </div>
                       <div className="font-bold">
                         ${p.price.toLocaleString()}

@@ -11,7 +11,7 @@ import { Product, productService } from '@shared';
 import dayjs from 'dayjs';
 
 const ProductManagementPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [pendingStatusUpdate, setPendingStatusUpdate] = useState<{
     id: string;
@@ -28,6 +28,7 @@ const ProductManagementPage = () => {
     search,
     page,
     limit,
+    lang: i18n.language,
   };
 
   const { data: productsResponse, isLoading } = useQuery({
@@ -68,7 +69,7 @@ const ProductManagementPage = () => {
         render: (_, record) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Avatar shape="square" src={record.images?.[0]} />
-            <div>{record.name}</div>
+            <div>{i18n.language === 'vi' ? record.name : record.nameEn}</div>
           </div>
         ),
       },
@@ -78,7 +79,9 @@ const ProductManagementPage = () => {
         key: 'category',
         render: (_, record) => {
           if (!record.categoryId) return '-';
-          return record.categoryId.name;
+          return i18n.language === 'vi'
+            ? record.categoryId.name
+            : record.categoryId.nameEn;
         },
       },
       {
@@ -127,7 +130,7 @@ const ProductManagementPage = () => {
         ),
       },
     ],
-    [t, updateStatusMutation.isPending, pendingStatusUpdate?.id],
+    [t, updateStatusMutation.isPending, pendingStatusUpdate?.id, i18n.language],
   );
 
   return (

@@ -14,7 +14,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
 const CategoryManagementPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [pendingStatusUpdate, setPendingStatusUpdate] = useState<{
     id: string;
@@ -31,6 +31,7 @@ const CategoryManagementPage = () => {
     search,
     page,
     limit,
+    lang: i18n.language,
   };
 
   const { data: categoriesResponse, isLoading } = useQuery({
@@ -77,7 +78,7 @@ const CategoryManagementPage = () => {
         render: (_, record) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Avatar shape="square" src={record.image} />
-            <div>{record.name}</div>
+            <div>{i18n.language === 'vi' ? record.name : record.nameEn}</div>
           </div>
         ),
       },
@@ -115,7 +116,7 @@ const CategoryManagementPage = () => {
         ),
       },
     ],
-    [pendingStatusUpdate?.id, t, updateStatusMutation.isPending],
+    [pendingStatusUpdate?.id, t, updateStatusMutation.isPending, i18n.language],
   );
 
   return (

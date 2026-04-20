@@ -3,7 +3,8 @@
     "clearAll": "Clear all",
     "items": "{{count}} items",
     "backToHome": "Back to home",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "noData": "No data"
   },
   "nav": {
     "store": "Store",
@@ -12,7 +13,8 @@
     "newArrivals": "New Arrivals",
     "sale": "Sale",
     "wishlist": "Wishlist",
-    "cart": "Cart"
+    "cart": "Cart",
+    "kids": "Kids"
   },
   "hero": {
     "subtitle": "HOLIDAY 2026",

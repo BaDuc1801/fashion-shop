@@ -13,7 +13,7 @@ import { useCreateCategory } from './hooks/useCreateCategory';
 import { categoryService, useDebouncedValue } from '@shared';
 
 const CategoryAddPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
   const debouncedSearch = useDebouncedValue(searchText, 400);
@@ -21,7 +21,12 @@ const CategoryAddPage = () => {
   const { data: categoriesResponse, isLoading } = useQuery({
     queryKey: ['categories', 'add-list', debouncedSearch],
     queryFn: () =>
-      categoryService.getCategories({ search: debouncedSearch, page: 1, limit: 100 }),
+      categoryService.getCategories({
+        search: debouncedSearch,
+        page: 1,
+        limit: 100,
+        lang: i18n.language,
+      }),
   });
 
   const createCategoryMutation = useCreateCategory();
@@ -75,7 +80,9 @@ const CategoryAddPage = () => {
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">
-                    <span className="truncate">{item.name}</span>
+                    <span className="truncate">
+                      {i18n.language === 'vi' ? item.name : item.nameEn}
+                    </span>
                     <span className="text-xs text-slate-500">{item.slug}</span>
                   </div>
                 </List.Item>

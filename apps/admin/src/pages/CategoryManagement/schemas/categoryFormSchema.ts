@@ -5,6 +5,7 @@ import { z } from 'zod';
 export const createCategoryFormSchema = (t: TFunction) =>
   z.object({
     name: z.string().min(1, t('admin.validation.requiredCategoryName')),
+    nameEn: z.string().min(1, t('admin.validation.requiredCategoryName')),
     slug: z.string().min(1, t('admin.validation.requiredSlug')),
     status: z.boolean(),
     images: z
@@ -15,6 +16,7 @@ export const createCategoryFormSchema = (t: TFunction) =>
 
 export const categoryFormSchemaDefaultValues = {
   name: '',
+  nameEn: '',
   slug: '',
   status: true,
   images: [] as UploadFile[],

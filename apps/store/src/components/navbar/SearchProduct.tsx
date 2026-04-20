@@ -2,9 +2,11 @@ import { productService, useDebouncedValue } from '@shared';
 import { useQuery } from '@tanstack/react-query';
 import { Empty, Input } from 'antd';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const SearchProduct = () => {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
   const [openSearch, setOpenSearch] = useState(false);
@@ -13,7 +15,11 @@ const SearchProduct = () => {
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['search-products', debouncedSearch],
-    queryFn: () => productService.getProducts({ search: debouncedSearch }),
+    queryFn: () =>
+      productService.getProducts({
+        search: debouncedSearch,
+        lang: i18n.language,
+      }),
     enabled: !!debouncedSearch,
   });
 
@@ -56,7 +62,9 @@ const SearchProduct = () => {
                 />
 
                 <div className="text-sm">
-                  <div className="font-medium">{p.name}</div>
+                  <div className="font-medium">
+                    {i18n.language === 'vi' ? p.name : p.nameEn}
+                  </div>
                   <div className="text-gray-500">${p.price}</div>
                 </div>
               </div>

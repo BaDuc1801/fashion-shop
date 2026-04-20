@@ -7,24 +7,29 @@ import ProductCard from './ProductCard';
 
 const PAGE_SIZE = 8;
 
-const TABS = [
-  { key: '1', label: 'Men' },
-  { key: '2', label: 'Women' },
-  { key: '3', label: 'Kids' },
-];
-
 const OutProductsSection = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeKey, setActiveKey] = useState('1');
   const [currentPage, setCurrentPage] = useState(1);
 
+  const TABS = useMemo(
+    () => [
+      { key: '1', label: t('nav.men') },
+      { key: '2', label: t('nav.women') },
+      { key: '3', label: t('nav.kids') },
+    ],
+    [t],
+  );
+
   const activeTab = useMemo(
     () => TABS.find((t) => t.key === activeKey) ?? TABS[0],
-    [activeKey],
+    [TABS, activeKey],
   );
 
   const { data, isLoading } = useGetProduct({
-    categoryName: activeTab.label,
+    lang: i18n.language,
+    categoryName: i18n.language === 'vi' ? activeTab.label : undefined,
+    categoryNameEn: i18n.language === 'en' ? activeTab.label : undefined,
     page: currentPage,
     limit: PAGE_SIZE,
   });
@@ -67,7 +72,7 @@ const OutProductsSection = () => {
                   ))
                 ) : (
                   <div className="flex justify-center items-center h-[300px]">
-                    <Empty description="No products found" />
+                    <Empty description={t('common.noData')} />
                   </div>
                 )}
               </div>

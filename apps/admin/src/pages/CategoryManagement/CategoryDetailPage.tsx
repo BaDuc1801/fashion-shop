@@ -14,7 +14,7 @@ import { useUpdateCategory } from './hooks/useUpdateCategory';
 import { categoryService, useDebouncedValue } from '@shared';
 
 const CategoryDetailPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id: categoryId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +30,7 @@ const CategoryDetailPage = () => {
         search: debouncedSearch,
         page: 1,
         limit: 100,
+        lang: i18n.language,
       }),
   });
 
@@ -117,7 +118,9 @@ const CategoryDetailPage = () => {
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">
-                    <span className="truncate">{item.name}</span>
+                    <span className="truncate">
+                      {i18n.language === 'vi' ? item.name : item.nameEn}
+                    </span>
                     <span className="text-xs text-slate-500">{item.slug}</span>
                   </div>
                 </List.Item>

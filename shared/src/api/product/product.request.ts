@@ -42,7 +42,9 @@ export interface GetProductsRequest {
   status?: string;
   search?: string;
   categoryName?: string;
+  categoryNameEn?: string;
   categoryId?: string;
   categorySlug?: string;
   sortPrice?: 'asc' | 'desc';
+  lang?: string;
 }

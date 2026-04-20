@@ -14,7 +14,7 @@ import { useDeleteProduct } from './hooks/useDeleteProduct';
 import { useUpdateProduct } from './hooks/useUpdateProduct';
 
 const ProductDetailPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { sku: productSku } = useParams<{ sku: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +28,7 @@ const ProductDetailPage = () => {
     queryFn: () =>
       productService.getProducts({
         search: debouncedSearch,
+        lang: i18n.language,
       }),
   });
 
@@ -37,7 +38,7 @@ const ProductDetailPage = () => {
     retry: false,
     queryFn: () => {
       if (!productSku) throw new Error('Missing product sku');
-      return productService.getProductBySku(productSku);
+      return productService.getProductBySku(productSku, i18n.language);
     },
   });
 
@@ -113,7 +114,9 @@ const ProductDetailPage = () => {
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">
-                    <span className="truncate">{item.name}</span>
+                    <span className="truncate">
+                      {i18n.language === 'en' ? item.nameEn : item.name}
+                    </span>
                     <span className="text-xs text-slate-500">{item.sku}</span>
                   </div>
                 </List.Item>

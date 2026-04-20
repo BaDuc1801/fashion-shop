@@ -13,14 +13,18 @@ import ProductForm from './ProductForm';
 import { useCreateProduct } from './hooks/useCreateProduct';
 
 const ProductAddPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
   const debouncedSearch = useDebouncedValue(searchText, 400);
 
   const { data: productsResponse, isLoading } = useQuery({
     queryKey: ['products', 'add-list', debouncedSearch],
-    queryFn: () => productService.getProducts({ search: debouncedSearch }),
+    queryFn: () =>
+      productService.getProducts({
+        search: debouncedSearch,
+        lang: i18n.language,
+      }),
   });
 
   const createProductMutation = useCreateProduct();
@@ -74,7 +78,9 @@ const ProductAddPage = () => {
                   }
                 >
                   <div className="flex w-full items-center justify-between gap-3">
-                    <span className="truncate">{item.name}</span>
+                    <span className="truncate">
+                      {i18n.language === 'vi' ? item.name : item.nameEn}
+                    </span>
                     <span className="text-xs text-slate-500">{item.sku}</span>
                   </div>
                 </List.Item>
