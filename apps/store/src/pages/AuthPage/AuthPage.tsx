@@ -204,8 +204,11 @@ const AuthPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    // window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
-    window.location.href = 'http://localhost:8080/auth/google';
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+  };
+
+  const handleFacebookLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/facebook`;
   };
 
   return (
@@ -342,6 +345,7 @@ const AuthPage = () => {
               <button
                 type="button"
                 className="flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 bg-white text-[#1877f2]"
+                onClick={handleFacebookLogin}
               >
                 <FaFacebookF />
               </button>
