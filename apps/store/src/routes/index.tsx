@@ -25,7 +25,7 @@ const AppRoutes = () => {
       <Route path="auth" element={<AuthPage />} />
       <Route path="login" element={<Navigate to="/auth" replace />} />
       <Route path="register" element={<Navigate to="/auth" replace />} />
-      <Route path="google-login-success" element={<GoogleLoginSuccess />} />
+      <Route path="login-success" element={<GoogleLoginSuccess />} />
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
         <Route path="home" element={<Navigate to="/" replace />} />

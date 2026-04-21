@@ -209,5 +209,6 @@
   "loading": "Đang tải...",
   "noMoreNotifications": "Không có thông báo nữa",
   "sessionExpired": "Phiên đăng nhập đã hết hạn",
-  "pleaseLogin": "Vui lòng đăng nhập để thực hiện hành động này"
+  "pleaseLogin": "Vui lòng đăng nhập để thực hiện hành động này",
+  "continueAsGuest": "Tiếp tục dưới dạng khách"
 }

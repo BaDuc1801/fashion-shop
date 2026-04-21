@@ -22,9 +22,8 @@ import SearchProduct from './SearchProduct';
 const NavBar = () => {
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
-  const { token, user, clearSession } = useAuthStore(
+  const { user, clearSession } = useAuthStore(
     useShallow((s) => ({
-      token: s.token,
       user: s.user,
       clearSession: s.clearSession,
     })),
@@ -59,7 +58,7 @@ const NavBar = () => {
   const [changePasswordError, setChangePasswordError] = useState('');
   const [openNoti, setOpenNoti] = useState(false);
 
-  const isLoggedIn = Boolean(token && user);
+  const isLoggedIn = Boolean(user);
   const avatar = user?.avatar;
 
   useNotificationCustomerSocket();

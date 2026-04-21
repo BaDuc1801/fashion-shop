@@ -209,5 +209,6 @@
   "loading": "Loading...",
   "noMoreNotifications": "No more notifications",
   "sessionExpired": "Session expired",
-  "pleaseLogin": "Please login to perform this action"
+  "pleaseLogin": "Please login to perform this action",
+  "continueAsGuest": "Continue as guest"
 }

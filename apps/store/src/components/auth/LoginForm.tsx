@@ -1,5 +1,6 @@
 import { Button, Input } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 type LoginFormProps = {
   email: string;
@@ -23,6 +24,7 @@ const LoginForm = ({
   onForgotPassword,
 }: LoginFormProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <div className="mt-8 space-y-4">
@@ -40,6 +42,9 @@ const LoginForm = ({
         autoComplete="new-password"
         onChange={(e) => onPasswordChange(e.target.value)}
       />
+      <div
+        className="flex items-center justify-between"
+      >
       <button
         type="button"
         className="text-sm text-slate-500 underline"
@@ -47,6 +52,10 @@ const LoginForm = ({
       >
         {t('auth.forgotPassword')}
       </button>
+      <button type="button" className="text-sm text-slate-500 underline" onClick={() => navigate('/')}>
+        {t('continueAsGuest')}
+      </button>
+      </div>
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
       <Button
         type="primary"
