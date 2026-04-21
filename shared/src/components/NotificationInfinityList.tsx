@@ -1,49 +1,64 @@
-import { useEffect, useRef } from 'react';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { GetNotificationsResponse, Notification } from '../api';
 import {
-  GetNotificationsResponse,
-  Notification,
-  notificationService,
-} from '../api';
-
-const LIMIT = 4;
+  InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useAuthStore } from '../stores';
+import { useEffect, useRef } from 'react';
 
 export interface NotificationInfinityListProps {
   setOpen?: (open: boolean) => void;
-  pages?: GetNotificationsResponse[];
+  queryKeyPrefix: string;
+  getList: (params: {
+    page: number;
+    limit: number;
+  }) => Promise<GetNotificationsResponse>;
+  markAsRead: (id: string) => Promise<{ success: boolean }>;
+  unreadKey: string;
+  isAdmin?: boolean;
 }
+
+const LIMIT = 4;
 
 export const NotificationInfinityList = ({
   setOpen,
-  pages,
+  queryKeyPrefix,
+  getList,
+  markAsRead,
+  unreadKey,
+  isAdmin = false,
 }: NotificationInfinityListProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const user = useAuthStore((s) => s.user);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
+  const queryKey = [queryKeyPrefix, user?.userId];
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ['notifications-infinite'],
+      queryKey,
       queryFn: ({ pageParam = 1 }) =>
-        notificationService.getNotifications({
+        getList({
           page: pageParam,
           limit: LIMIT,
         }),
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.data.length < LIMIT) return undefined;
-        return allPages.length + 1;
+      getNextPageParam: (lastPage) => {
+        if (lastPage.page >= lastPage.totalPages) return undefined;
+        return lastPage.page + 1;
       },
       initialPageParam: 1,
+      enabled: !!user?.userId,
     });
 
-  // flatten data
   const notifications = data?.pages.flatMap((p) => p.data) || [];
 
   useEffect(() => {
-    if (!loaderRef.current) return;
-    if (!hasNextPage) return;
+    const el = loaderRef.current;
+    if (!el || !hasNextPage) return;
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !isFetchingNextPage) {
@@ -51,50 +66,54 @@ export const NotificationInfinityList = ({
       }
     });
 
-    observer.observe(loaderRef.current);
+    observer.observe(el);
 
-    return () => observer.disconnect();
+    return () => {
+      if (el) observer.unobserve(el);
+    };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const handleClick = (item: Notification) => {
-    notificationService.markAsRead(item._id);
-  
+  const handleClick = async (item: Notification) => {
+    await markAsRead(item._id);
+
     queryClient.setQueryData(
-      ['notifications-infinite'],
-      (old: any) => {
+      queryKey,
+      (old: InfiniteData<GetNotificationsResponse>) => {
         if (!old) return old;
-  
+
         return {
           ...old,
-          pages: old.pages.map((p: any) => ({
+          pages: old.pages.map((p) => ({
             ...p,
-            data: p.data.map((n: any) =>
-              n._id === item._id ? { ...n, isRead: true } : n
+            data: p.data.map((n) =>
+              n._id === item._id ? { ...n, isRead: true } : n,
             ),
           })),
         };
-      }
+      },
     );
-  
+
     queryClient.setQueryData(
-      ['unread-notifications-count'],
-      (old: any) => ({
+      [unreadKey, user?.userId],
+      (old: { total: number }) => ({
         total: Math.max(0, (old?.total ?? 1) - 1),
-      })
+      }),
     );
-  
+
     setOpen?.(false);
-  
-    if (item.data?.orderId) {
+
+    if (item.data?.orderId && isAdmin) {
       navigate(`/orders/${item.data.orderId}`);
+    } else if (item.data?.orderId) {
+      navigate(`/user/orders?search=${item.data.orderCode}`);
     }
   };
 
   return (
-    <div className="w-80 max-h-96 overflow-y-auto rounded-lg shadow-xl border border-gray-200 bg-white">
+    <div className="w-80 max-h-[400px] overflow-y-auto rounded-lg shadow-xl border bg-white">
       {notifications.map((item) => (
         <div
-          key={item._id}
+          key={item._id + item.isRead}
           onClick={() => handleClick(item)}
           className={`p-3 border-b cursor-pointer hover:bg-gray-50 ${
             item.isRead ? '' : 'bg-blue-50'
@@ -108,9 +127,9 @@ export const NotificationInfinityList = ({
       ))}
 
       <div ref={loaderRef} className="flex justify-center py-3">
-        {isFetchingNextPage ? (
+        {isFetchingNextPage && (
           <span className="text-sm text-gray-400">Loading...</span>
-        ) : null}
+        )}
 
         {!hasNextPage && notifications.length > 0 && (
           <span className="text-xs text-gray-400">No more notifications</span>

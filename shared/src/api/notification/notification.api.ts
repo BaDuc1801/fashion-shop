@@ -24,6 +24,31 @@ class NotificationService {
     const res = await api.post(`/api/notifications/read-all`);
     return res.data;
   }
+
+  async getCustomerNotifications(params: {
+    page: number;
+    limit: number;
+  }): Promise<GetNotificationsResponse> {
+    const res = await api.get('/api/notifications/customer', { params });
+    return res.data;
+  }
+
+  async getCustomerUnreadNotificationsCount(): Promise<{ total: number }> {
+    const res = await api.get('/api/notifications/customer/unread-count');
+    return res.data;
+  }
+
+  async markCustomerNotificationAsRead(
+    id: string,
+  ): Promise<{ success: boolean }> {
+    const res = await api.patch(`/api/notifications/customer/${id}/read`);
+    return res.data;
+  }
+
+  async markAllCustomerNotificationsAsRead(): Promise<{ success: boolean }> {
+    const res = await api.patch('/api/notifications/customer/read-all');
+    return res.data;
+  }
 }
 
 export const notificationService = new NotificationService();

@@ -1,7 +1,10 @@
+import { UserMeData } from '../user/user.response';
+
 export type Notification = {
   type: string;
   title: string;
   message: string;
+  target: string;
   data: {
     orderId: string;
     orderCode: string;
@@ -14,6 +17,7 @@ export type Notification = {
   updatedAt: string;
   __v: number;
   isRead: boolean;
+  userId: UserMeData;
 };
 
 export interface GetNotificationsResponse {

@@ -7,7 +7,15 @@ import { FaRegHeart } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
-import { getApiErrorMessage, useAuthStore, userService } from '@shared';
+import {
+  getApiErrorMessage,
+  NotificationInfinityList,
+  notificationService,
+  useAuthStore,
+  useNotificationCustomerSocket,
+  userService,
+} from '@shared';
+import { BellOutlined } from '@ant-design/icons';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
 import SearchProduct from './SearchProduct';
 
@@ -34,6 +42,12 @@ const NavBar = () => {
     queryKey: ['cart'],
     queryFn: () => userService.getCart(),
   });
+  const { data: unreadData } = useQuery({
+    queryKey: ['customer-unread-count', user?.userId],
+    queryFn: () => notificationService.getCustomerUnreadNotificationsCount(),
+    enabled: !!user,
+    staleTime: Infinity,
+  });
   const cartCount = cartData?.reduce((sum, it) => sum + it.quantity, 0) || 0;
   const wishlistCount = wishlistData?.length || 0;
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
@@ -41,9 +55,12 @@ const NavBar = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [changePasswordError, setChangePasswordError] = useState('');
+  const [openNoti, setOpenNoti] = useState(false);
 
   const isLoggedIn = Boolean(token && user);
   const avatar = user?.avatar;
+
+  useNotificationCustomerSocket();
 
   const changePasswordMutation = useMutation({
     mutationFn: (payload: { currentPassword: string; newPassword: string }) =>
@@ -168,9 +185,26 @@ const NavBar = () => {
       </div>
       <nav className="flex items-center gap-6 text-2xl font-medium">
         <SearchProduct />
-        {/* <Link to="/account" className="leading-none">
-          <FaRegUser className="cursor-pointer hover:font-semibold" />
-        </Link> */}
+        <Dropdown
+          trigger={['click']}
+          open={openNoti}
+          onOpenChange={(v) => setOpenNoti(v)}
+          placement="bottomRight"
+          dropdownRender={() => (
+            <NotificationInfinityList
+              setOpen={setOpenNoti}
+              queryKeyPrefix="customer-notifications"
+              unreadKey="customer-unread-count"
+              getList={notificationService.getCustomerNotifications}
+              markAsRead={notificationService.markCustomerNotificationAsRead}
+              isAdmin={false}
+            />
+          )}
+        >
+          <Badge count={unreadData?.total ?? 0} size="small" offset={[0, 2]}>
+            <BellOutlined className="cursor-pointer text-2xl hover:font-semibold" />
+          </Badge>
+        </Dropdown>
         <Link to="/wishlist" className="leading-none">
           <Badge count={wishlistCount} size="small" offset={[0, 2]}>
             <FaRegHeart className="text-2xl cursor-pointer hover:font-semibold" />
