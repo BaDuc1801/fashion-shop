@@ -47,12 +47,12 @@ export interface LoginApiResponse {
     address: string;
     phone: string;
     role: string;
-    provider: string;
-    isVerified: boolean;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
+    provider?: string;
+    isVerified?: boolean;
+    status?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    __v?: number;
   };
   token: string;
 }

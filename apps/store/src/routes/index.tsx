@@ -17,6 +17,7 @@ import UserOrderPage from '../pages/UserAccountPage/UserOrderPage';
 import OrderSuccessPage from '../pages/PaymentPage/OrderSuccessPage';
 import QrBankPage from '../pages/PaymentPage/QrBankPage';
 import { ProtectedRoute } from './ProtectedRoute';
+import GoogleLoginSuccess from '../pages/AuthPage/GoogleLoginSuccess';
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Route path="auth" element={<AuthPage />} />
       <Route path="login" element={<Navigate to="/auth" replace />} />
       <Route path="register" element={<Navigate to="/auth" replace />} />
+      <Route path="google-login-success" element={<GoogleLoginSuccess />} />
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
         <Route path="home" element={<Navigate to="/" replace />} />

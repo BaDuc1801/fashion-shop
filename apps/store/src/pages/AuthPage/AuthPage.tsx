@@ -203,6 +203,10 @@ const AuthPage = () => {
     });
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+  };
+
   return (
     <section className="min-h-dvh bg-[#85503a] p-6 md:p-10 flex items-center justify-center">
       <div className="mx-auto flex w-full max-w-6xl overflow-hidden rounded-[28px] bg-[#f3f3f7] shadow-2xl">
@@ -329,6 +333,7 @@ const AuthPage = () => {
             <div className="flex items-center justify-center gap-4">
               <button
                 type="button"
+                onClick={handleGoogleLogin}
                 className="flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 bg-white text-[#db4437]"
               >
                 <FaGoogle />
