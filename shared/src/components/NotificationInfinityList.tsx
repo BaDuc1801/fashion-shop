@@ -1,21 +1,29 @@
 import { useNavigate } from 'react-router-dom';
-import { GetNotificationsResponse, Notification } from '../api';
+import {
+  GetNotificationsRequest,
+  GetNotificationsResponse,
+  Notification,
+} from '../api';
 import {
   InfiniteData,
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { useAuthStore } from '../stores';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Input } from 'antd';
+import { TFunction } from 'i18next';
 
 export interface NotificationInfinityListProps {
+  t: TFunction;
   setOpen?: (open: boolean) => void;
   queryKeyPrefix: string;
-  getList: (params: {
-    page: number;
-    limit: number;
-  }) => Promise<GetNotificationsResponse>;
+  lang: string;
+  getList: (
+    params: GetNotificationsRequest,
+  ) => Promise<GetNotificationsResponse>;
   markAsRead: (id: string) => Promise<{ success: boolean }>;
+  markAllAsRead: () => Promise<{ success: boolean }>;
   unreadKey: string;
   isAdmin?: boolean;
 }
@@ -23,10 +31,13 @@ export interface NotificationInfinityListProps {
 const LIMIT = 4;
 
 export const NotificationInfinityList = ({
+  t,
   setOpen,
   queryKeyPrefix,
+  lang,
   getList,
   markAsRead,
+  markAllAsRead,
   unreadKey,
   isAdmin = false,
 }: NotificationInfinityListProps) => {
@@ -36,7 +47,9 @@ export const NotificationInfinityList = ({
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const queryKey = [queryKeyPrefix, user?.userId];
+  const [search, setSearch] = useState('');
+
+  const queryKey = [queryKeyPrefix, user?.userId, search];
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -45,6 +58,8 @@ export const NotificationInfinityList = ({
         getList({
           page: pageParam,
           limit: LIMIT,
+          search,
+          lang,
         }),
       getNextPageParam: (lastPage) => {
         if (lastPage.page >= lastPage.totalPages) return undefined;
@@ -109,31 +124,84 @@ export const NotificationInfinityList = ({
     }
   };
 
+  const handleReadAll = async () => {
+    await markAllAsRead();
+
+    queryClient.setQueryData(
+      queryKey,
+      (old: InfiniteData<GetNotificationsResponse>) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          pages: old.pages.map((p) => ({
+            ...p,
+            data: p.data.map((n) => ({ ...n, isRead: true })),
+          })),
+        };
+      },
+    );
+
+    queryClient.setQueryData([unreadKey, user?.userId], () => ({ total: 0 }));
+  };
+
   return (
-    <div className="w-80 max-h-[400px] overflow-y-auto rounded-lg shadow-xl border bg-white">
-      {notifications.map((item) => (
+    <div className="w-80 max-h-[420px] overflow-y-auto rounded-lg shadow-xl border bg-white flex flex-col">
+      {/* HEADER */}
+      <div className="p-2 border-b space-y-2">
+        <Input
+          size="small"
+          placeholder={t('searchPlaceholder')}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
         <div
-          key={item._id + item.isRead}
-          onClick={() => handleClick(item)}
-          className={`p-3 border-b cursor-pointer hover:bg-gray-50 ${
-            item.isRead ? '' : 'bg-blue-50'
-          }`}
+          onClick={handleReadAll}
+          className="cursor-pointer text-sm text-gray-500 underline hover:text-gray-700 text-end"
         >
-          <div className="font-medium text-sm">
-            {item.title || 'Notification'}
-          </div>
-          <div className="text-xs text-gray-500">{item.message}</div>
+          {t('markAllAsRead')}
         </div>
-      ))}
+      </div>
 
-      <div ref={loaderRef} className="flex justify-center py-3">
-        {isFetchingNextPage && (
-          <span className="text-sm text-gray-400">Loading...</span>
+      {/* LIST */}
+      <div className="flex-1 overflow-y-auto">
+        {notifications.length > 0 ? (
+          notifications.map((item) => (
+            <div
+              key={item._id + item.isRead}
+              onClick={() => handleClick(item)}
+              className={`p-3 border-b cursor-pointer hover:bg-gray-50 ${
+                item.isRead ? '' : 'bg-blue-50'
+              }`}
+            >
+              <div className="font-medium text-sm">
+                {item.title[lang as 'vi' | 'en'] || 'Notification'}
+              </div>
+              <div className="text-xs text-gray-500">
+                {item.message[lang as 'vi' | 'en'] || 'Notification'}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <span className="text-sm text-gray-400 mt-4">
+              {t('noNotifications')}
+            </span>
+          </div>
         )}
 
-        {!hasNextPage && notifications.length > 0 && (
-          <span className="text-xs text-gray-400">No more notifications</span>
-        )}
+        <div ref={loaderRef} className="flex justify-center py-3">
+          {isFetchingNextPage && (
+            <span className="text-sm text-gray-400">{t('loading')}</span>
+          )}
+
+          {!hasNextPage && notifications.length > 0 && (
+            <span className="text-xs text-gray-400">
+              {t('noMoreNotifications')}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

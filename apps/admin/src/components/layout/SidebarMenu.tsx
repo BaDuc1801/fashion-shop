@@ -7,7 +7,12 @@ import {
   ShoppingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { getApiErrorMessage, userService, useAuthStore } from '@shared';
+import {
+  getApiErrorMessage,
+  userService,
+  useAuthStore,
+  ADMIN_PANEL_ROLE,
+} from '@shared';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Divider, Input, Menu, Modal, Select, message } from 'antd';
 import { useMemo, useState } from 'react';
@@ -25,6 +30,7 @@ const SidebarMenu = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [changePasswordError, setChangePasswordError] = useState('');
+  const isAdmin = user?.role === ADMIN_PANEL_ROLE;
 
   const changePasswordMutation = useMutation({
     mutationFn: (args: { currentPassword: string; newPassword: string }) =>
@@ -68,7 +74,7 @@ const SidebarMenu = () => {
         icon: <MdOutlineRateReview className="!text-base" />,
         label: t('ratingAndReview'),
       },
-      {
+      isAdmin && {
         key: '/employees',
         icon: <UserOutlined className="!text-base" />,
         label: t('admin.nav.managers'),
@@ -89,11 +95,21 @@ const SidebarMenu = () => {
         label: t('admin.nav.vouchers'),
       },
     ],
-    [t],
+    [t, isAdmin],
   );
 
-  const selectedKey =
-    items.find((item) => location.pathname.startsWith(item.key))?.key || '';
+  const filteredItems = useMemo(
+    () => items.filter(Boolean) as { key: string }[],
+    [items],
+  );
+
+  const selectedKey = useMemo(() => {
+    const found = filteredItems.find((item) =>
+      location.pathname.startsWith(item.key),
+    );
+
+    return found?.key || '';
+  }, [filteredItems, location.pathname]);
 
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
@@ -121,7 +137,7 @@ const SidebarMenu = () => {
         mode="inline"
         selectedKeys={[selectedKey]}
         className="min-h-0 flex-1 border-r-0 pt-2 text-base"
-        items={items}
+        items={filteredItems}
         onClick={(item) => {
           navigate(item.key);
         }}

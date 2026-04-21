@@ -11,9 +11,12 @@ import {
 import SidebarMenu from './SidebarMenu';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 const RootLayout = () => {
   const [open, setOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const hasHydrated = useAuthStore.persist.hasHydrated();
   const token = useAuthStore((s) => s.token);
@@ -49,11 +52,14 @@ const RootLayout = () => {
           placement="bottomRight"
           dropdownRender={() => (
             <NotificationInfinityList
+              t={t}
+              lang={lang}
               setOpen={setOpen}
               queryKeyPrefix="notifications-infinite"
               unreadKey="unread-notifications-count"
               getList={notificationService.getNotifications}
               markAsRead={notificationService.markAsRead}
+              markAllAsRead={notificationService.markAllAsRead}
               isAdmin={true}
             />
           )}

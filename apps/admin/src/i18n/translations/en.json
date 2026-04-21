@@ -530,5 +530,11 @@
   "address": "Address",
   "orderUpdated": "Order updated successfully",
   "orderUpdateFailed": "Failed to update order",
-  "update": "Update"
+  "update": "Update",
+  "markAllAsRead": "Mark all as read",
+  "searchPlaceholder": "Search notifications...",
+  "noNotifications": "No notifications",
+  "loading": "Loading...",
+  "noMoreNotifications": "No more notifications",
+  "sessionExpired": "Session expired"
 }

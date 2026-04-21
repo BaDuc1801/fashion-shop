@@ -6,15 +6,17 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { formatUsd } from '@shared';
 import OrderItemsExpanded from './OrderItemsExpanded';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const UserOrderPage = () => {
   const { t } = useTranslation();
   const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
-  const [params] = useSearchParams();
+  const [params, setSearchParams] = useSearchParams();
   const urlOrderCode = params.get('orderCode') || '';
+
+  const clearedRef = useRef(false);
 
   const { page, limit, onPageChange, searchText, setSearchText, search } =
     useTableQuery({
@@ -93,6 +95,13 @@ const UserOrderPage = () => {
           size="large"
           placeholder={t('search')}
           className="w-96"
+          onFocus={(e) => {
+            if (!clearedRef.current && params.toString()) {
+              clearedRef.current = true;
+              setSearchParams({});
+            }
+            e.target.select();
+          }}
           onChange={(e) => setSearchText(e.target.value)}
           value={searchText}
         />

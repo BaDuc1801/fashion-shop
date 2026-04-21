@@ -68,8 +68,10 @@ const OrderDetailPage = () => {
         data.phone,
         data.address,
       ),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       message.success(t('orderUpdated'));
+
+      reset(variables);
     },
     onError: () => {
       message.error(t('orderUpdateFailed'));

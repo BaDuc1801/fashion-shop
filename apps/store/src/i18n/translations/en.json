@@ -202,5 +202,12 @@
   "images": "Images",
   "submit": "Submit",
   "orderNotCompleted": "Order not completed",
-  "alreadyReviewed": "Already reviewed"
+  "alreadyReviewed": "Already reviewed",
+  "markAllAsRead": "Mark all as read",
+  "searchPlaceholder": "Search notifications...",
+  "noNotifications": "No notifications",
+  "loading": "Loading...",
+  "noMoreNotifications": "No more notifications",
+  "sessionExpired": "Session expired",
+  "pleaseLogin": "Please login to perform this action"
 }

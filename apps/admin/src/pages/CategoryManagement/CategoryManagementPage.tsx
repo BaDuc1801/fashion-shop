@@ -121,16 +121,12 @@ const CategoryManagementPage = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <span className="text-xl font-semibold">
-          {t('admin.category.title')}
-        </span>
+      <span className="text-xl font-semibold">{t('admin.category.title')}</span>
+      <div className="flex flex-col mt-1 gap-4 justify-end items-end">
         <AddNewButton
           to="/categories/add-new"
           label={t('admin.category.add')}
         />
-      </div>
-      <div className="flex items-center justify-end">
         <Input
           size="large"
           placeholder={t('admin.category.searchPlaceholder')}
@@ -138,25 +134,25 @@ const CategoryManagementPage = () => {
           onChange={(e) => setSearchText(e.target.value)}
           value={searchText}
         />
+        <Table
+          className="w-full"
+          loading={isLoading}
+          columns={columns}
+          dataSource={categories}
+          rowKey="_id"
+          pagination={{
+            current: page,
+            pageSize: limit,
+            total: categoriesResponse?.total,
+            onChange: onPageChange,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => navigate(`/categories/${record._id}`),
+            style: { cursor: 'pointer' },
+          })}
+        />
       </div>
-      <Table
-        className="w-full"
-        loading={isLoading}
-        columns={columns}
-        dataSource={categories}
-        rowKey="_id"
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total: categoriesResponse?.total,
-          onChange: onPageChange,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => navigate(`/categories/${record._id}`),
-          style: { cursor: 'pointer' },
-        })}
-      />
       <ConfirmModal
         open={Boolean(pendingStatusUpdate)}
         title={t('admin.confirmModal.title')}

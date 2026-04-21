@@ -129,14 +129,9 @@ const EmployeeManagementPage = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <span className="text-xl font-semibold">
-          {t('admin.employee.title')}
-        </span>
+      <span className="text-xl font-semibold">{t('admin.employee.title')}</span>
+      <div className="flex flex-col mt-1 gap-4 justify-end items-end">
         <AddNewButton to="/employees/add-new" label={t('admin.employee.add')} />
-      </div>
-
-      <div className="flex items-center justify-end">
         <Input
           size="large"
           placeholder={t('admin.employee.searchPlaceholder')}
@@ -144,26 +139,26 @@ const EmployeeManagementPage = () => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-      </div>
 
-      <Table
-        className="w-full"
-        loading={staffLoading || adminLoading}
-        columns={columns}
-        dataSource={[...adminUsers, ...staffUsers]}
-        rowKey="_id"
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total,
-          onChange: onPageChange,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => navigate(`/employees/${record._id}`),
-          style: { cursor: 'pointer' },
-        })}
-      />
+        <Table
+          className="w-full"
+          loading={staffLoading || adminLoading}
+          columns={columns}
+          dataSource={[...adminUsers, ...staffUsers]}
+          rowKey="_id"
+          pagination={{
+            current: page,
+            pageSize: limit,
+            total,
+            onChange: onPageChange,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => navigate(`/employees/${record._id}`),
+            style: { cursor: 'pointer' },
+          })}
+        />
+      </div>
       <ConfirmModal
         open={Boolean(pendingStatusUpdate)}
         title={t('admin.confirmModal.title')}

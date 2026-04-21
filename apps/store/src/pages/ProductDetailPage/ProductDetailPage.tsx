@@ -1,11 +1,11 @@
-import { Button, Spin } from 'antd';
+import { Button, Spin, Tooltip } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NotFoundPage } from '../NotFoundPage';
 import { CiHeart } from 'react-icons/ci';
 import ProductReviewList from '../../components/productDetail/ProductReviewList';
-import { productService } from '@shared';
+import { productService, useAuthStore } from '@shared';
 import { useQuery } from '@tanstack/react-query';
 import { FaHeart } from 'react-icons/fa';
 import { useToggleWishlist } from './hooks/useWishList';
@@ -16,6 +16,7 @@ const ProductDetailPage = () => {
   const { sku } = useParams<{ sku: string }>();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
+  const { user } = useAuthStore();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -118,25 +119,28 @@ const ProductDetailPage = () => {
             <h1 className="text-2xl font-semibold text-slate-900">
               {i18n.language === 'en' ? data.nameEn : data.name}
             </h1>
-            <Button
-              size="large"
-              onClick={() =>
-                toggleWishlist.mutate({
-                  productId: data._id,
-                  inWishlist: data.inWishlist ?? false,
-                })
-              }
-              className={`hover:text-[#fb6f92] ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
-            >
-              <text className={`${data.inWishlist ? 'text-[#fb6f92]' : ''}`}>
-                {t('product.favorited')}
-              </text>
-              {data.inWishlist ? (
-                <FaHeart className="text-[#fb6f92]" />
-              ) : (
-                <CiHeart />
-              )}
-            </Button>
+            <Tooltip title={!user ? t('pleaseLogin') : ''}>
+              <Button
+                size="large"
+                onClick={() =>
+                  toggleWishlist.mutate({
+                    productId: data._id,
+                    inWishlist: data.inWishlist ?? false,
+                  })
+                }
+                className={`hover:text-[#fb6f92] ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
+                disabled={!user}
+              >
+                <text className={`${data.inWishlist ? 'text-[#fb6f92]' : ''}`}>
+                  {t('product.favorited')}
+                </text>
+                {data.inWishlist ? (
+                  <FaHeart className="text-[#fb6f92]" />
+                ) : (
+                  <CiHeart />
+                )}
+              </Button>
+            </Tooltip>
           </div>
 
           <p className="text-base text-slate-600 max-w-[520px]">
@@ -227,41 +231,45 @@ const ProductDetailPage = () => {
             </div>
           </div>
           {/* Actions */}
-          <div className="flex flex-col gap-2">
-            <Button
-              type="primary"
-              size="large"
-              onClick={() =>
-                toggleCart.mutate({
-                  productId: data._id,
-                  size: selectedSize,
-                  color: selectedColorId,
-                })
-              }
-            >
-              {t('product.addToCart')}
-            </Button>
-            <Button
-              size="large"
-              onClick={() =>
-                navigate('/checkout', {
-                  state: {
-                    buyNowItem: {
-                      productId: data._id,
-                      name: data.name,
-                      image: data.images?.[0],
-                      price: data.price,
-                      size: selectedSize,
-                      color: selectedColorId,
-                      quantity: 1,
+          <Tooltip title={!user ? t('pleaseLogin') : ''}>
+            <div className="flex flex-col gap-2">
+              <Button
+                type="primary"
+                size="large"
+                onClick={() =>
+                  toggleCart.mutate({
+                    productId: data._id,
+                    size: selectedSize,
+                    color: selectedColorId,
+                  })
+                }
+                disabled={!user}
+              >
+                {t('product.addToCart')}
+              </Button>
+              <Button
+                size="large"
+                onClick={() =>
+                  navigate('/checkout', {
+                    state: {
+                      buyNowItem: {
+                        productId: data._id,
+                        name: data.name,
+                        image: data.images?.[0],
+                        price: data.price,
+                        size: selectedSize,
+                        color: selectedColorId,
+                        quantity: 1,
+                      },
                     },
-                  },
-                })
-              }
-            >
-              {t('byNow')}
-            </Button>
-          </div>
+                  })
+                }
+                disabled={!user}
+              >
+                {t('byNow')}
+              </Button>
+            </div>
+          </Tooltip>
         </div>
       </div>
 

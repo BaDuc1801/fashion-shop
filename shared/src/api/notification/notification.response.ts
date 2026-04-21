@@ -2,8 +2,14 @@ import { UserMeData } from '../user/user.response';
 
 export type Notification = {
   type: string;
-  title: string;
-  message: string;
+  title: {
+    vi: string;
+    en: string;
+  };
+  message: {
+    vi: string;
+    en: string;
+  };
   target: string;
   data: {
     orderId: string;

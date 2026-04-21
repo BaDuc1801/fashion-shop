@@ -20,6 +20,7 @@ import CategoryManagementPage from '../pages/CategoryManagement/CategoryManageme
 import CategoryAddPage from '../pages/CategoryManagement/CategoryAddPage';
 import CategoryDetailPage from '../pages/CategoryManagement/CategoryDetailPage';
 import RatingManagementPage from '../pages/RatingManagement/RatingManagementPage';
+import { ProtectedRoute } from './ProtectedRoute';
 
 const AppRoutes = () => {
   return (
@@ -28,9 +29,30 @@ const AppRoutes = () => {
       <Route element={<RootLayout />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/employees" element={<EmployeeManagementPage />} />
-        <Route path="/employees/add-new" element={<EmployeeAddPage />} />
-        <Route path="/employees/:id" element={<EmployeeDetailPage />} />
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute>
+              <EmployeeManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/add-new"
+          element={
+            <ProtectedRoute>
+              <EmployeeAddPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeDetailPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/users" element={<UserManagementPage />} />
         <Route path="/users/add-new" element={<UserAddPage />} />
         <Route path="/users/:id" element={<UserDetailPage />} />

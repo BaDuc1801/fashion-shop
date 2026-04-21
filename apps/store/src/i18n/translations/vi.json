@@ -202,5 +202,12 @@
   "images": "Ảnh",
   "submit": "Gửi",
   "orderNotCompleted": "Đơn hàng chưa hoàn thành",
-  "alreadyReviewed": "Đã đánh giá"
+  "alreadyReviewed": "Đã đánh giá",
+  "markAllAsRead": "Đánh dấu tất cả đã đọc",
+  "searchPlaceholder": "Tìm kiếm thông báo...",
+  "noNotifications": "Không có thông báo",
+  "loading": "Đang tải...",
+  "noMoreNotifications": "Không có thông báo nữa",
+  "sessionExpired": "Phiên đăng nhập đã hết hạn",
+  "pleaseLogin": "Vui lòng đăng nhập để thực hiện hành động này"
 }

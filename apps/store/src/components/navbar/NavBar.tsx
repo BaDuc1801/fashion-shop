@@ -37,10 +37,12 @@ const NavBar = () => {
   const { data: wishlistData } = useQuery({
     queryKey: ['wishlist'],
     queryFn: () => userService.getWishlist(),
+    enabled: !!user,
   });
   const { data: cartData } = useQuery({
     queryKey: ['cart'],
     queryFn: () => userService.getCart(),
+    enabled: !!user,
   });
   const { data: unreadData } = useQuery({
     queryKey: ['customer-unread-count', user?.userId],
@@ -185,36 +187,51 @@ const NavBar = () => {
       </div>
       <nav className="flex items-center gap-6 text-2xl font-medium">
         <SearchProduct />
-        <Dropdown
-          trigger={['click']}
-          open={openNoti}
-          onOpenChange={(v) => setOpenNoti(v)}
-          placement="bottomRight"
-          dropdownRender={() => (
-            <NotificationInfinityList
-              setOpen={setOpenNoti}
-              queryKeyPrefix="customer-notifications"
-              unreadKey="customer-unread-count"
-              getList={notificationService.getCustomerNotifications}
-              markAsRead={notificationService.markCustomerNotificationAsRead}
-              isAdmin={false}
-            />
-          )}
-        >
-          <Badge count={unreadData?.total ?? 0} size="small" offset={[0, 2]}>
-            <BellOutlined className="cursor-pointer text-2xl hover:font-semibold" />
-          </Badge>
-        </Dropdown>
-        <Link to="/wishlist" className="leading-none">
-          <Badge count={wishlistCount} size="small" offset={[0, 2]}>
-            <FaRegHeart className="text-2xl cursor-pointer hover:font-semibold" />
-          </Badge>
-        </Link>
-        <Link to="/cart" className="leading-none">
-          <Badge count={cartCount} size="small" offset={[0, 2]}>
-            <FiShoppingCart className="text-2xl cursor-pointer hover:font-semibold" />
-          </Badge>
-        </Link>
+        {isLoggedIn && (
+          <>
+            <Dropdown
+              trigger={['click']}
+              open={openNoti}
+              onOpenChange={(v) => setOpenNoti(v)}
+              placement="bottomRight"
+              dropdownRender={() => (
+                <NotificationInfinityList
+                  t={t}
+                  lang={i18n.language}
+                  setOpen={setOpenNoti}
+                  queryKeyPrefix="customer-notifications"
+                  unreadKey="customer-unread-count"
+                  getList={notificationService.getCustomerNotifications}
+                  markAsRead={
+                    notificationService.markCustomerNotificationAsRead
+                  }
+                  markAllAsRead={
+                    notificationService.markAllCustomerNotificationsAsRead
+                  }
+                  isAdmin={false}
+                />
+              )}
+            >
+              <Badge
+                count={unreadData?.total ?? 0}
+                size="small"
+                offset={[0, 2]}
+              >
+                <BellOutlined className="cursor-pointer text-2xl hover:font-semibold" />
+              </Badge>
+            </Dropdown>
+            <Link to="/wishlist" className="leading-none">
+              <Badge count={wishlistCount} size="small" offset={[0, 2]}>
+                <FaRegHeart className="text-2xl cursor-pointer hover:font-semibold" />
+              </Badge>
+            </Link>
+            <Link to="/cart" className="leading-none">
+              <Badge count={cartCount} size="small" offset={[0, 2]}>
+                <FiShoppingCart className="text-2xl cursor-pointer hover:font-semibold" />
+              </Badge>
+            </Link>
+          </>
+        )}
 
         <Button size="small" onClick={toggleLanguage}>
           {i18n.language === 'en' ? 'EN' : 'VI'}

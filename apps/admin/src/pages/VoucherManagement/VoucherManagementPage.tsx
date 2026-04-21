@@ -120,13 +120,9 @@ const VoucherManagementPage = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <span className="text-xl font-semibold">
-          {t('admin.voucher.title')}
-        </span>
+      <span className="text-xl font-semibold">{t('admin.voucher.title')}</span>
+      <div className="flex flex-col mt-1 gap-4 justify-end items-end">
         <AddNewButton to="/vouchers/add-new" label={t('admin.voucher.add')} />
-      </div>
-      <div className="flex items-center justify-end">
         <Input
           size="large"
           placeholder={t('admin.voucher.searchPlaceholder')}
@@ -134,25 +130,25 @@ const VoucherManagementPage = () => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
+        <Table
+          className="w-full"
+          loading={isLoading}
+          columns={columns}
+          dataSource={vouchersResponse?.data || []}
+          rowKey="id"
+          pagination={{
+            current: page,
+            pageSize: limit,
+            total: vouchersResponse?.total,
+            onChange: onPageChange,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => navigate(`/vouchers/${record._id}`),
+            style: { cursor: 'pointer' },
+          })}
+        />
       </div>
-      <Table
-        className="w-full"
-        loading={isLoading}
-        columns={columns}
-        dataSource={vouchersResponse?.data || []}
-        rowKey="id"
-        pagination={{
-          current: page,
-          pageSize: limit,
-          total: vouchersResponse?.total,
-          onChange: onPageChange,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => navigate(`/vouchers/${record._id}`),
-          style: { cursor: 'pointer' },
-        })}
-      />
       <ConfirmModal
         open={Boolean(pendingStatusUpdate)}
         title={t('admin.confirmModal.title')}

@@ -533,5 +533,11 @@
   "address": "Địa chỉ",
   "orderUpdated": "Cập nhật đơn hàng thành công",
   "orderUpdateFailed": "Cập nhật đơn hàng thất bại",
-  "update": "Cập nhật"
+  "update": "Cập nhật",
+  "markAllAsRead": "Đánh dấu tất cả đã đọc",
+  "searchPlaceholder": "Tìm kiếm thông báo...",
+  "noNotifications": "Không có thông báo",
+  "loading": "Đang tải...",
+  "noMoreNotifications": "Không có thông báo nữa",
+  "sessionExpired": "Phiên đăng nhập đã hết hạn"
 }

@@ -62,8 +62,10 @@ const OrderInfiniteList = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'paid':
         return 'green';
+      case 'completed':
+        return 'lime';
       case 'shipping':
         return 'blue';
       case 'pending':

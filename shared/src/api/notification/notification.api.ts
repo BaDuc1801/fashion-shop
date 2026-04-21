@@ -1,11 +1,11 @@
 import api from '../axios';
+import { GetNotificationsRequest } from './notification.request';
 import { GetNotificationsResponse } from './notification.response';
 
 class NotificationService {
-  async getNotifications(params: {
-    page: number;
-    limit: number;
-  }): Promise<GetNotificationsResponse> {
+  async getNotifications(
+    params: GetNotificationsRequest,
+  ): Promise<GetNotificationsResponse> {
     const res = await api.get('/api/notifications', { params });
     return res.data;
   }
@@ -25,10 +25,9 @@ class NotificationService {
     return res.data;
   }
 
-  async getCustomerNotifications(params: {
-    page: number;
-    limit: number;
-  }): Promise<GetNotificationsResponse> {
+  async getCustomerNotifications(
+    params: GetNotificationsRequest,
+  ): Promise<GetNotificationsResponse> {
     const res = await api.get('/api/notifications/customer', { params });
     return res.data;
   }
