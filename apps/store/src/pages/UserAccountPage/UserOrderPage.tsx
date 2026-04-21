@@ -6,16 +6,27 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { formatUsd } from '@shared';
 import OrderItemsExpanded from './OrderItemsExpanded';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const UserOrderPage = () => {
   const { t } = useTranslation();
   const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
+  const [params] = useSearchParams();
+  const urlOrderCode = params.get('orderCode') || '';
+
   const { page, limit, onPageChange, searchText, setSearchText, search } =
     useTableQuery({
       defaultLimit: 6,
     });
+
+  useEffect(() => {
+    if (urlOrderCode && urlOrderCode !== searchText) {
+      setSearchText(urlOrderCode);
+    }
+  }, [urlOrderCode, searchText, setSearchText]);
+
   const queryParams = {
     page,
     limit,
@@ -57,6 +68,7 @@ const UserOrderPage = () => {
                 : text === 'shipping'
                   ? 'blue'
                   : 'red';
+
         return (
           <Tag color={color} variant="outlined">
             {t(`${text}`)}
@@ -71,10 +83,12 @@ const UserOrderPage = () => {
       sorter: (a, b) => a.total - b.total,
     },
   ];
+
   return (
     <div className="px-[200px] py-[40px]">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-semibold mb-2">{t('myOrders')}</h1>
+
         <Input
           size="large"
           placeholder={t('search')}
@@ -83,6 +97,7 @@ const UserOrderPage = () => {
           value={searchText}
         />
       </div>
+
       <Table
         dataSource={orders?.orders ?? []}
         loading={isLoading}
@@ -92,9 +107,7 @@ const UserOrderPage = () => {
           expandedRowKeys,
           onExpand: (expanded, record) => {
             setExpandedRowKeys((prev) => {
-              if (expanded) {
-                return [...prev, record._id];
-              }
+              if (expanded) return [...prev, record._id];
               return prev.filter((id) => id !== record._id);
             });
           },

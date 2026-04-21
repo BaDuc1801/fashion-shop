@@ -105,7 +105,7 @@ export const NotificationInfinityList = ({
     if (item.data?.orderId && isAdmin) {
       navigate(`/orders/${item.data.orderId}`);
     } else if (item.data?.orderId) {
-      navigate(`/user/orders?search=${item.data.orderCode}`);
+      navigate(`/user/orders?orderCode=${item.data.orderCode}`);
     }
   };
 
