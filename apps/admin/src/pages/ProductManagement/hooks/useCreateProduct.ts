@@ -14,7 +14,21 @@ export const useCreateProduct = () => {
 
   return useMutation({
     mutationFn: async (values: AddNewProductFormValues) => {
-      const imageUrls = await resolveImageUrls(values.images);
+      const variants = await Promise.all(
+        values.variants.map(async (variant) => {
+          const imageUrls = await resolveImageUrls(variant.images || []);
+
+          return {
+            color: normalizeHexColor(variant.color),
+            images: imageUrls,
+            skus: variant.skus.map((sku) => ({
+              size: sku.size,
+              quantity: sku.quantity ?? 0,
+            })),
+          };
+        }),
+      );
+
       return productService.createProduct({
         name: values.name,
         nameEn: values.nameEn,
@@ -24,14 +38,7 @@ export const useCreateProduct = () => {
         sku: values.sku,
         price: values.price,
         status: values.status ? 'active' : 'inactive',
-        images: imageUrls,
-        sizeVariants: values.sizeVariants.map((sv) => ({
-          ...sv,
-          colors: sv.colors.map((color) => ({
-            ...color,
-            name: normalizeHexColor(color.name),
-          })),
-        })),
+        variants,
       });
     },
     onSuccess: async (createdProduct) => {

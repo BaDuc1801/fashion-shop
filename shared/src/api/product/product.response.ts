@@ -1,6 +1,6 @@
 import { Category } from '../category/category.response';
-import { ProductSizeVariant } from './product.request';
 import { RatingResponse, RatingStatsResponse } from '../rating/rating.response';
+import { ProductVariant } from './product.request';
 
 export interface Product {
   _id: string;
@@ -13,8 +13,7 @@ export interface Product {
   price: number;
   status: string;
   stock: number;
-  images: string[];
-  sizeVariants: ProductSizeVariant[];
+  variants: ProductVariant[];
   createdAt: string;
   updatedAt: string;
   inWishlist?: boolean;

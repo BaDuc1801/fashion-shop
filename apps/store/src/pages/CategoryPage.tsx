@@ -150,7 +150,7 @@ const CategoryPage = () => {
                   <div className="border rounded overflow-hidden">
                     <img
                       alt={p.name}
-                      src={p.images?.[0]}
+                      src={p.variants[0].images[0]}
                       className="h-[300px] w-full object-top object-cover"
                     />
                     <div className="p-2">

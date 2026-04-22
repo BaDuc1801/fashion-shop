@@ -30,38 +30,29 @@ const ProductDetailPage = () => {
     },
     enabled: !!sku,
   });
+
+  const selectedVariant = useMemo(
+    () => data?.variants.find((v) => v.color === selectedColorId),
+    [data, selectedColorId],
+  );
+
   const toggleWishlist = useToggleWishlist();
   const toggleCart = useToggleCart();
 
   useEffect(() => {
     if (!data) return;
-    setActiveImageIndex(0);
-    const firstAvailableSize = data.sizeVariants.find((s) =>
-      s.colors.some((c) => c.quantity > 0),
+
+    const firstVariant = data.variants.find((v) =>
+      v.skus.some((s) => s.quantity > 0),
     );
-    setSelectedSize(firstAvailableSize?.size ?? '');
+
+    if (!firstVariant) return;
+
+    setSelectedColorId(firstVariant.color);
+
+    const firstSize = firstVariant.skus.find((s) => s.quantity > 0)?.size;
+    setSelectedSize(firstSize || '');
   }, [data]);
-
-  const selectedSizeVariant = useMemo(
-    () => data?.sizeVariants.find((s) => s.size === selectedSize),
-    [data, selectedSize],
-  );
-
-  useEffect(() => {
-    if (!selectedSizeVariant) return;
-    const firstAvailableColor = selectedSizeVariant.colors.find(
-      (c) => c.quantity > 0,
-    );
-
-    setSelectedColorId(firstAvailableColor?.name ?? '');
-  }, [selectedSizeVariant]);
-
-  const selectedVariant = useMemo(
-    () => selectedSizeVariant?.colors.find((c) => c.name === selectedColorId),
-    [selectedSizeVariant, selectedColorId],
-  );
-
-  const activeImage = data?.images?.[activeImageIndex] ?? '';
 
   if (isLoading)
     return (
@@ -77,8 +68,8 @@ const ProductDetailPage = () => {
       <div className="flex items-start gap-10">
         {/* Gallery */}
         <div className="flex gap-6">
-          <div className="flex flex-col justify-between">
-            {data.images.map((img, i) => (
+          <div className="flex flex-col gap-4">
+            {selectedVariant?.images.map((img, i) => (
               <button
                 key={img + i}
                 type="button"
@@ -101,12 +92,14 @@ const ProductDetailPage = () => {
 
           <div className="w-[520px] rounded-sm border border-slate-200 overflow-hidden bg-white">
             <img
-              src={activeImage}
+              src={selectedVariant?.images[activeImageIndex]}
               alt={data.name}
               className="h-[520px] w-full object-cover object-top"
               onClick={() =>
                 setActiveImageIndex((prev) =>
-                  data.images.length ? (prev + 1) % data.images.length : 0,
+                  selectedVariant?.images.length
+                    ? (prev + 1) % selectedVariant?.images.length
+                    : 0,
                 )
               }
             />
@@ -157,7 +150,8 @@ const ProductDetailPage = () => {
           <div>
             <div className="text-sm font-semibold">{t('product.stock')}</div>
             <div className="text-xl font-bold">
-              {selectedVariant?.quantity ?? 0}
+              {selectedVariant?.skus.find((s) => s.size === selectedSize)
+                ?.quantity ?? 0}
             </div>
           </div>
 
@@ -168,25 +162,27 @@ const ProductDetailPage = () => {
                 {t('product.selectSize')}
               </div>
               <div className="flex flex-wrap gap-2">
-                {data.sizeVariants.map((s) => {
-                  const active = s.size === selectedSize;
+                {selectedVariant?.skus.map((v) => {
+                  const active = v.size === selectedSize;
                   return (
                     <button
-                      key={s.size}
-                      disabled={s.colors.every((c) => c.quantity === 0)}
-                      onClick={() => setSelectedSize(s.size)}
+                      key={v.size}
+                      disabled={selectedVariant?.skus.every(
+                        (s) => s.quantity === 0,
+                      )}
+                      onClick={() => setSelectedSize(v.size)}
                       className={[
-                        'relative h-10 px-3 rounded-full border flex items-center justify-center',
+                        'relative h-10 min-w-10 px-3 rounded-full border flex items-center justify-center',
                         active
                           ? 'border-pink-300 bg-pink-50'
                           : 'border-slate-200',
-                        s.colors.every((c) => c.quantity === 0)
+                        selectedVariant?.skus.every((s) => s.quantity === 0)
                           ? 'cursor-not-allowed opacity-60'
                           : '',
                       ].join(' ')}
                     >
-                      {s.size}
-                      {s.colors.every((c) => c.quantity === 0) && (
+                      {v.size}
+                      {selectedVariant?.skus.every((s) => s.quantity === 0) && (
                         <span className="absolute text-red-400 text-xl font-bold">
                           ✕
                         </span>
@@ -202,31 +198,28 @@ const ProductDetailPage = () => {
               <div className="text-sm font-semibold">
                 {t('product.selectColor')}
               </div>
-              <div key={selectedSize} className="flex gap-3">
-                {selectedSizeVariant?.colors.map((c) => {
-                  const active = c.name === selectedColorId;
-                  return (
-                    <button
-                      key={`${selectedSize}-${c.name}`}
-                      onClick={() => setSelectedColorId(c.name)}
-                      disabled={c.quantity === 0}
-                      className={[
-                        'relative h-10 w-10 border rounded-sm flex items-center justify-center',
-                        active
-                          ? 'border-pink-300 ring-2 ring-pink-100'
-                          : 'border-slate-200',
-                        c.quantity === 0 ? 'cursor-not-allowed opacity-60' : '',
-                      ].join(' ')}
-                      style={{ backgroundColor: c.name }}
-                    >
-                      {c.quantity === 0 && (
-                        <span className="absolute text-red-400 text-xl font-bold">
-                          ✕
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+              <div className="flex gap-2">
+                {data.variants.map((v) => (
+                  <button
+                    key={v.color}
+                    onClick={() => {
+                      setSelectedColorId(v.color);
+
+                      const firstSize = v.skus.find(
+                        (s) => s.quantity > 0,
+                      )?.size;
+
+                      setSelectedSize(firstSize || '');
+                    }}
+                    className={[
+                      'w-10 h-10 border',
+                      selectedColorId === v.color
+                        ? 'border-pink-400'
+                        : 'border-gray-300',
+                    ].join(' ')}
+                    style={{ backgroundColor: v.color }}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -255,7 +248,7 @@ const ProductDetailPage = () => {
                       buyNowItem: {
                         productId: data._id,
                         name: data.name,
-                        image: data.images?.[0],
+                        image: selectedVariant?.images[0],
                         price: data.price,
                         size: selectedSize,
                         color: selectedColorId,

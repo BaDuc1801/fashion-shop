@@ -1,6 +1,5 @@
 import {
   Button,
-  ColorPicker,
   Form,
   Input,
   InputNumber,
@@ -9,96 +8,19 @@ import {
   Switch,
   Tabs,
 } from 'antd';
-import type { UploadFile } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import {
-  FieldErrors,
-  FormProvider,
-  useFieldArray,
-  useForm,
-  useFormContext,
-  useWatch,
-} from 'react-hook-form';
+import { FieldErrors, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { categoryService, FormItem, ImageUploader, Product } from '@shared';
-import { PRODUCT_SIZE_SELECT_OPTIONS } from './constants/productSizeOptions';
+import { categoryService, FormItem, Product } from '@shared';
 import {
   addNewProductSchemaDefaultValues,
   createAddNewProductSchema,
   type AddNewProductFormValues,
 } from './schemas/addNewProductSchema';
 import { useProductDetail } from './hooks/useProductDetail';
-
-const DEFAULT_SWATCH = '#1677ff';
-
-interface ProductFormProps {
-  initialValues?: Product;
-  isEdit?: boolean;
-  showTitle?: boolean;
-  submitting?: boolean;
-  onSubmit?: (values: AddNewProductFormValues) => void | Promise<void>;
-}
-
-function SizeColorsFields({ sizeIndex }: { sizeIndex: number }) {
-  const { t } = useTranslation();
-  const { control } = useFormContext<AddNewProductFormValues>();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `sizeVariants.${sizeIndex}.colors`,
-  });
-
-  return (
-    <div className="space-y-2 border-l-2 border-slate-200 pl-3">
-      <div className="text-xs font-medium text-slate-500">
-        {t('admin.product.form.colorsSection')}
-      </div>
-      <div className="max-h-48 overflow-y-auto overflow-x-hidden pr-1 space-y-2">
-        {fields.map((field, colorIndex) => (
-          <div key={field.id} className="flex flex-wrap items-end gap-2">
-            <div className="min-w-[200px] flex-1">
-              <FormItem
-                name={`sizeVariants.${sizeIndex}.colors.${colorIndex}.name`}
-                label={t('admin.product.form.color')}
-              >
-                {({ field }) => (
-                  <ColorPicker
-                    value={field.value}
-                    onChange={(_, hex) => field.onChange(hex)}
-                    showText
-                    format="hex"
-                    size="large"
-                    disabledAlpha
-                  />
-                )}
-              </FormItem>
-            </div>
-            <div className="w-32">
-              <FormItem
-                name={`sizeVariants.${sizeIndex}.colors.${colorIndex}.quantity`}
-                label={t('admin.product.form.quantity')}
-                getValueFromEvent={(value) => (value as number | null) ?? 0}
-              >
-                <InputNumber min={0} className="w-full" size="large" />
-              </FormItem>
-            </div>
-            <Button type="text" danger onClick={() => remove(colorIndex)}>
-              {t('admin.product.form.removeColor')}
-            </Button>
-          </div>
-        ))}
-      </div>
-      <Button
-        type="dashed"
-        size="small"
-        onClick={() => append({ name: DEFAULT_SWATCH, quantity: 0 })}
-      >
-        {t('admin.product.form.addColor')}
-      </Button>
-    </div>
-  );
-}
+import { VariantFields } from './components/VariantField';
 
 const ProductForm = ({
   initialValues,
@@ -106,104 +28,67 @@ const ProductForm = ({
   showTitle = true,
   submitting = false,
   onSubmit,
-}: ProductFormProps) => {
-  const { t } = useTranslation();
-  const productSchema = createAddNewProductSchema(t);
+}: {
+  initialValues?: Product;
+  isEdit?: boolean;
+  showTitle?: boolean;
+  submitting?: boolean;
+  onSubmit?: (values: AddNewProductFormValues) => void;
+}) => {
+  const { t, i18n } = useTranslation();
+
   const form = useForm<AddNewProductFormValues>({
-    resolver: zodResolver(productSchema),
-    mode: 'onSubmit',
+    resolver: zodResolver(createAddNewProductSchema(t)),
     defaultValues: addNewProductSchemaDefaultValues,
   });
+
   const { handleSubmit, reset, control } = form;
-  const { data: categoriesResponse, isLoading: isCategoriesLoading } = useQuery(
-    {
-      queryKey: ['categories', 'product-form'],
-      queryFn: () => categoryService.getCategories({ limit: 100 }),
-    },
-  );
 
-  const {
-    fields: sizeFields,
-    append: appendSize,
-    remove: removeSize,
-  } = useFieldArray({
-    control,
-    name: 'sizeVariants',
+  const { data, isLoading: isCategoriesLoading } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => categoryService.getCategories({ limit: 100 }),
   });
-
-  const sizeVariantsWatch = useWatch({
-    control,
-    name: 'sizeVariants',
-    defaultValue: addNewProductSchemaDefaultValues.sizeVariants,
-  });
-
-  const totalVariantStock = useMemo(() => {
-    if (!sizeVariantsWatch?.length) return 0;
-    return sizeVariantsWatch.reduce((sum, row) => {
-      if (!row?.colors?.length) return sum;
-      return (
-        sum + row.colors.reduce((acc, c) => acc + (Number(c?.quantity) || 0), 0)
-      );
-    }, 0);
-  }, [sizeVariantsWatch]);
-
-  const categoryOptions = useMemo(
-    () =>
-      categoriesResponse?.data?.map((category) => ({
-        value: category._id,
-        label: category.name,
-      })),
-    [categoriesResponse],
-  );
 
   useProductDetail({ initialValues, reset });
 
+  const variantsWatch = useWatch({ control, name: 'variants' });
+
+  const totalStock = useMemo(() => {
+    return variantsWatch?.reduce((sum, v) => {
+      return (
+        sum + (v?.skus?.reduce((acc, s) => acc + (s.quantity || 0), 0) || 0)
+      );
+    }, 0);
+  }, [variantsWatch]);
+
+  const categoryOptions = data?.data?.map((c) => ({
+    value: c._id,
+    label: i18n.language === 'vi' ? c.name : c.nameEn,
+  }));
+
   const handleError = (errors: FieldErrors<AddNewProductFormValues>) => {
-    const fields = Object.keys(errors);
-
-    const hasViError = fields.some((f) => ['name', 'description'].includes(f));
-
-    const hasEnError = fields.some((f) =>
-      ['nameEn', 'descriptionEn'].includes(f),
-    );
-
-    if (hasViError || hasEnError) {
-      message.error('requiredBothLanguages');
+    if (errors.name || errors.nameEn) {
+      message.error('Name required');
     }
   };
 
   const handleFinish = async (values: AddNewProductFormValues) => {
     await onSubmit?.(values);
   };
-
   return (
     <FormProvider {...form}>
       <Form
         layout="vertical"
         onFinish={handleSubmit(handleFinish, handleError)}
-        className="max-w-2xl space-y-2"
+        className="max-w-2xl space-y-3"
       >
-        {showTitle ? (
+        {showTitle && (
           <h2 className="text-xl font-semibold">
-            {isEdit
-              ? t('admin.product.form.editTitle')
-              : t('admin.product.form.addTitle')}
+            {isEdit ? 'Update Product' : 'Create Product'}
           </h2>
-        ) : null}
+        )}
 
-        <FormItem name="images" label={t('admin.product.form.images')}>
-          {({ field }) => (
-            <ImageUploader
-              fileList={(field.value as UploadFile[]) || []}
-              onChange={(fileList) => field.onChange(fileList.slice(0, 6))}
-              maxCount={6}
-              uploadLabel={t('admin.product.form.upload')}
-              multiple
-            />
-          )}
-        </FormItem>
-
-        <FormItem name="categoryId" label={t('admin.product.form.category')}>
+        <FormItem name="categoryId" label="Category">
           <Select
             showSearch
             optionFilterProp="label"
@@ -215,29 +100,17 @@ const ProductForm = ({
         </FormItem>
 
         <Tabs
-          defaultActiveKey="en"
           items={[
             {
               key: 'en',
-              label: t('english'),
+              label: 'English',
               children: (
                 <>
-                  <FormItem name="nameEn" label={t('productNameEn')}>
-                    <Input
-                      placeholder={t('admin.product.form.placeholderName')}
-                      size="large"
-                      className="mb-2"
-                    />
+                  <FormItem name="nameEn" label="Name">
+                    <Input />
                   </FormItem>
-
-                  <FormItem name="descriptionEn" label={t('descriptionEn')}>
-                    <Input.TextArea
-                      placeholder={t(
-                        'admin.product.form.placeholderDescription',
-                      )}
-                      size="large"
-                      rows={5}
-                    />
+                  <FormItem name="descriptionEn" label="Description">
+                    <Input.TextArea rows={4} />
                   </FormItem>
                 </>
               ),
@@ -287,86 +160,15 @@ const ProductForm = ({
 
         <Form.Item label={t('admin.product.form.totalStock')} className="mb-0">
           <InputNumber
-            value={totalVariantStock}
+            value={totalStock}
             disabled
             className="w-full"
             size="large"
           />
         </Form.Item>
 
-        <div className="space-y-3 pt-1">
-          <div className="text-sm font-semibold text-slate-800">
-            {t('admin.product.form.sizesTitle')}
-          </div>
-          <div className="max-h-[min(420px,55vh)] overflow-y-auto overflow-x-hidden space-y-3 pr-1">
-            {sizeFields.map((sizeField, sizeIndex) => (
-              <div
-                key={sizeField.id}
-                className="space-y-3 rounded-md border border-slate-200 p-3"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-[160px] max-w-[240px] flex-1">
-                    <FormItem
-                      name={`sizeVariants.${sizeIndex}.size`}
-                      label={t('admin.product.form.sizeLabel')}
-                    >
-                      {({ field }) => {
-                        const selectedSizes = (sizeVariantsWatch ?? [])
-                          .map((variant) => variant?.size)
-                          .filter((size): size is string => Boolean(size));
-                        const options = PRODUCT_SIZE_SELECT_OPTIONS.map(
-                          (option) => ({
-                            ...option,
-                            disabled:
-                              option.value !== field.value &&
-                              selectedSizes.includes(option.value),
-                          }),
-                        );
-
-                        return (
-                          <Select
-                            value={field.value || undefined}
-                            onChange={(v) => field.onChange(v ?? '')}
-                            onBlur={field.onBlur}
-                            ref={field.ref}
-                            showSearch
-                            optionFilterProp="label"
-                            options={options}
-                            placeholder={t(
-                              'admin.product.form.placeholderSize',
-                            )}
-                            size="large"
-                            className="w-full"
-                          />
-                        );
-                      }}
-                    </FormItem>
-                  </div>
-                  <Button
-                    type="text"
-                    danger
-                    disabled={sizeFields.length <= 1}
-                    onClick={() => removeSize(sizeIndex)}
-                  >
-                    {t('admin.product.form.removeSize')}
-                  </Button>
-                </div>
-                <SizeColorsFields sizeIndex={sizeIndex} />
-              </div>
-            ))}
-          </div>
-          <Button
-            type="dashed"
-            block
-            onClick={() =>
-              appendSize({
-                size: '',
-                colors: [{ name: DEFAULT_SWATCH, quantity: 0 }],
-              })
-            }
-          >
-            {t('admin.product.form.addSize')}
-          </Button>
+        <div className="max-h-[500px] overflow-y-auto p-2 rounded-xl border border-slate-200">
+          <VariantFields />
         </div>
 
         <FormItem

@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userService, useAuthStore } from '@shared';
+import { Spin } from 'antd';
 
-const GoogleLoginSuccess = () => {
+const LoginSuccess = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,7 @@ const GoogleLoginSuccess = () => {
 
         navigate('/', { replace: true });
       } catch (err) {
+        console.error(err);
         useAuthStore.getState().clearSession();
         navigate('/auth', { replace: true });
       }
@@ -33,7 +35,11 @@ const GoogleLoginSuccess = () => {
     run();
   }, [navigate]);
 
-  return <div>Logging in...</div>;
+  return (
+    <div className="flex min-h-dvh items-center justify-center">
+      <Spin />
+    </div>
+  );
 };
 
-export default GoogleLoginSuccess;
+export default LoginSuccess;

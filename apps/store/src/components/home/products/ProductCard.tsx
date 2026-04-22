@@ -11,7 +11,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <article className="rounded-sm overflow-hidden">
       <div className="relative">
         <img
-          src={product.images[0]}
+          src={product.variants[0].images[0]}
           alt={product.name}
           className="h-[300px] w-full object-cover object-top"
         />

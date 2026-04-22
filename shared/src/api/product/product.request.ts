@@ -1,13 +1,15 @@
-export interface ProductColorVariant {
-  name: string;
-  quantity: number;
-}
-
-export interface ProductSizeVariant {
+export interface ProductSku {
   size: string;
-  colors: ProductColorVariant[];
+  quantity: number;
+  reserved?: number;
+  sold?: number;
 }
 
+export interface ProductVariant {
+  color: string;
+  images: string[];
+  skus: ProductSku[];
+}
 export interface CreateProductRequest {
   name: string;
   nameEn: string;
@@ -17,10 +19,8 @@ export interface CreateProductRequest {
   sku: string;
   price: number;
   status?: string;
-  images?: string[];
-  sizeVariants?: ProductSizeVariant[];
+  variants: ProductVariant[];
 }
-
 export interface UpdateProductRequest {
   name?: string;
   nameEn?: string;
@@ -30,8 +30,7 @@ export interface UpdateProductRequest {
   sku?: string;
   price?: number;
   status?: string;
-  images?: string[];
-  sizeVariants?: ProductSizeVariant[];
+  variants?: ProductVariant[];
 }
 
 export interface GetProductsRequest {

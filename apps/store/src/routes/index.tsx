@@ -3,7 +3,6 @@ import { RootLayout } from '../components/layout/RootLayout';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import CategoryPage from '../pages/CategoryPage';
 import CartPage from '../pages/CartPage/CartPage';
-import CollectionPage from '../pages/CollectionPage';
 import ProductDetailPage from '../pages/ProductDetailPage/ProductDetailPage';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import { HomePage } from '../pages/HomePage';
@@ -17,7 +16,7 @@ import UserOrderPage from '../pages/UserAccountPage/UserOrderPage';
 import OrderSuccessPage from '../pages/PaymentPage/OrderSuccessPage';
 import QrBankPage from '../pages/PaymentPage/QrBankPage';
 import { ProtectedRoute } from './ProtectedRoute';
-import GoogleLoginSuccess from '../pages/AuthPage/GoogleLoginSuccess';
+import LoginSuccess from '../pages/AuthPage/LoginSuccess';
 
 const AppRoutes = () => {
   return (
@@ -25,7 +24,7 @@ const AppRoutes = () => {
       <Route path="auth" element={<AuthPage />} />
       <Route path="login" element={<Navigate to="/auth" replace />} />
       <Route path="register" element={<Navigate to="/auth" replace />} />
-      <Route path="login-success" element={<GoogleLoginSuccess />} />
+      <Route path="login-success" element={<LoginSuccess />} />
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
         <Route path="home" element={<Navigate to="/" replace />} />
@@ -41,7 +40,6 @@ const AppRoutes = () => {
         <Route path="category/:slug" element={<CategoryPage />} />
         <Route path="products/:sku" element={<ProductDetailPage />} />
         <Route path="payment/sepay" element={<QrBankPage />} />
-        <Route path="collection/:collectionId" element={<CollectionPage />} />
         <Route
           path="wishlist"
           element={

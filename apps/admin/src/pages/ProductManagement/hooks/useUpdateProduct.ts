@@ -24,8 +24,23 @@ export const useUpdateProduct = ({
         throw new Error('Missing product id');
       }
 
-      const imageUrls = await resolveImageUrls(values.images);
-      console.log(values);
+      const variants = await Promise.all(
+        values.variants.map(async (variant) => {
+          const imageUrls = await resolveImageUrls(variant.images || []);
+
+          return {
+            color: normalizeHexColor(variant.color),
+            images: imageUrls,
+            skus: variant.skus
+              .filter((sku) => sku.size)
+              .map((sku) => ({
+                size: sku.size,
+                quantity: sku.quantity ?? 0,
+              })),
+          };
+        }),
+      );
+
       return productService.updateProduct(productId, {
         name: values.name,
         nameEn: values.nameEn,
@@ -35,28 +50,30 @@ export const useUpdateProduct = ({
         sku: values.sku,
         price: values.price,
         status: values.status ? 'active' : 'inactive',
-        images: imageUrls,
-        sizeVariants: values.sizeVariants.map((sv) => ({
-          ...sv,
-          colors: sv.colors.map((color) => ({
-            ...color,
-            name: normalizeHexColor(color.name),
-          })),
-        })),
+        variants,
       });
     },
+
     onSuccess: async (updatedProduct) => {
       message.success(t('admin.confirmModal.updateSuccess'));
+
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['products'] }),
+
         queryClient.invalidateQueries({
           queryKey: ['products', 'detail-list'],
         }),
+
         queryClient.invalidateQueries({
           queryKey: ['products', 'detail-by-sku', currentSku],
         }),
+
+        queryClient.invalidateQueries({
+          queryKey: ['products', 'detail-by-sku', updatedProduct.sku],
+        }),
       ]);
     },
+
     onError: () => {
       message.error(t('admin.product.form.updateFailed'));
     },

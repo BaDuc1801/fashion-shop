@@ -68,7 +68,7 @@ const ProductManagementPage = () => {
         key: 'name',
         render: (_, record) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Avatar shape="square" src={record.images?.[0]} />
+            <Avatar shape="square" src={record.variants?.[0]?.images?.[0]} />
             <div>{i18n.language === 'vi' ? record.name : record.nameEn}</div>
           </div>
         ),

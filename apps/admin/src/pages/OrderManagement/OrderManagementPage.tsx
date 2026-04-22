@@ -32,6 +32,7 @@ const OrderManagementPage = () => {
   const { data: orders, isLoading } = useQuery({
     queryKey: ['orders', queryParams],
     queryFn: () => orderService.getAllOrders(queryParams),
+    refetchInterval: 5000,
   });
 
   const columns: ColumnsType<OrderDetailData> = useMemo(

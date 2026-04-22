@@ -38,6 +38,7 @@ const UserOrderPage = () => {
   const { data: orders, isLoading } = useQuery({
     queryKey: ['orders', queryParams],
     queryFn: () => orderService.getMyOrders(queryParams),
+    refetchInterval: 5000,
   });
 
   const orderColumns: ColumnsType<OrderDetailData> = [
