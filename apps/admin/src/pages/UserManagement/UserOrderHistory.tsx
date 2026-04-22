@@ -10,7 +10,7 @@ import OrderItemsExpanded from './OrderItemsExpanded';
 import { useParams } from 'react-router-dom';
 
 const UserOrderHistory = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
   const { id } = useParams<{ id: string }>();
   const { page, limit, onPageChange, searchText, setSearchText, search } =
@@ -96,6 +96,7 @@ const UserOrderHistory = () => {
             <OrderItemsExpanded
               items={record.items ?? []}
               t={t}
+              language={i18n.language}
               discount={record.discount}
             />
           ),

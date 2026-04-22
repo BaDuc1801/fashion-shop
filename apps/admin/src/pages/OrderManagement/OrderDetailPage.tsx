@@ -22,6 +22,7 @@ import { useForm, Controller } from 'react-hook-form';
 type OrderItem = {
   productId: string;
   nameSnapshot: string;
+  nameEnSnapshot: string;
   imageSnapshot: string;
   skuSnapshot: string;
   price: number;
@@ -40,6 +41,7 @@ const OrderDetailPage = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   const { data: order, isLoading } = useQuery({
     queryKey: ['order', id],
@@ -109,7 +111,9 @@ const OrderDetailPage = () => {
           </Avatar>
 
           <div>
-            <div className="font-medium">{row.nameSnapshot}</div>
+            <div className="font-medium">
+              {i18n.language === 'en' ? row.nameEnSnapshot : row.nameSnapshot}
+            </div>
             <div className="text-xs text-slate-500">{row.skuSnapshot}</div>
             <div className="text-xs text-slate-400 flex items-center gap-1">
               {row.size} /

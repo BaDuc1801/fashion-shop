@@ -44,6 +44,7 @@ export interface OrderDetailData {
   items: {
     productId: string;
     nameSnapshot: string;
+    nameEnSnapshot: string;
     reviewed: boolean;
     canReview: boolean;
     imageSnapshot: string;

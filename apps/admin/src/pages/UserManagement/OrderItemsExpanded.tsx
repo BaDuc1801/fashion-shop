@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom';
 interface Props {
   items: OrderDetailData['items'];
   t: TFunction;
+  language: string;
   discount: OrderDetailDiscount;
 }
 
-const OrderItemsExpanded = ({ items, t, discount }: Props) => {
+const OrderItemsExpanded = ({ items, t, language, discount }: Props) => {
   const navigate = useNavigate();
 
   return (
@@ -28,7 +29,9 @@ const OrderItemsExpanded = ({ items, t, discount }: Props) => {
               className="w-12 h-12 object-cover rounded"
             />
             <div>
-              <div className="font-medium">{item.nameSnapshot}</div>
+              <div className="font-medium">
+                {language === 'en' ? item.nameEnSnapshot : item.nameSnapshot}
+              </div>
               <div className="text-xs text-gray-500 flex items-center gap-2">
                 {t('size')}: {item.size} | {t('color')}:
                 <span

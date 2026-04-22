@@ -9,11 +9,18 @@ import { Tooltip } from 'antd';
 interface Props {
   items: OrderDetailData['items'];
   t: TFunction;
+  language: string;
   discount: OrderDetailDiscount;
   orderId: string;
 }
 
-const OrderItemsExpanded = ({ items, t, discount, orderId }: Props) => {
+const OrderItemsExpanded = ({
+  items,
+  t,
+  language,
+  discount,
+  orderId,
+}: Props) => {
   const navigate = useNavigate();
   const [openReviewModal, setOpenReviewModal] = useState(false);
 
@@ -35,7 +42,9 @@ const OrderItemsExpanded = ({ items, t, discount, orderId }: Props) => {
                 className="w-12 h-12 object-cover rounded"
               />
               <div>
-                <div className="font-medium">{item.nameSnapshot}</div>
+                <div className="font-medium">
+                  {language === 'en' ? item.nameEnSnapshot : item.nameSnapshot}
+                </div>
                 <div className="text-xs text-gray-500 flex items-center gap-2">
                   {t('size')}: {item.size} | {t('color')}:
                   <span

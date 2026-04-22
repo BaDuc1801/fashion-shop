@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const UserOrderPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
   const [params, setSearchParams] = useSearchParams();
@@ -125,6 +125,7 @@ const UserOrderPage = () => {
             <OrderItemsExpanded
               items={record.items ?? []}
               t={t}
+              language={i18n.language}
               discount={record.discount}
               orderId={record._id}
             />
