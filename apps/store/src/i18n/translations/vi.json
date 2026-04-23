@@ -210,5 +210,8 @@
   "noMoreNotifications": "Không có thông báo nữa",
   "sessionExpired": "Phiên đăng nhập đã hết hạn",
   "pleaseLogin": "Vui lòng đăng nhập để thực hiện hành động này",
-  "continueAsGuest": "Tiếp tục dưới dạng khách"
+  "continueAsGuest": "Tiếp tục dưới dạng khách",
+  "summary": "Chi tiết đơn hàng",
+  "subtotal": "Tạm tính",
+  "total": "Tổng"
 }

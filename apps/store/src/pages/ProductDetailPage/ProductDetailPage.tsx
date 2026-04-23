@@ -21,6 +21,7 @@ const ProductDetailPage = () => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColorId, setSelectedColorId] = useState<string>('');
+  const [quantity, setQuantity] = useState(1);
 
   const { data, isLoading } = useQuery({
     queryKey: ['product', sku, i18n.language],
@@ -107,7 +108,7 @@ const ProductDetailPage = () => {
         </div>
 
         {/* Info */}
-        <div className="flex-1 flex flex-col justify-between h-[520px]">
+        <div className="flex-1 flex flex-col justify-between h-fit gap-4">
           <div className="flex items-start justify-between">
             <h1 className="text-2xl font-semibold text-slate-900">
               {i18n.language === 'en' ? data.nameEn : data.name}
@@ -136,7 +137,7 @@ const ProductDetailPage = () => {
             </Tooltip>
           </div>
 
-          <p className="text-base text-slate-600 max-w-[520px]">
+          <p className="text-base text-slate-600 max-w-[520px] text-justify">
             {i18n.language === 'en' ? data.descriptionEn : data.description}
           </p>
 
@@ -147,81 +148,100 @@ const ProductDetailPage = () => {
           </div>
 
           {/* Stock */}
-          <div>
+          {/* <div>
             <div className="text-sm font-semibold">{t('product.stock')}</div>
             <div className="text-xl font-bold">
               {selectedVariant?.skus.find((s) => s.size === selectedSize)
                 ?.quantity ?? 0}
             </div>
+          </div> */}
+
+          {/* <div className="flex gap-8"> */}
+          {/* Size */}
+          <div>
+            <div className="text-sm font-semibold">
+              {t('product.selectSize')}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {selectedVariant?.skus.map((v) => {
+                const active = v.size === selectedSize;
+                return (
+                  <button
+                    key={v.size}
+                    disabled={selectedVariant?.skus.every(
+                      (s) => s.quantity === 0,
+                    )}
+                    onClick={() => setSelectedSize(v.size)}
+                    className={[
+                      'relative h-10 min-w-10 px-3 rounded-full border flex items-center justify-center',
+                      active
+                        ? 'border-pink-300 bg-pink-50'
+                        : 'border-slate-200',
+                      selectedVariant?.skus.every((s) => s.quantity === 0)
+                        ? 'cursor-not-allowed opacity-60'
+                        : '',
+                    ].join(' ')}
+                  >
+                    {v.size}
+                    {selectedVariant?.skus.every((s) => s.quantity === 0) && (
+                      <span className="absolute text-red-400 text-xl font-bold">
+                        ✕
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex gap-8">
-            {/* Size */}
-            <div>
-              <div className="text-sm font-semibold">
-                {t('product.selectSize')}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {selectedVariant?.skus.map((v) => {
-                  const active = v.size === selectedSize;
-                  return (
-                    <button
-                      key={v.size}
-                      disabled={selectedVariant?.skus.every(
-                        (s) => s.quantity === 0,
-                      )}
-                      onClick={() => setSelectedSize(v.size)}
-                      className={[
-                        'relative h-10 min-w-10 px-3 rounded-full border flex items-center justify-center',
-                        active
-                          ? 'border-pink-300 bg-pink-50'
-                          : 'border-slate-200',
-                        selectedVariant?.skus.every((s) => s.quantity === 0)
-                          ? 'cursor-not-allowed opacity-60'
-                          : '',
-                      ].join(' ')}
-                    >
-                      {v.size}
-                      {selectedVariant?.skus.every((s) => s.quantity === 0) && (
-                        <span className="absolute text-red-400 text-xl font-bold">
-                          ✕
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Color */}
+          <div>
+            <div className="text-sm font-semibold">
+              {t('product.selectColor')}
+            </div>
+            <div className="flex gap-2">
+              {data.variants.map((v) => (
+                <button
+                  key={v.color}
+                  onClick={() => {
+                    setSelectedColorId(v.color);
+
+                    const firstSize = v.skus.find((s) => s.quantity > 0)?.size;
+
+                    setSelectedSize(firstSize || '');
+                  }}
+                  className={[
+                    'w-10 h-10 border',
+                    selectedColorId === v.color
+                      ? 'border-pink-400'
+                      : 'border-gray-300',
+                  ].join(' ')}
+                  style={{ backgroundColor: v.color }}
+                />
+              ))}
+            </div>
+          </div>
+          {/* </div> */}
+          <div className="my-2 flex items-center gap-2">
+            <button
+              disabled={isLoading}
+              onClick={() => setQuantity(quantity - 1)}
+              className="h-8 w-8 rounded-full border border-slate-300"
+            >
+              −
+            </button>
+
+            <div className="min-w-6 text-center text-sm font-semibold">
+              {quantity}
             </div>
 
-            {/* Color */}
-            <div>
-              <div className="text-sm font-semibold">
-                {t('product.selectColor')}
-              </div>
-              <div className="flex gap-2">
-                {data.variants.map((v) => (
-                  <button
-                    key={v.color}
-                    onClick={() => {
-                      setSelectedColorId(v.color);
-
-                      const firstSize = v.skus.find(
-                        (s) => s.quantity > 0,
-                      )?.size;
-
-                      setSelectedSize(firstSize || '');
-                    }}
-                    className={[
-                      'w-10 h-10 border',
-                      selectedColorId === v.color
-                        ? 'border-pink-400'
-                        : 'border-gray-300',
-                    ].join(' ')}
-                    style={{ backgroundColor: v.color }}
-                  />
-                ))}
-              </div>
-            </div>
+            <button
+              disabled={isLoading}
+              onClick={() => setQuantity(quantity + 1)}
+              className="h-8 w-8 rounded-full border border-slate-300"
+            >
+              +
+            </button>
           </div>
           {/* Actions */}
           <Tooltip title={!user ? t('pleaseLogin') : ''}>
@@ -234,6 +254,7 @@ const ProductDetailPage = () => {
                     productId: data._id,
                     size: selectedSize,
                     color: selectedColorId,
+                    quantity: quantity,
                   })
                 }
                 disabled={!user}
@@ -248,6 +269,7 @@ const ProductDetailPage = () => {
                       buyNowItem: {
                         productId: data._id,
                         name: data.name,
+                        nameEn: data.nameEn,
                         image: selectedVariant?.images[0],
                         price: data.price,
                         size: selectedSize,

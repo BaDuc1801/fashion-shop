@@ -11,12 +11,14 @@ export const useToggleCart = () => {
       productId,
       size,
       color,
+      quantity,
     }: {
       productId: string;
       size: string;
       color: string;
+      quantity: number;
     }) => {
-      return userService.addToCart({ productId, size, color });
+      return userService.addToCart({ productId, size, color, quantity });
     },
 
     onSuccess: () => {

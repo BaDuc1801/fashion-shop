@@ -210,5 +210,8 @@
   "noMoreNotifications": "No more notifications",
   "sessionExpired": "Session expired",
   "pleaseLogin": "Please login to perform this action",
-  "continueAsGuest": "Continue as guest"
+  "continueAsGuest": "Continue as guest",
+  "summary": "Order summary",
+  "subtotal": "Subtotal",
+  "total": "Total"
 }

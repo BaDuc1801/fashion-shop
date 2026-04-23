@@ -4,8 +4,7 @@ import { userService } from '@shared';
 import { useQuery } from '@tanstack/react-query';
 
 const WishlistPage = () => {
-  const { t } = useTranslation();
-
+  const { t, i18n } = useTranslation();
   const { data, isLoading, error } = useQuery({
     queryKey: ['wishlist'],
     queryFn: () => {
@@ -41,7 +40,7 @@ const WishlistPage = () => {
             >
               <div className="relative">
                 <img
-                  src={it.images?.[0] || ''}
+                  src={it.variants[0].images?.[0] || ''}
                   alt={it.name}
                   className="h-[220px] w-full object-cover"
                 />
@@ -49,7 +48,7 @@ const WishlistPage = () => {
 
               <div className="px-3 pb-3 pt-2">
                 <div className="truncate text-sm font-semibold text-slate-900">
-                  {it.name}
+                  {i18n.language === 'en' ? it.nameEn : it.name}
                 </div>
 
                 <div className="mt-1 text-sm font-bold text-slate-900">

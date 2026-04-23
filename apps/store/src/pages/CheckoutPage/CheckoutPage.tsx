@@ -3,7 +3,13 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FormItem, useAuthStore, userService, voucherService } from '@shared';
+import {
+  CartItem,
+  FormItem,
+  useAuthStore,
+  userService,
+  voucherService,
+} from '@shared';
 import { getVoucherDiscount } from '../CartPage/utils/getDiscountVoucher';
 import VoucherSection from '../CartPage/components/VoucherSection';
 import PaymentMethodForm from './PaymentMethodForm';
@@ -18,7 +24,7 @@ import useOrderSubmit from './hooks/useOrderSubmit';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const CheckoutPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { state } = useLocation();
   const { user } = useAuthStore();
 
@@ -58,7 +64,12 @@ const CheckoutPage = () => {
           product: {
             _id: buyNowItem.productId,
             name: buyNowItem.name,
-            images: [buyNowItem.image],
+            nameEn: buyNowItem.nameEn,
+            variants: [
+              {
+                images: [buyNowItem.image],
+              },
+            ],
             price: buyNowItem.price,
           },
           size: buyNowItem.size,
@@ -95,7 +106,7 @@ const CheckoutPage = () => {
 
   const { createOrder, isLoading } = useCreateOrder();
   const { onCheckoutSubmit } = useOrderSubmit({
-    cartData: displayItems,
+    cartData: displayItems as CartItem[],
     selectedVoucher,
     createOrder,
   });
@@ -147,12 +158,17 @@ const CheckoutPage = () => {
           {/* RIGHT */}
           <div>
             <div className="border p-4 rounded-lg">
-              <h2 className="font-semibold mb-4">Summary</h2>
+              <h2 className="font-semibold mb-4">{t('summary')}</h2>
 
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
+                  <span>{t('subtotal')}</span>
                   <span>${subtotal}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>{t('cart.estimatedDelivery')}</span>
+                  <span className="font-semibold">{t('cart.free')}</span>
                 </div>
 
                 <VoucherSection
@@ -168,7 +184,7 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="border-t pt-2 flex justify-between font-semibold">
-                  <span>Total</span>
+                  <span>{t('total')}</span>
                   <span>${total}</span>
                 </div>
               </div>
@@ -193,12 +209,20 @@ const CheckoutPage = () => {
                 >
                   <div className="flex gap-4">
                     <img
-                      src={it.product.images?.[0]}
+                      src={it.product.variants[0].images?.[0]}
                       className="w-20 h-20 object-cover"
-                      alt={it.product.name}
+                      alt={
+                        i18n.language === 'en'
+                          ? it.product.nameEn
+                          : it.product.name
+                      }
                     />
                     <div className="flex flex-col justify-between">
-                      <div className="font-medium">{it.product.name}</div>
+                      <div className="font-medium">
+                        {i18n.language === 'en'
+                          ? it.product.nameEn
+                          : it.product.name}
+                      </div>
                       <div className="text-sm text-gray-500 flex items-center gap-2">
                         {t('product.selectSize')}: {it.size} |{' '}
                         {t('product.selectColor')}:{' '}

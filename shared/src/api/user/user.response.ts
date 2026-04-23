@@ -1,3 +1,6 @@
+import { ProductVariant } from '../product/product.request';
+import { Product } from '../product/product.response';
+
 export interface SendOtpResponse {
   message: string;
   otpExpiresAt?: string;
@@ -7,18 +10,14 @@ export interface SendOtpResponse {
 export interface WishlistItem {
   _id: string;
   name: string;
+  nameEn: string;
   price: number;
-  images: string[];
+  variants: ProductVariant[];
   sku: string;
 }
 
 export interface CartItem {
-  product: {
-    _id: string;
-    name: string;
-    price: number;
-    images: string[];
-  };
+  product: Product;
   size: string;
   color: string;
   quantity: number;
