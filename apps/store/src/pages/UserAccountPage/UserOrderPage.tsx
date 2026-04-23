@@ -1,6 +1,6 @@
 import { OrderDetailData, orderService, useTableQuery } from '@shared';
 import { useQuery } from '@tanstack/react-query';
-import { Input, Tag } from 'antd';
+import { Button, Input, message, Tag } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -40,6 +40,16 @@ const UserOrderPage = () => {
     queryFn: () => orderService.getMyOrders(queryParams),
     refetchInterval: 5000,
   });
+
+  const handleCancelOrder = async (orderId: string) => {
+    try {
+      await orderService.cancelOrder(orderId as string);
+      message.success(t('cancelOrderSuccess'));
+    } catch (error) {
+      console.error(error);
+      message.error(t('cancelOrderFailed'));
+    }
+  };
 
   const orderColumns: ColumnsType<OrderDetailData> = [
     {
@@ -84,6 +94,22 @@ const UserOrderPage = () => {
       dataIndex: 'total',
       render: (text) => <span>{formatUsd(text)}</span>,
       sorter: (a, b) => a.total - b.total,
+    },
+    {
+      title: t('action'),
+      dataIndex: 'action',
+      render: (_, record) =>
+        record.orderStatus === 'pending' &&
+        record.paymentMethod === 'cod' && (
+          <Button
+            type="text"
+            size="small"
+            danger
+            onClick={() => handleCancelOrder(record._id)}
+          >
+            {t('cancelOrder')}
+          </Button>
+        ),
     },
   ];
 

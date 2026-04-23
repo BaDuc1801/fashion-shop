@@ -25,7 +25,7 @@ const OrderItemsExpanded = ({
   const [openReviewModal, setOpenReviewModal] = useState(false);
 
   return (
-    <div className="bg-gray-50 rounded ps-12 pe-[52px]">
+    <div className="bg-gray-50 rounded ps-12 max-w-[600px]">
       {items?.map((item, index) => {
         return (
           <div

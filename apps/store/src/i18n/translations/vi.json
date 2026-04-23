@@ -213,5 +213,7 @@
   "continueAsGuest": "Tiếp tục dưới dạng khách",
   "summary": "Chi tiết đơn hàng",
   "subtotal": "Tạm tính",
-  "total": "Tổng"
+  "total": "Tổng",
+  "cancelOrder": "Huỷ đơn hàng",
+  "action": "Hành động"
 }

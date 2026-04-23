@@ -1,11 +1,13 @@
 import { Button, Form, Input } from 'antd';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
+  AddressAutocomplete,
   CartItem,
   FormItem,
+  shippingService,
   useAuthStore,
   userService,
   voucherService,
@@ -27,6 +29,10 @@ const CheckoutPage = () => {
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
   const { user } = useAuthStore();
+  const [selectedAddress, setSelectedAddress] = useState<{
+    lat: string;
+    lng: string;
+  } | null>(null);
 
   const { buyNowItem } = state ?? {};
 
@@ -43,6 +49,18 @@ const CheckoutPage = () => {
   });
 
   const { handleSubmit, watch, setValue } = form;
+
+  const { data: shippingData } = useQuery({
+    queryKey: ['shipping-fee', selectedAddress],
+    queryFn: async () => {
+      if (!selectedAddress) return null;
+
+      return shippingService.calculateShipping(selectedAddress);
+    },
+    enabled: !!selectedAddress,
+  });
+
+  const shippingFee = shippingData?.shippingFee || 0;
 
   const { data: cartData } = useQuery({
     queryKey: ['cart'],
@@ -102,7 +120,7 @@ const CheckoutPage = () => {
     );
   }, [selectedVoucher, subtotal, vouchersData?.data]);
 
-  const total = Math.max(0, subtotal - discount);
+  const total = Math.max(0, subtotal - discount + shippingFee);
 
   const { createOrder, isLoading } = useCreateOrder();
   const { onCheckoutSubmit } = useOrderSubmit({
@@ -132,10 +150,19 @@ const CheckoutPage = () => {
             </FormItem>
 
             <FormItem name="address">
-              <Input.TextArea
-                rows={3}
-                placeholder={t('auth.address')}
-                size="large"
+              <AddressAutocomplete
+                onSelect={(data: {
+                  address: string;
+                  lat: string;
+                  lng: string;
+                }) => {
+                  setValue('address', data.address);
+
+                  setSelectedAddress({
+                    lat: data.lat,
+                    lng: data.lng,
+                  });
+                }}
               />
             </FormItem>
 
@@ -168,7 +195,7 @@ const CheckoutPage = () => {
 
                 <div className="flex justify-between">
                   <span>{t('cart.estimatedDelivery')}</span>
-                  <span className="font-semibold">{t('cart.free')}</span>
+                  <span className="font-semibold">${shippingFee}</span>
                 </div>
 
                 <VoucherSection

@@ -5,3 +5,7 @@ export {
   NotificationInfinityList,
   type NotificationInfinityListProps,
 } from './NotificationInfinityList';
+export {
+  AddressAutocomplete,
+  type AddressSuggestion,
+} from './AddressAutoComplete';

@@ -213,5 +213,7 @@
   "continueAsGuest": "Continue as guest",
   "summary": "Order summary",
   "subtotal": "Subtotal",
-  "total": "Total"
+  "total": "Total",
+  "cancelOrder": "Cancel order",
+  "action": "Action"
 }

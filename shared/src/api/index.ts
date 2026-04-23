@@ -23,3 +23,4 @@ export * from './dashboard/dashboard.response';
 export * from './notification/notification.api';
 export * from './notification/notification.response';
 export * from './notification/notification.request';
+export * from './shipping/shipping.api';
