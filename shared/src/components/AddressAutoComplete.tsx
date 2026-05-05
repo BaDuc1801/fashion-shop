@@ -11,11 +11,13 @@ export type AddressSuggestion = {
 };
 
 export const AddressAutocomplete = ({
+  defaultValue,
   onSelect,
 }: {
+  defaultValue?: string;
   onSelect: (address: { address: string; lat: string; lng: string }) => void;
 }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(defaultValue ?? '');
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
 
   const searchAddress = async (keyword: string) => {

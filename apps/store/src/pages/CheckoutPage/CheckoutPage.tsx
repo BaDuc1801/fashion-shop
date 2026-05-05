@@ -45,7 +45,7 @@ const CheckoutPage = () => {
       email: user?.email,
       name: user?.name,
       phone: user?.phone,
-      address: user?.address ?? '',
+      address: user?.address,
     },
   });
 
@@ -163,6 +163,7 @@ const CheckoutPage = () => {
 
             <FormItem name="address">
               <AddressAutocomplete
+                defaultValue={user?.address}
                 onSelect={(data: {
                   address: string;
                   lat: string;
