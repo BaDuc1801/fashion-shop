@@ -56,6 +56,16 @@ const RegisterContainer = ({ onRegisterSuccess }: RegisterContainerProps) => {
 
   const resendOtpMutation = useResendOtp();
 
+  const deleteUserMutation = useMutation({
+    mutationFn: () => userService.deleteUserByEmail(formValues.email.trim()),
+    onSuccess: () => {
+      localStorage.removeItem(OTP_SESSION_KEY);
+      setStep('form');
+      setOtpDigits(['', '', '', '', '', '']);
+      setError('');
+    },
+  });
+
   useEffect(() => {
     const rawSession = localStorage.getItem(OTP_SESSION_KEY);
     if (!rawSession) return;
@@ -200,6 +210,9 @@ const RegisterContainer = ({ onRegisterSuccess }: RegisterContainerProps) => {
           onVerified={handleVerifyOtp}
           onResend={handleResendOtp}
           loading={verifyOtpMutation.isPending}
+          onBack={() => {
+            deleteUserMutation.mutate();
+          }}
         />
       )}
     </div>

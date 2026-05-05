@@ -65,6 +65,7 @@
     "createAccount": "Create Account",
     "subtitle": "Sign in or create an account to continue.",
     "username": "Username",
+    "back": "Back",
     "email": "Email",
     "phoneNumber": "Phone number",
     "password": "Password",
@@ -166,6 +167,7 @@
   "requiredName": "Please enter name",
   "invalidEmail": "Invalid email",
   "requiredPhone": "Please enter phone",
+  "invalidPhoneDigits": "Phone must contain digits only (8–15 characters)",
   "requiredAddress": "Please enter address",
   "requiredPaymentMethod": "Please select payment method",
   "note": "Note",
@@ -215,5 +217,6 @@
   "subtotal": "Subtotal",
   "total": "Total",
   "cancelOrder": "Cancel order",
-  "action": "Action"
+  "action": "Action",
+  "phoneDigits": "Phone number must be 9-15 digits"
 }

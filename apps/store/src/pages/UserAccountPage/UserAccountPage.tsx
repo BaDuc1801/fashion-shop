@@ -94,7 +94,30 @@ const UserAccountPage = () => {
             <Controller
               name="phone"
               control={control}
-              render={({ field }) => <Input {...field} size="large" />}
+              rules={{
+                pattern: {
+                  value: /^[0-9]{9,15}$/,
+                  message: t('phoneDigits'),
+                },
+              }}
+              render={({ field, fieldState }) => (
+                <>
+                  <Input
+                    {...field}
+                    size="large"
+                    status={fieldState.error ? 'error' : ''}
+                    onChange={(e) => {
+                      const onlyNumber = e.target.value.replace(/\D/g, '');
+                      field.onChange(onlyNumber);
+                    }}
+                  />
+                  {fieldState.error && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {fieldState.error.message}
+                    </p>
+                  )}
+                </>
+              )}
             />
           </div>
 

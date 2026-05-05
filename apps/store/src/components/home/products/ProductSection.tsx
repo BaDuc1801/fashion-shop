@@ -37,7 +37,7 @@ const OutProductsSection = () => {
   const hasData = data?.data && data?.data?.length > 0;
 
   return (
-    <section className="mt-20 flex flex-col justify-center mx-[200px]">
+    <section className="mt-20 flex flex-col justify-center mx-[200px] mb-8">
       <h2 className="text-2xl font-bold w-full text-center">
         {t('home.outProducts')}
       </h2>

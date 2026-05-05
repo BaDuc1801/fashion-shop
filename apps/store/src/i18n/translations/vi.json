@@ -65,6 +65,7 @@
     "createAccount": "Tạo tài khoản",
     "subtitle": "Đăng nhập hoặc tạo tài khoản để tiếp tục.",
     "username": "Tên người dùng",
+    "back": "Quay lại",
     "email": "Email",
     "phoneNumber": "Số điện thoại",
     "password": "Mật khẩu",
@@ -166,6 +167,7 @@
   "requiredName": "Vui lòng nhập họ tên",
   "invalidEmail": "Email không hợp lệ",
   "requiredPhone": "Vui lòng nhập số điện thoại",
+  "invalidPhoneDigits": "Số điện thoại chỉ gồm chữ số, từ 8 đến 15 ký tự",
   "requiredAddress": "Vui lòng nhập địa chỉ",
   "requiredPaymentMethod": "Vui lòng chọn phương thức thanh toán",
   "note": "Ghi chú",
@@ -215,5 +217,6 @@
   "subtotal": "Tạm tính",
   "total": "Tổng",
   "cancelOrder": "Huỷ đơn hàng",
-  "action": "Hành động"
+  "action": "Hành động",
+  "phoneDigits": "Số điện thoại phải có 9-15 chữ số"
 }

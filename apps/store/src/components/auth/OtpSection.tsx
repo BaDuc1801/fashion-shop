@@ -14,6 +14,7 @@ type OtpSectionProps = {
   setError: (error: string) => void;
   onVerified: (otp: string) => void;
   onResend: () => void;
+  onBack: () => void;
 };
 
 const OtpSection = ({
@@ -28,6 +29,7 @@ const OtpSection = ({
   setError,
   onVerified,
   onResend,
+  onBack,
 }: OtpSectionProps) => {
   const otpRefs = useRef<Array<InputRef | null>>([]);
   const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
@@ -93,50 +95,61 @@ const OtpSection = ({
   };
 
   return (
-    <div className="mt-8 space-y-8">
-      <p className="text-sm text-slate-600">{t('auth.otpHint')}</p>
-      <div className="flex items-center justify-center gap-2">
-        {otpDigits.map((digit, index) => (
-          <Input
-            key={index}
-            size="large"
-            value={digit}
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            maxLength={1}
-            onPaste={handleOtpPaste}
-            onChange={(e) => handleOtpChange(index, e.target.value)}
-            onKeyDown={(e) => handleOtpKeyDown(index, e)}
-            ref={(el) => {
-              otpRefs.current[index] = el;
-            }}
-            className="h-12 w-12 !text-center"
-          />
-        ))}
-      </div>
-      {error ? <p className="text-sm text-red-500">{error}</p> : null}
-      <div className="flex items-center justify-between text-sm text-slate-500">
-        <span>{t('auth.otpExpiresIn', { time: `${minutes}:${seconds}` })}</span>
+    <div>
+      <button
+        type="button"
+        className="text-sm text-slate-500 underline mb-4"
+        onClick={onBack}
+      >
+        {t('auth.back')}
+      </button>
+      <div className="space-y-8">
+        <p className="text-sm text-slate-600">{t('auth.otpHint')}</p>
+        <div className="flex items-center justify-center gap-2">
+          {otpDigits.map((digit, index) => (
+            <Input
+              key={index}
+              size="large"
+              value={digit}
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={1}
+              onPaste={handleOtpPaste}
+              onChange={(e) => handleOtpChange(index, e.target.value)}
+              onKeyDown={(e) => handleOtpKeyDown(index, e)}
+              ref={(el) => {
+                otpRefs.current[index] = el;
+              }}
+              className="h-12 w-12 !text-center"
+            />
+          ))}
+        </div>
+        {error ? <p className="text-sm text-red-500">{error}</p> : null}
+        <div className="flex items-center justify-between text-sm text-slate-500">
+          <span>
+            {t('auth.otpExpiresIn', { time: `${minutes}:${seconds}` })}
+          </span>
+          <Button
+            type="link"
+            className="!px-0"
+            onClick={onResend}
+            disabled={!canResend || resendLoading}
+            loading={resendLoading}
+          >
+            {t('auth.resendOtp')}
+          </Button>
+        </div>
         <Button
-          type="link"
-          className="!px-0"
-          onClick={onResend}
-          disabled={!canResend || resendLoading}
-          loading={resendLoading}
+          type="primary"
+          size="large"
+          loading={loading}
+          disabled={loading}
+          className="!h-11 w-full rounded-md !bg-[#a66e7f] hover:!bg-[#8d5c6d]"
+          onClick={handleVerifyOtp}
         >
-          {t('auth.resendOtp')}
+          {t('auth.verifyOtp')}
         </Button>
       </div>
-      <Button
-        type="primary"
-        size="large"
-        loading={loading}
-        disabled={loading}
-        className="!h-11 w-full rounded-md !bg-[#a66e7f] hover:!bg-[#8d5c6d]"
-        onClick={handleVerifyOtp}
-      >
-        {t('auth.verifyOtp')}
-      </Button>
     </div>
   );
 };

@@ -41,6 +41,7 @@ export const AddressAutocomplete = ({
   return (
     <div className="relative">
       <Input
+        required
         value={value}
         size="large"
         placeholder="Enter address"

@@ -292,6 +292,13 @@ const AuthPage = () => {
                     onVerified={handleVerifyForgotOtp}
                     onResend={handleResendForgotOtp}
                     loading={verifyOtpMutation.isPending}
+                    onBack={() => {
+                      localStorage.removeItem(OTP_SESSION_KEY);
+                      setForgotStep('email');
+                      setError('');
+                      setForgotOtpDigits(['', '', '', '', '', '']);
+                      setOtpDeadlineMs(null);
+                    }}
                   />
                   <Button
                     type="link"

@@ -32,10 +32,6 @@ const SearchProduct = () => {
         onChange={(e) => setSearchText(e.target.value)}
         onFocus={() => setOpenSearch(true)}
         onBlur={() => setTimeout(() => setOpenSearch(false), 200)}
-        onSearch={(value) => {
-          if (!value.trim()) return;
-          navigate(`/search?q=${value}`);
-        }}
       />
 
       {openSearch && searchText && (
@@ -56,7 +52,7 @@ const SearchProduct = () => {
                 className="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
               >
                 <img
-                  src={p.images?.[0]}
+                  src={p.variants[0].images?.[0]}
                   className="w-10 h-10 rounded object-cover"
                   alt={p.name}
                 />

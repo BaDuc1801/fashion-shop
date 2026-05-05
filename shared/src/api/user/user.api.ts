@@ -157,6 +157,13 @@ class UserService {
     });
     return res.data;
   }
+
+  async deleteUserByEmail(email: string): Promise<{ message: string }> {
+    const res = await api.delete(`/api/users/delete/email`, {
+      data: { email },
+    });
+    return res.data;
+  }
 }
 
 export const userService = new UserService();

@@ -38,6 +38,7 @@ const CheckoutPage = () => {
 
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema(t)),
+    mode: 'onSubmit',
     defaultValues: {
       ...orderFormSchemaDefaultValues,
       voucherId: state?.voucherId,
@@ -146,7 +147,18 @@ const CheckoutPage = () => {
             </FormItem>
 
             <FormItem name="phone">
-              <Input placeholder={t('auth.phoneNumber')} size="large" />
+              {({ field }) => (
+                <Input
+                  required
+                  {...field}
+                  size="large"
+                  placeholder={t('auth.phoneNumber')}
+                  onChange={(e) => {
+                    const onlyNumber = e.target.value.replace(/\D/g, '');
+                    field.onChange(onlyNumber);
+                  }}
+                />
+              )}
             </FormItem>
 
             <FormItem name="address">
@@ -157,7 +169,6 @@ const CheckoutPage = () => {
                   lng: string;
                 }) => {
                   setValue('address', data.address);
-
                   setSelectedAddress({
                     lat: data.lat,
                     lng: data.lng,
@@ -254,7 +265,7 @@ const CheckoutPage = () => {
                         {t('product.selectSize')}: {it.size} |{' '}
                         {t('product.selectColor')}:{' '}
                         <div
-                          className="size-4 rounded-md"
+                          className="size-4 rounded-md shadow-md"
                           style={{ backgroundColor: it.color }}
                         />
                       </div>
