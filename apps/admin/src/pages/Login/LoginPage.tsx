@@ -61,6 +61,8 @@ const LoginPage = () => {
       userService.resetPassword(args),
   });
 
+  const [form] = Form.useForm();
+
   const canResendOtp = remainingSeconds <= 0;
   const forgotOtpValue = useMemo(
     () => forgotOtpDigits.join(''),
@@ -81,7 +83,10 @@ const LoginPage = () => {
       return;
     }
     const tick = () => {
-      const seconds = Math.max(0, Math.ceil((otpDeadlineMs - Date.now()) / 1000));
+      const seconds = Math.max(
+        0,
+        Math.ceil((otpDeadlineMs - Date.now()) / 1000),
+      );
       setRemainingSeconds(seconds);
     };
     tick();
@@ -243,7 +248,12 @@ const LoginPage = () => {
         title={t('admin.auth.title')}
         className="w-full max-w-md text-center"
       >
-        <Form layout="vertical" onFinish={handleSubmit} className="space-y-4">
+        <Form
+          layout="vertical"
+          form={form}
+          onFinish={handleSubmit}
+          className="space-y-4"
+        >
           <Form.Item
             name="email"
             label={t('admin.auth.email')}

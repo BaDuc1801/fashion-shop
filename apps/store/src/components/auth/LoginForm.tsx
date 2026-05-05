@@ -27,7 +27,15 @@ const LoginForm = ({
   const navigate = useNavigate();
 
   return (
-    <div className="mt-8 space-y-4">
+    <div
+      className="mt-8 space-y-4"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          onSubmit();
+        }
+      }}
+    >
       <Input
         size="large"
         placeholder={t('auth.email')}
@@ -42,19 +50,21 @@ const LoginForm = ({
         autoComplete="new-password"
         onChange={(e) => onPasswordChange(e.target.value)}
       />
-      <div
-        className="flex items-center justify-between"
-      >
-      <button
-        type="button"
-        className="text-sm text-slate-500 underline"
-        onClick={onForgotPassword}
-      >
-        {t('auth.forgotPassword')}
-      </button>
-      <button type="button" className="text-sm text-slate-500 underline" onClick={() => navigate('/')}>
-        {t('continueAsGuest')}
-      </button>
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          className="text-sm text-slate-500 underline"
+          onClick={onForgotPassword}
+        >
+          {t('auth.forgotPassword')}
+        </button>
+        <button
+          type="button"
+          className="text-sm text-slate-500 underline"
+          onClick={() => navigate('/')}
+        >
+          {t('continueAsGuest')}
+        </button>
       </div>
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
       <Button

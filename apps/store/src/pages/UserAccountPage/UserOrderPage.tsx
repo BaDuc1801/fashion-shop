@@ -113,6 +113,24 @@ const UserOrderPage = () => {
     },
   ];
 
+  useEffect(() => {
+    if (!orders?.orders?.length) return;
+
+    const expanded = orders.orders
+      .filter((order) => {
+        const isCompleted = order.orderStatus === 'completed';
+
+        const hasUnreviewedItem = order.items?.some(
+          (item) => item.reviewed === false,
+        );
+
+        return isCompleted && hasUnreviewedItem;
+      })
+      .map((order) => order._id);
+
+    setExpandedRowKeys(expanded);
+  }, [orders]);
+
   return (
     <div className="px-[200px] py-[40px]">
       <div className="flex items-center justify-between mb-4">
