@@ -34,9 +34,10 @@ const formatMoney = (n: number) =>
 
 interface Props {
   t: TFunction;
+  isAdmin: boolean;
 }
 
-const StatisticSection = ({ t }: Props) => {
+const StatisticSection = ({ t, isAdmin }: Props) => {
   const [range, setRange] = useState<string>('1d');
 
   const summaryQuery = useQuery({
@@ -68,7 +69,9 @@ const StatisticSection = ({ t }: Props) => {
               <div>
                 <p className="text-base">{t('revenue')}</p>
                 <h2 className="text-xl font-semibold my-2">
-                  {formatMoney(summaryQuery.data?.revenue.current || 0)}
+                  {!isAdmin
+                    ? formatMoney(summaryQuery.data?.revenue.current || 0)
+                    : '$ XXXX'}
                 </h2>
                 <ChangeTag percent={summaryQuery.data?.revenue.change || 0} />
               </div>

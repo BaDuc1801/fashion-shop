@@ -536,5 +536,8 @@
   "noNotifications": "No notifications",
   "loading": "Loading...",
   "noMoreNotifications": "No more notifications",
-  "sessionExpired": "Session expired"
+  "sessionExpired": "Session expired",
+  "reviewDetail": "Review detail",
+  "toxicReason": "Toxic reason",
+  "save": "Save"
 }

@@ -73,7 +73,10 @@ const CartPage = () => {
           <span className="text-sm">
             <Trans
               i18nKey="product.removeItemConfirm"
-              values={{ name: it.product.name }}
+              values={{
+                name:
+                  i18n.language === 'en' ? it.product.nameEn : it.product.name,
+              }}
               components={[<span className="font-semibold" />]}
             />
           </span>

@@ -539,5 +539,8 @@
   "noNotifications": "Không có thông báo",
   "loading": "Đang tải...",
   "noMoreNotifications": "Không có thông báo nữa",
-  "sessionExpired": "Phiên đăng nhập đã hết hạn"
+  "sessionExpired": "Phiên đăng nhập đã hết hạn",
+  "reviewDetail": "Chi tiết đánh giá",
+  "toxicReason": "Lý do độc hại",
+  "save": "Lưu"
 }

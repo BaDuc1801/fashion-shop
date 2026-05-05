@@ -89,7 +89,7 @@ const SidebarMenu = () => {
         icon: <AppstoreOutlined className="!text-base" />,
         label: t('admin.nav.categories'),
       },
-      {
+      isAdmin && {
         key: '/vouchers',
         icon: <GiftOutlined className="!text-base" />,
         label: t('admin.nav.vouchers'),

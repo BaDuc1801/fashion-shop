@@ -1,6 +1,10 @@
 import api from '../axios';
 import { CreateRatingRequest, UpdateRatingRequest } from './rating.request';
-import { RatingAdminResponse, RatingResponse } from './rating.response';
+import {
+  MaskedSelection,
+  RatingAdminResponse,
+  RatingResponse,
+} from './rating.response';
 
 class RatingService {
   async createRating(payload: CreateRatingRequest): Promise<RatingResponse> {
@@ -50,6 +54,11 @@ class RatingService {
 
   async togglePublish(id: string): Promise<{ message: string }> {
     const res = await api.put(`/api/ratings/admin/toggle-publish/${id}`);
+    return res.data;
+  }
+
+  async maskComment(payload: MaskedSelection): Promise<{ message: string }> {
+    const res = await api.post(`/api/ratings/mask-comment`, payload);
     return res.data;
   }
 }

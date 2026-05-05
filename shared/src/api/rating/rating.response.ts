@@ -16,9 +16,19 @@ export interface RatingResponse {
   isPublic: boolean;
   verifiedPurchase: boolean;
   updatedAt: string;
+  isToxic: boolean;
+  toxicityReason: string;
+  toxicityReasonEn: number;
+  maskedComment: string;
+  maskedRanges: [number, number][];
 }
 
 export interface RatingAdminResponse {
   data: RatingResponse[];
   total: number;
+}
+
+export interface MaskedSelection {
+  ratingId: string;
+  ranges: [number, number][];
 }

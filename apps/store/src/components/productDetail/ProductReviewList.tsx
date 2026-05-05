@@ -62,7 +62,7 @@ const ProductReviewList = ({
 
             <Rate disabled value={review.rating} className="mt-2 text-sm" />
             <p className="mt-2 text-sm leading-6 text-slate-700">
-              {review.comment}
+              {review.maskedComment || review.comment}
             </p>
             {review.images?.length ? (
               <div className="mt-3 flex flex-wrap gap-2">
