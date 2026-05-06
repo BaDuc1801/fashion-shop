@@ -218,5 +218,9 @@
   "total": "Tổng",
   "cancelOrder": "Huỷ đơn hàng",
   "action": "Hành động",
-  "phoneDigits": "Số điện thoại phải có 9-15 chữ số"
+  "phoneDigits": "Số điện thoại phải có 9-15 chữ số",
+  "find": "Khám phá",
+  "notSureWhatToChoose": "Bạn không biết chọn gì?",
+  "letOurAIHelpYouFindThePerfectOutfit": "Hãy để AI của chúng tôi giúp bạn tìm ra bộ đồ hoàn hảo",
+  "searchRecommendProduct": "eg: Tôi muốn mua bộ đồ cho nam phù hợp đi biển..."
 }

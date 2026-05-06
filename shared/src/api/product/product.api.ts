@@ -56,6 +56,11 @@ class ProductService {
     const res = await api.get('/api/products/admin/top-purchased', { params });
     return res.data;
   }
+
+  async getProductByPrompt(prompt: string): Promise<GetProductsResponse> {
+    const res = await api.post('/api/products/ai/recommend', { prompt });
+    return res.data;
+  }
 }
 
 export const productService = new ProductService();

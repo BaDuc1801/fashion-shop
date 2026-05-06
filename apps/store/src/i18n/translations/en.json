@@ -218,5 +218,9 @@
   "total": "Total",
   "cancelOrder": "Cancel order",
   "action": "Action",
-  "phoneDigits": "Phone number must be 9-15 digits"
+  "phoneDigits": "Phone number must be 9-15 digits",
+  "find": "Find out",
+  "notSureWhatToChoose": "Not sure what to choose?",
+  "letOurAIHelpYouFindThePerfectOutfit": "Let our AI help you find the perfect outfit",
+  "searchRecommendProduct": "e.g. I need a summer beach outfit for men..."
 }
