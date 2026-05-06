@@ -1,6 +1,6 @@
-import { Product, productService, useTableQuery } from '@shared';
+import { Product, productService, useAuthStore, useTableQuery } from '@shared';
 import { useQuery } from '@tanstack/react-query';
-import { Input, Button, Spin, Pagination } from 'antd';
+import { Input, Button, Spin, Pagination, Tooltip } from 'antd';
 import { useState } from 'react';
 import ProductCard from '../products/ProductCard';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const RecommendProductSection = () => {
   const { t } = useTranslation();
+  const { user } = useAuthStore();
   const [prompt, setPrompt] = useState('');
   const { page, onPageChange } = useTableQuery({
     defaultPage: 1,
@@ -33,27 +34,30 @@ const RecommendProductSection = () => {
         </p>
       </div>
 
-      <div className="mx-auto mb-10 flex max-w-2xl gap-2">
-        <Input
-          size="large"
-          placeholder={t('searchRecommendProduct')}
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onPressEnter={() => refetch()}
-        />
-        <Button
-          type="primary"
-          size="large"
-          disabled={isFetching}
-          className="!bg-[#fb6f92]"
-          onClick={() => {
-            refetch();
-            onPageChange(1);
-          }}
-        >
-          {t('find')}
-        </Button>
-      </div>
+      <Tooltip title={!user ? t('pleaseLogin') : ''}>
+        <div className="mx-auto mb-10 flex max-w-2xl gap-2">
+          <Input
+            disabled={!user}
+            size="large"
+            placeholder={t('searchRecommendProduct')}
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onPressEnter={() => refetch()}
+          />
+          <Button
+            type="primary"
+            size="large"
+            disabled={isFetching || !user}
+            className="!bg-[#fb6f92]"
+            onClick={() => {
+              refetch();
+              onPageChange(1);
+            }}
+          >
+            {t('find')}
+          </Button>
+        </div>
+      </Tooltip>
 
       {isFetching ? (
         <div className="flex justify-center py-10">
