@@ -69,7 +69,7 @@ const StatisticSection = ({ t, isAdmin }: Props) => {
               <div>
                 <p className="text-base">{t('revenue')}</p>
                 <h2 className="text-xl font-semibold my-2">
-                  {!isAdmin
+                  {isAdmin
                     ? formatMoney(summaryQuery.data?.revenue.current || 0)
                     : '$ XXXX'}
                 </h2>
