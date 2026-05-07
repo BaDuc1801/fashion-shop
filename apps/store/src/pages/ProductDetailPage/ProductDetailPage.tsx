@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { FaHeart } from 'react-icons/fa';
 import { useToggleWishlist } from './hooks/useWishList';
 import { useToggleCart } from './hooks/useAddToCart';
+import AITryOnModal from './TryOnModal';
 
 const ProductDetailPage = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ const ProductDetailPage = () => {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColorId, setSelectedColorId] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
+  const [openAITryOnModal, setOpenAITryOnModal] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ['product', sku, i18n.language],
@@ -114,26 +116,43 @@ const ProductDetailPage = () => {
               {i18n.language === 'en' ? data.nameEn : data.name}
             </h1>
             <Tooltip title={!user ? t('pleaseLogin') : ''}>
-              <Button
-                size="large"
-                onClick={() =>
-                  toggleWishlist.mutate({
-                    productId: data._id,
-                    inWishlist: data.inWishlist ?? false,
-                  })
-                }
-                className={`hover:text-[#fb6f92] ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
-                disabled={!user}
-              >
-                <text className={`${data.inWishlist ? 'text-[#fb6f92]' : ''}`}>
-                  {t('product.favorited')}
-                </text>
-                {data.inWishlist ? (
-                  <FaHeart className="text-[#fb6f92]" />
-                ) : (
-                  <CiHeart />
-                )}
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button
+                  size="large"
+                  onClick={() =>
+                    toggleWishlist.mutate({
+                      productId: data._id,
+                      inWishlist: data.inWishlist ?? false,
+                    })
+                  }
+                  className={`hover:text-[#fb6f92] ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
+                  disabled={!user}
+                >
+                  <text
+                    className={`${data.inWishlist ? 'text-[#fb6f92]' : ''}`}
+                  >
+                    {t('product.favorited')}
+                  </text>
+                  {data.inWishlist ? (
+                    <FaHeart className="text-[#fb6f92]" />
+                  ) : (
+                    <CiHeart />
+                  )}
+                </Button>
+                <Button
+                  size="large"
+                  className="!border-pink-200 !bg-pink-50 hover:!bg-pink-100 !text-pink-600 !font-medium disabled:!bg-slate-100 disabled:!text-slate-400 disabled:!border-slate-200"
+                  onClick={() => {
+                    setOpenAITryOnModal(true);
+                  }}
+                  disabled={!user}
+                >
+                  <span className="text-md" role="img" aria-label="star">
+                    ✨
+                  </span>{' '}
+                  {t('tryOnAI')}
+                </Button>
+              </div>
             </Tooltip>
           </div>
 
@@ -291,6 +310,14 @@ const ProductDetailPage = () => {
       <ProductReviewList
         reviews={data.reviews}
         ratingStats={data.ratingStats}
+      />
+      <AITryOnModal
+        open={openAITryOnModal}
+        onClose={() => setOpenAITryOnModal(false)}
+        product={data}
+        selectedColorId={selectedColorId}
+        language={i18n.language}
+        t={t}
       />
     </section>
   );

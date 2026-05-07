@@ -164,6 +164,24 @@ class UserService {
     });
     return res.data;
   }
+
+  async virtualTryOn(payload: {
+    person: File;
+    clothesUrl: string;
+  }): Promise<{ success: boolean; imageUrl: string }> {
+    const formData = new FormData();
+
+    formData.append('person', payload.person);
+    formData.append('clothesUrl', payload.clothesUrl);
+
+    const res = await api.post('/api/virtual', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return res.data;
+  }
 }
 
 export const userService = new UserService();

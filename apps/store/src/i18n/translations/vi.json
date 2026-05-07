@@ -227,5 +227,16 @@
   "cancelOrderSuccess": "Huỷ đơn hàng thành công",
   "cancelOrderFailed": "Huỷ đơn hàng thất bại",
   "confirm": "Xác nhận",
-  "close": "Đóng"
+  "close": "Đóng",
+  "tryOnAI": "Trải nghiệm thử đồ bằng AI",
+  "aiVirtualTryOn": "AI Thử Đồ Thông Minh",
+  "uploadYourImageAndPreviewYourselfWearingThisOutfitUsingAI": "Tải ảnh của bạn để xem AI mô phỏng khi mặc sản phẩm này.",
+  "uploadYourPhoto": "Tải ảnh của bạn",
+  "clickToUploadImage": "Nhấn để tải ảnh",
+  "selectedOutfit": "Trang phục đã chọn",
+  "generateAITryOn": "Tạo AI Thử Đồ",
+  "aiResult": "Kết Quả AI",
+  "yourGeneratedFashionTryOnImageWillAppearHere": "Ảnh AI thử đồ sẽ xuất hiện ở đây.",
+  "uploadYourPhotoAndGenerateARealisticVirtualFashionTryOn": "Tải ảnh của bạn và tạo ảnh thử đồ thời trang bằng AI.",
+  "aiPreviewWillAppearHere": "Ảnh AI sẽ hiển thị ở đây"
 }

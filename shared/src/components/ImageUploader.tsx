@@ -43,7 +43,22 @@ export const ImageUploader = ({
   const handleChange: UploadProps['onChange'] = ({
     fileList: nextFileList,
   }) => {
-    onChange(nextFileList.slice(0, maxCount));
+    const normalized = nextFileList.slice(0, maxCount).map((file) => {
+      const isAvif =
+        file.url?.toLowerCase().endsWith('.avif') ||
+        file.name?.toLowerCase().endsWith('.avif');
+
+      if (isAvif && file.url && !file.thumbUrl) {
+        return {
+          ...file,
+          thumbUrl: file.url,
+        };
+      }
+
+      return file;
+    });
+
+    onChange(normalized);
   };
 
   return (
@@ -57,6 +72,9 @@ export const ImageUploader = ({
         fileList={fileList}
         rootClassName={
           squareFullWidth ? 'image-uploader-square-full' : undefined
+        }
+        isImageUrl={(file) =>
+          !!(file.type?.includes('image') || file.url?.includes('.avif'))
         }
       >
         {fileList.length >= maxCount ? null : (

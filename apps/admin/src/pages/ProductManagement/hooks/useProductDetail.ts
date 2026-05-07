@@ -32,6 +32,7 @@ export const useProductDetail = ({
           name: `image-${index}`,
           status: 'done',
           url,
+          thumbUrl: url,
         })) as UploadFile[],
         skus: v.skus.map((sku) => ({
           size: sku.size,

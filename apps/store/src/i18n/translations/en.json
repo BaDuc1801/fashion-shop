@@ -227,5 +227,16 @@
   "cancelOrderSuccess": "Order cancelled successfully",
   "cancelOrderFailed": "Failed to cancel order",
   "confirm": "Confirm",
-  "close": "Close"
+  "close": "Close",
+  "tryOnAI": "Try on with AI",
+  "aiVirtualTryOn": "AI Virtual Try-On",
+  "uploadYourImageAndPreviewYourselfWearingThisOutfitUsingAI": "Upload your image and preview yourself wearing this outfit using AI.",
+  "uploadYourPhoto": "Upload your photo",
+  "clickToUploadImage": "Click to upload image",
+  "selectedOutfit": "Selected outfit",
+  "generateAITryOn": "Generate AI Try-On",
+  "aiResult": "AI Result",
+  "yourGeneratedFashionTryOnImageWillAppearHere": "Your generated fashion try-on image will appear here.",
+  "uploadYourPhotoAndGenerateARealisticVirtualFashionTryOn": "Upload your photo and generate a realistic virtual fashion try-on.",
+  "aiPreviewWillAppearHere": "AI preview will appear here"
 }
