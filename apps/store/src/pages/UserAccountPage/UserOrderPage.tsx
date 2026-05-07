@@ -1,6 +1,6 @@
 import { OrderDetailData, orderService, useTableQuery } from '@shared';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Input, message, Tag } from 'antd';
+import { Button, Input, message, Modal, Tag } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,8 @@ import { useSearchParams } from 'react-router-dom';
 const UserOrderPage = () => {
   const { t, i18n } = useTranslation();
   const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
+  const [openCancelModal, setOpenCancelModal] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   const [params, setSearchParams] = useSearchParams();
   const urlOrderCode = params.get('orderCode') || '';
@@ -105,7 +107,10 @@ const UserOrderPage = () => {
             type="text"
             size="small"
             danger
-            onClick={() => handleCancelOrder(record._id)}
+            onClick={() => {
+              setSelectedOrderId(record._id);
+              setOpenCancelModal(true);
+            }}
           >
             {t('cancelOrder')}
           </Button>
@@ -182,6 +187,29 @@ const UserOrderPage = () => {
           onChange: onPageChange,
         }}
       />
+      <Modal
+        open={openCancelModal}
+        onCancel={() => {
+          setOpenCancelModal(false);
+          setSelectedOrderId(null);
+        }}
+        title={t('cancelOrder')}
+        okText={t('confirm')}
+        cancelText={t('close')}
+        okButtonProps={{
+          danger: true,
+        }}
+        onOk={async () => {
+          if (!selectedOrderId) return;
+
+          await handleCancelOrder(selectedOrderId);
+
+          setOpenCancelModal(false);
+          setSelectedOrderId(null);
+        }}
+      >
+        <p>{t('cancelOrderContent')}</p>
+      </Modal>
     </div>
   );
 };

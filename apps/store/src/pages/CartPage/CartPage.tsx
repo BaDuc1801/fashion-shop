@@ -6,6 +6,7 @@ import { CartItem, userService, voucherService } from '@shared';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getVoucherDiscount } from './utils/getDiscountVoucher';
 import { useNavigate } from 'react-router-dom';
+import { LuTrash2 } from 'react-icons/lu';
 
 const CartPage = () => {
   const { t, i18n } = useTranslation();
@@ -130,68 +131,86 @@ const CartPage = () => {
                 ?.map((it) => (
                   <div
                     key={`${it.product._id}-${it.size}-${it.color}`}
-                    className="flex gap-5 border-b border-slate-200 pb-6"
+                    className="group relative overflow-hidden"
                   >
-                    <div className="h-28 w-28 overflow-hidden rounded-sm bg-slate-100">
-                      <img
-                        src={it.product.variants[0].images?.[0] ?? ''}
-                        alt={it.product.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <div className="text-sm font-semibold text-slate-900">
-                            {i18n.language === 'en'
-                              ? it.product.nameEn
-                              : it.product.name}
-                          </div>
-
-                          <div className="mt-1 text-xs text-slate-500">
-                            {t('product.selectSize')}{' '}
-                            <span className="font-semibold text-slate-900">
-                              {it.size}
-                            </span>
-                          </div>
-
-                          <div className="mt-1 text-xs text-slate-500 flex items-center gap-2">
-                            {t('product.selectColor')}
-                            <div
-                              className="size-4 rounded-md"
-                              style={{ backgroundColor: it.color }}
-                            />
-                          </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-5 border-b border-slate-200 pb-6 flex-1 transition-all duration-300 group-hover:pr-24">
+                        <div className="h-28 w-28 overflow-hidden rounded-sm bg-slate-100">
+                          <img
+                            src={it.product.variants[0].images?.[0] ?? ''}
+                            alt={it.product.name}
+                            className="h-full w-full object-cover"
+                          />
                         </div>
 
-                        <div className="text-sm font-semibold text-slate-900">
-                          ${it.product.price * it.quantity}
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <div className="text-sm font-semibold text-slate-900">
+                                {i18n.language === 'en'
+                                  ? it.product.nameEn
+                                  : it.product.name}
+                              </div>
+
+                              <div className="mt-1 text-xs text-slate-500">
+                                {t('product.selectSize')}{' '}
+                                <span className="font-semibold text-slate-900">
+                                  {it.size}
+                                </span>
+                              </div>
+
+                              <div className="mt-1 text-xs text-slate-500 flex items-center gap-2 sha">
+                                {t('product.selectColor')}
+                                <div
+                                  className="size-4 rounded-md shadow-[0_0_6px_rgba(0,0,0,0.25)]"
+                                  style={{ backgroundColor: it.color }}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="text-sm font-semibold text-slate-900">
+                              ${it.product.price * it.quantity}
+                            </div>
+                          </div>
+
+                          {/* Quantity */}
+                          <div className="mt-4 flex items-center gap-2">
+                            <button
+                              disabled={isLoading}
+                              onClick={() => handleDecrease(it)}
+                              className="h-8 w-8 rounded-full border border-slate-300 transition hover:bg-slate-100"
+                            >
+                              −
+                            </button>
+
+                            <div className="min-w-6 text-center text-sm font-semibold">
+                              {it.quantity}
+                            </div>
+
+                            <button
+                              disabled={isLoading}
+                              onClick={() => handleIncrease(it)}
+                              className="h-8 w-8 rounded-full border border-slate-300 transition hover:bg-slate-100"
+                            >
+                              +
+                            </button>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Quantity */}
-                      <div className="mt-4 flex items-center gap-2">
-                        <button
-                          disabled={isLoading}
-                          onClick={() => handleDecrease(it)}
-                          className="h-8 w-8 rounded-full border border-slate-300"
-                        >
-                          −
-                        </button>
-
-                        <div className="min-w-6 text-center text-sm font-semibold">
-                          {it.quantity}
-                        </div>
-
-                        <button
-                          disabled={isLoading}
-                          onClick={() => handleIncrease(it)}
-                          className="h-8 w-8 rounded-full border border-slate-300"
-                        >
-                          +
-                        </button>
-                      </div>
+                      <button
+                        disabled={isLoading}
+                        onClick={() =>
+                          removeCart.mutate({
+                            productId: it.product._id,
+                            size: it.size,
+                            color: it.color,
+                          })
+                        }
+                        className="absolute right-0 top-0 h-full w-20 translate-x-full opacity-0 bg-red-400 text-white transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100  hover:bg-red-600 flex items-center justify-center"
+                      >
+                        <LuTrash2 size={20} />
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -241,12 +260,13 @@ const CartPage = () => {
               loading={isLoading}
               type="primary"
               size="large"
-              className="mt-5 w-full rounded-full"
+              className="mt-5 w-full rounded-lg"
               onClick={() =>
                 navigate('/checkout', {
                   state: { voucherId: selectedVoucherId },
                 })
               }
+              disabled={cartData?.length === 0}
             >
               {t('cart.memberCheckout')}
             </Button>

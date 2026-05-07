@@ -222,5 +222,10 @@
   "find": "Khám phá",
   "notSureWhatToChoose": "Bạn không biết chọn gì?",
   "letOurAIHelpYouFindThePerfectOutfit": "Hãy để AI của chúng tôi giúp bạn tìm ra bộ đồ hoàn hảo",
-  "searchRecommendProduct": "eg: Tôi muốn mua bộ đồ cho nam phù hợp đi biển..."
+  "searchRecommendProduct": "eg: Tôi muốn mua bộ đồ cho nam phù hợp đi biển...",
+  "cancelOrderContent": "Bạn có chắc muốn huỷ đơn hàng này?",
+  "cancelOrderSuccess": "Huỷ đơn hàng thành công",
+  "cancelOrderFailed": "Huỷ đơn hàng thất bại",
+  "confirm": "Xác nhận",
+  "close": "Đóng"
 }
