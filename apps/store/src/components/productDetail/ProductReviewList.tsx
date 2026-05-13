@@ -34,6 +34,13 @@ const ProductReviewList = ({
       </div>
 
       <div className="mt-6 space-y-4">
+        {reviews.length === 0 ? (
+          <div className="flex items-center justify-center h-20">
+            <p className="text-sm text-slate-500">
+              {t('productReviews.noReviews')}
+            </p>
+          </div>
+        ) : null}
         {reviews.map((review) => (
           <article
             key={review._id}

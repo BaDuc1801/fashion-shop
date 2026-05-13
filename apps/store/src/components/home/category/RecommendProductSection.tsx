@@ -24,9 +24,9 @@ const RecommendProductSection = () => {
   const paginatedData = data?.data?.slice((page - 1) * 8, page * 8);
 
   return (
-    <div className="mt-20 px-[200px]">
+    <div className="mt-20 px-8 lg:px-12 xl:px-20 2xl:px-32">
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold text-gray-800">
+        <h2 className="text-3xl max-md:text-2xl font-bold text-gray-800">
           {t('notSureWhatToChoose')}
         </h2>
         <p className="mt-2 text-gray-500">

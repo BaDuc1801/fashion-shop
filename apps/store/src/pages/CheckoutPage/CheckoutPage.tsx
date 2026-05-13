@@ -133,7 +133,7 @@ const CheckoutPage = () => {
   return (
     <FormProvider {...form}>
       <Form layout="vertical" onFinish={handleSubmit(onCheckoutSubmit)}>
-        <div className="max-w-6xl mx-auto py-10 grid grid-cols-2 gap-8">
+        <div className="max-w-6xl mx-auto py-10 grid grid-cols-2 gap-8  max-xl:px-[48px] max-md:px-[16px] max-md:flex max-md:flex-col">
           {/* LEFT */}
           <div className="space-y-4">
             <h3 className="font-semibold">{t('delivery')}</h3>

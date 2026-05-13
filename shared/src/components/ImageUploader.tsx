@@ -73,9 +73,19 @@ export const ImageUploader = ({
         rootClassName={
           squareFullWidth ? 'image-uploader-square-full' : undefined
         }
-        isImageUrl={(file) =>
-          !!(file.type?.includes('image') || file.url?.includes('.avif'))
-        }
+        isImageUrl={(file) => {
+          const lowerUrl = file.url?.toLowerCase() || '';
+          const lowerName = file.name?.toLowerCase() || '';
+          return !!(
+            file.type?.includes('image') ||
+            lowerUrl.endsWith('.avif') ||
+            lowerUrl.endsWith('.jpg') ||
+            lowerUrl.endsWith('.jpeg') ||
+            lowerName.endsWith('.avif') ||
+            lowerName.endsWith('.jpg') ||
+            lowerName.endsWith('.jpeg')
+          );
+        }}
       >
         {fileList.length >= maxCount ? null : (
           <button type="button" className="border-none">

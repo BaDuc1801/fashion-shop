@@ -1,38 +1,74 @@
 import { Button, Spin, Tooltip } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NotFoundPage } from '../NotFoundPage';
 import { CiHeart } from 'react-icons/ci';
 import ProductReviewList from '../../components/productDetail/ProductReviewList';
-import { productService, useAuthStore } from '@shared';
+import {
+  interactionService,
+  productService,
+  useAuthStore,
+  type InteractionSource,
+} from '@shared';
 import { useQuery } from '@tanstack/react-query';
 import { FaHeart } from 'react-icons/fa';
 import { useToggleWishlist } from './hooks/useWishList';
 import { useToggleCart } from './hooks/useAddToCart';
 import AITryOnModal from './TryOnModal';
+import RecommendedProductsCarousel from './RecommendedProductsCarousel';
 
 const ProductDetailPage = () => {
   const { t } = useTranslation();
   const { sku } = useParams<{ sku: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
   const { i18n } = useTranslation();
   const { user } = useAuthStore();
+
+  type ProductDetailLocationState = {
+    source?: InteractionSource;
+  };
+
+  const source = (state as ProductDetailLocationState | null)?.source;
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColorId, setSelectedColorId] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
   const [openAITryOnModal, setOpenAITryOnModal] = useState(false);
+  const trackedViewProductIdRef = useRef<string | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['product', sku, i18n.language],
     queryFn: () => {
       if (!sku) throw new Error('Missing product sku');
+      // Recommendations endpoint uses Mongo `_id`, while traditional listing uses `sku`.
+      const looksLikeObjectId = /^[a-fA-F0-9]{24}$/.test(sku);
+      if (looksLikeObjectId) return productService.getProductById(sku);
       return productService.getProductBySku(sku, i18n.language);
     },
     enabled: !!sku,
   });
+
+  useEffect(() => {
+    trackedViewProductIdRef.current = null;
+  }, [sku]);
+
+  useEffect(() => {
+    if (!user) return;
+    if (!data?._id) return;
+    if (trackedViewProductIdRef.current === data._id) return;
+
+    trackedViewProductIdRef.current = data._id;
+    void interactionService
+      .trackView({
+        productId: data._id,
+        source: source ?? 'organic',
+      })
+      .catch(() => undefined);
+  }, [data?._id, source, user]);
 
   const selectedVariant = useMemo(
     () => data?.variants.find((v) => v.color === selectedColorId),
@@ -67,8 +103,8 @@ const ProductDetailPage = () => {
   if (!sku || !data) return <NotFoundPage />;
 
   return (
-    <section className="py-6 mx-[200px]">
-      <div className="flex items-start gap-10">
+    <section className="xl:px-[120px] 2xl:px-[200px] py-6 max-xl:px-[48px]">
+      <div className="flex items-start max-lg:items-center gap-10 max-lg:flex-col">
         {/* Gallery */}
         <div className="flex gap-6">
           <div className="flex flex-col gap-4">
@@ -93,11 +129,11 @@ const ProductDetailPage = () => {
             ))}
           </div>
 
-          <div className="w-[520px] rounded-sm border border-slate-200 overflow-hidden bg-white">
+          <div className="w-[520px] max-xl:w-[400px] max-sm:w-[320px] rounded-sm border border-slate-200 overflow-hidden bg-white">
             <img
               src={selectedVariant?.images[activeImageIndex]}
               alt={data.name}
-              className="h-[520px] w-full object-cover object-top"
+              className="h-[520px] max-xl:h-[400px] max-sm:h-[320px] w-full object-cover object-top"
               onClick={() =>
                 setActiveImageIndex((prev) =>
                   selectedVariant?.images.length
@@ -111,12 +147,12 @@ const ProductDetailPage = () => {
 
         {/* Info */}
         <div className="flex-1 flex flex-col justify-between h-fit gap-4">
-          <div className="flex items-start justify-between">
-            <h1 className="text-2xl font-semibold text-slate-900">
+          <div className="flex justify-between gap-4 flex-wrap">
+            <h1 className="text-2xl font-semibold text-slate-900 truncate">
               {i18n.language === 'en' ? data.nameEn : data.name}
             </h1>
             <Tooltip title={!user ? t('pleaseLogin') : ''}>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col justify-end w-fit items-end gap-2">
                 <Button
                   size="large"
                   onClick={() =>
@@ -125,7 +161,7 @@ const ProductDetailPage = () => {
                       inWishlist: data.inWishlist ?? false,
                     })
                   }
-                  className={`hover:text-[#fb6f92] ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
+                  className={`hover:text-[#fb6f92] w-40 ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
                   disabled={!user}
                 >
                   <text
@@ -141,7 +177,7 @@ const ProductDetailPage = () => {
                 </Button>
                 <Button
                   size="large"
-                  className="!border-pink-200 !bg-pink-50 hover:!bg-pink-100 !text-pink-600 !font-medium disabled:!bg-slate-100 disabled:!text-slate-400 disabled:!border-slate-200"
+                  className="!border-pink-200 w-40 !bg-pink-50 hover:!bg-pink-100 !text-pink-600 !font-medium disabled:!bg-slate-100 disabled:!text-slate-400 disabled:!border-slate-200"
                   onClick={() => {
                     setOpenAITryOnModal(true);
                   }}
@@ -156,7 +192,7 @@ const ProductDetailPage = () => {
             </Tooltip>
           </div>
 
-          <p className="text-base text-slate-600 max-w-[520px] text-justify">
+          <p className="text-base text-slate-600 text-justify">
             {i18n.language === 'en' ? data.descriptionEn : data.description}
           </p>
 
@@ -311,6 +347,7 @@ const ProductDetailPage = () => {
         reviews={data.reviews}
         ratingStats={data.ratingStats}
       />
+      <RecommendedProductsCarousel />
       <AITryOnModal
         open={openAITryOnModal}
         onClose={() => setOpenAITryOnModal(false)}

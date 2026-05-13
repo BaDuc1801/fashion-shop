@@ -1,5 +1,6 @@
-import { Input, Pagination, Select, Spin, Empty } from 'antd';
-import { useEffect, useMemo } from 'react';
+import { Input, Pagination, Select, Spin, Empty, Dropdown, Button } from 'antd';
+import { FilterOutlined } from '@ant-design/icons';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
@@ -12,6 +13,7 @@ const CategoryPage = () => {
   const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug?: string }>();
   const navigate = useNavigate();
+  const [openFilterDropdown, setOpenFilterDropdown] = useState(false);
 
   const {
     page,
@@ -54,58 +56,67 @@ const CategoryPage = () => {
   });
 
   const hasData = data?.data && data.data.length > 0;
+  const categoryFilterContent = (
+    <div className="w-[280px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold">{t('filters.title')}</h2>
+        <button
+          onClick={() => {
+            setSearchText('');
+            onPageChange(1);
+            navigate('/category');
+            setOpenFilterDropdown(false);
+          }}
+          className="text-xs text-slate-500"
+        >
+          {t('common.clearAll')}
+        </button>
+      </div>
+
+      <div className="mt-4 space-y-2 max-h-[320px] overflow-y-auto">
+        {isCategoryLoading ? (
+          <div className="flex justify-center py-4">
+            <Spin />
+          </div>
+        ) : (
+          categories.map((c) => {
+            const checked = slug === c.slug;
+            return (
+              <button
+                key={c._id}
+                onClick={() => {
+                  navigate(`/category/${c.slug}`);
+                  setOpenFilterDropdown(false);
+                }}
+                className={`w-full flex justify-between px-3 py-2 rounded border ${
+                  checked
+                    ? 'border-pink-300 bg-pink-50'
+                    : 'border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                <span>{i18n.language === 'vi' ? c.name : c.nameEn}</span>
+                <span className="text-xs text-slate-500">
+                  {c.productCount ?? 0}
+                </span>
+              </button>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
 
   return (
-    <section className="py-8 mx-[200px]">
+    <section className="py-8 mx-4 md:mx-12 xl:mx-[120px] 2xl:mx-[200px]">
       <div className="flex items-start gap-6">
         {/* SIDEBAR */}
-        <aside className="w-[280px] shrink-0 rounded-lg border border-slate-200 bg-white p-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">{t('filters.title')}</h2>
-            <button
-              onClick={() => {
-                setSearchText('');
-                onPageChange(1);
-                navigate('/category');
-              }}
-              className="text-xs text-slate-500"
-            >
-              {t('common.clearAll')}
-            </button>
-          </div>
-
-          <div className="mt-4 space-y-2">
-            {isCategoryLoading ? (
-              <div className="flex justify-center py-4">
-                <Spin />
-              </div>
-            ) : (
-              categories.map((c) => {
-                const checked = slug === c.slug;
-                return (
-                  <button
-                    key={c._id}
-                    onClick={() => navigate(`/category/${c.slug}`)}
-                    className={`w-full flex justify-between px-3 py-2 rounded border ${
-                      checked
-                        ? 'border-pink-300 bg-pink-50'
-                        : 'border-slate-200 hover:bg-slate-50'
-                    }`}
-                  >
-                    <span>{i18n.language === 'vi' ? c.name : c.nameEn}</span>
-                    <span className="text-xs text-slate-500">
-                      {c.productCount ?? 0}
-                    </span>
-                  </button>
-                );
-              })
-            )}
-          </div>
+        <aside className="hidden lg:block w-[280px] shrink-0">
+          {categoryFilterContent}
         </aside>
 
         {/* CONTENT */}
         <div className="flex-1">
-          <div className="mb-4 flex justify-between gap-4">
+          <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold">
                 {i18n.language === 'vi'
@@ -117,13 +128,26 @@ const CategoryPage = () => {
               </p>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 items-stretch sm:items-end">
+              <div className="lg:hidden">
+                <Dropdown
+                  trigger={['click']}
+                  open={openFilterDropdown}
+                  onOpenChange={setOpenFilterDropdown}
+                  placement="bottomLeft"
+                  dropdownRender={() => categoryFilterContent}
+                >
+                  <Button icon={<FilterOutlined />}>
+                    {t('filters.title')}
+                  </Button>
+                </Dropdown>
+              </div>
               <Input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder={t('filters.searchProducts')}
                 allowClear
-                style={{ width: 280 }}
+                className="w-full sm:w-[280px]"
               />
 
               <Select
@@ -133,7 +157,7 @@ const CategoryPage = () => {
                   { value: 'asc', label: t('filters.priceLowToHigh') },
                   { value: 'desc', label: t('filters.priceHighToLow') },
                 ]}
-                style={{ width: 220 }}
+                className="w-full sm:w-[220px]"
               />
             </div>
           </div>

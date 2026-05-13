@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { userService } from '@shared';
+import { interactionService, userService } from '@shared';
 import { message } from 'antd';
 import { t } from 'i18next';
 
@@ -21,13 +21,18 @@ export const useToggleCart = () => {
       return userService.addToCart({ productId, size, color, quantity });
     },
 
-    onSuccess: () => {
+    onSuccess: async (_res, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['product'],
       });
       queryClient.invalidateQueries({
         queryKey: ['cart'],
       });
+
+      // Track interaction best-effort; don't block cart UI on tracking failures.
+      void interactionService
+        .trackAddToCart({ productId: variables.productId })
+        .catch(() => undefined);
       message.success(t('product.addToCartSuccess'));
     },
   });

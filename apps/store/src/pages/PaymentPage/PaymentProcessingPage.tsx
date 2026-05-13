@@ -58,7 +58,7 @@ const PaymentProcessingPage = () => {
 
   return (
     <div className="h-[calc(100vh-80px)] flex items-center justify-center bg-pink-50">
-      <div className="flex flex-col items-center justify-center gap-4 p-8 bg-white rounded-lg shadow-sm mb-20">
+      <div className="flex flex-col items-center justify-center gap-4 p-8 bg-white rounded-lg shadow-sm mb-20 max-sm:w-full">
         <div className="flex flex-col items-center justify-center gap-8">
           <h1 className="text-2xl font-semibold">{t('paymentProcessing')}</h1>
           <Spin size="large" />

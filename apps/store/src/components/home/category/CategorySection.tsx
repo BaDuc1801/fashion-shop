@@ -31,7 +31,7 @@ const CategorySection = () => {
   });
 
   return (
-    <section className="mt-20 mx-[200px]">
+    <section className="mt-20 px-8 lg:px-12 xl:px-20 2xl:px-32">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold">{t('home.shopByCategories')}</h2>
 
@@ -64,7 +64,7 @@ const CategorySection = () => {
           .map((category) => (
             <div
               key={category._id}
-              className="w-[calc((100%-96px)/4)] shrink-0 snap-start"
+              className="w-[calc((100%-96px)/4)] max-sm:w-[calc((100%-32px)/2)] max-lg:w-[calc((100%-32px)/3)] shrink-0 snap-start"
             >
               <CategoryCard category={category} />
             </div>

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Badge, Button, Dropdown, message } from 'antd';
+import { Badge, Button, Dropdown, Grid, message } from 'antd';
 import type { MenuProps } from 'antd';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaRegHeart } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
@@ -21,6 +21,7 @@ import SearchProduct from './SearchProduct';
 
 const NavBar = () => {
   const { i18n, t } = useTranslation();
+  const screens = Grid.useBreakpoint();
   const navigate = useNavigate();
   const { user, clearSession } = useAuthStore(
     useShallow((s) => ({
@@ -57,8 +58,11 @@ const NavBar = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [changePasswordError, setChangePasswordError] = useState('');
   const [openNoti, setOpenNoti] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
+  const keepUserMenuOpenRef = useRef(false);
 
   const isLoggedIn = Boolean(user);
+  const isMaxMd = !screens.lg;
   const avatar = user?.avatar;
 
   useNotificationCustomerSocket();
@@ -113,7 +117,37 @@ const NavBar = () => {
     }
   };
 
+  const mobileQuickActions: MenuProps['items'] = isMaxMd
+    ? [
+        {
+          key: 'mobile-wishlist',
+          label: (
+            <div className="flex items-center justify-between gap-4 min-w-[160px]">
+              <span>{t('nav.wishlist')}</span>
+              <Badge count={wishlistCount} size="small" />
+            </div>
+          ),
+          onClick: () => {
+            navigate('/wishlist');
+          },
+        },
+        {
+          key: 'mobile-cart',
+          label: (
+            <div className="flex items-center justify-between gap-4 min-w-[160px]">
+              <span>{t('nav.cart')}</span>
+              <Badge count={cartCount} size="small" />
+            </div>
+          ),
+          onClick: () => {
+            navigate('/cart');
+          },
+        },
+      ]
+    : [];
+
   const userMenuItems: MenuProps['items'] = [
+    ...mobileQuickActions,
     {
       key: 'my-orders',
       label: t('myOrders'),
@@ -139,6 +173,26 @@ const NavBar = () => {
     {
       type: 'divider',
     },
+    ...(isMaxMd
+      ? [
+          {
+            key: 'mobile-language',
+            label: (
+              <div className="flex items-center justify-between gap-4 min-w-[160px]">
+                <span>{t('nav.language')}</span>
+                <Badge
+                  count={i18n.language === 'en' ? 'EN' : 'VI'}
+                  size="middle"
+                />
+              </div>
+            ),
+            onClick: () => {
+              keepUserMenuOpenRef.current = true;
+              toggleLanguage();
+            },
+          },
+        ]
+      : []),
     {
       key: 'logout',
       label: t('auth.logout'),
@@ -150,7 +204,7 @@ const NavBar = () => {
   ];
 
   return (
-    <div className="absolute inset-x-0 top-0 z-10 mx-auto flex w-full items-center justify-between px-[200px] py-4">
+    <div className="absolute inset-x-0 top-0 z-10 mx-auto flex w-full items-center justify-between xl:px-[120px] 2xl:px-[200px] py-4 max-xl:px-[48px] max-md:px-[16px]">
       <div className="flex items-center gap-6">
         <Link
           to="/"
@@ -161,30 +215,30 @@ const NavBar = () => {
         </Link>
         <Link
           to="/category/men"
-          className="text-base font-medium hover:font-semibold"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden"
         >
           {t('nav.men')}
         </Link>
         <Link
           to="/category/women"
-          className="text-base font-medium hover:font-semibold"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden"
         >
           {t('nav.women')}
         </Link>
         <Link
           to="/category/new-arrivals"
-          className="text-base font-medium hover:font-semibold"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden truncate"
         >
           {t('nav.newArrivals')}
         </Link>
         <Link
           to="/category/sale"
-          className="text-base font-medium hover:font-semibold"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden"
         >
           {t('nav.sale')}
         </Link>
       </div>
-      <nav className="flex items-center gap-6 text-2xl font-medium">
+      <nav className="flex items-center md:gap-6 gap-4 text-2xl font-medium">
         <SearchProduct />
         {isLoggedIn && (
           <>
@@ -219,28 +273,42 @@ const NavBar = () => {
                 <BellOutlined className="cursor-pointer text-2xl hover:font-semibold" />
               </Badge>
             </Dropdown>
-            <Link to="/wishlist" className="leading-none">
-              <Badge count={wishlistCount} size="small" offset={[0, 2]}>
-                <FaRegHeart className="text-2xl cursor-pointer hover:font-semibold" />
-              </Badge>
-            </Link>
-            <Link to="/cart" className="leading-none">
-              <Badge count={cartCount} size="small" offset={[0, 2]}>
-                <FiShoppingCart className="text-2xl cursor-pointer hover:font-semibold" />
-              </Badge>
-            </Link>
+            {!isMaxMd && (
+              <>
+                <Link to="/wishlist" className="leading-none">
+                  <Badge count={wishlistCount} size="small" offset={[0, 2]}>
+                    <FaRegHeart className="text-2xl cursor-pointer hover:font-semibold" />
+                  </Badge>
+                </Link>
+                <Link to="/cart" className="leading-none">
+                  <Badge count={cartCount} size="small" offset={[0, 2]}>
+                    <FiShoppingCart className="text-2xl cursor-pointer hover:font-semibold" />
+                  </Badge>
+                </Link>
+              </>
+            )}
           </>
         )}
 
-        <Button size="small" onClick={toggleLanguage}>
-          {i18n.language === 'en' ? 'EN' : 'VI'}
-        </Button>
+        {(!isLoggedIn || !isMaxMd) && (
+          <Button size="small" onClick={toggleLanguage}>
+            {i18n.language === 'en' ? 'EN' : 'VI'}
+          </Button>
+        )}
         {isLoggedIn ? (
           <>
             <Dropdown
               menu={{ items: userMenuItems }}
               trigger={['hover']}
               placement="bottomRight"
+              open={openUserMenu}
+              onOpenChange={(nextOpen) => {
+                if (!nextOpen && keepUserMenuOpenRef.current) {
+                  keepUserMenuOpenRef.current = false;
+                  return;
+                }
+                setOpenUserMenu(nextOpen);
+              }}
             >
               <img
                 src={avatar}

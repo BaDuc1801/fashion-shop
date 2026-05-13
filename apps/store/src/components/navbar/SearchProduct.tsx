@@ -24,7 +24,7 @@ const SearchProduct = () => {
   });
 
   return (
-    <div className="relative w-[320px]">
+    <div className="relative w-[320px] max-sm:hidden">
       <Input.Search
         size="large"
         placeholder="Search products..."

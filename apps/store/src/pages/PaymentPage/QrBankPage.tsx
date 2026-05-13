@@ -51,7 +51,7 @@ const SePayQRCard = () => {
 
   return (
     <div className="flex justify-center items-center h-[calc(100vh-80px)] bg-pink-50">
-      <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg shadow-sm mb-20 w-[600px] gap-4">
+      <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg shadow-sm mb-20 w-[600px] gap-4 max-sm:w-full">
         <div className="text-center space-y-1">
           <div className="font-semibold text-lg">
             {order?.payment?.bankName}

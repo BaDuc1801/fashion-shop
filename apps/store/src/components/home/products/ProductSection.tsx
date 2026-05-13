@@ -4,13 +4,18 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetProduct } from '../../../hooks/useGetProduct';
 import ProductCard from './ProductCard';
+import { interactionService, useAuthStore } from '@shared';
+import type { InteractionSource } from '@shared';
 
 const PAGE_SIZE = 8;
 
 const OutProductsSection = () => {
   const { t, i18n } = useTranslation();
+  const user = useAuthStore((s) => s.user);
   const [activeKey, setActiveKey] = useState('1');
   const [currentPage, setCurrentPage] = useState(1);
+
+  const source: InteractionSource = 'organic';
 
   const TABS = useMemo(
     () => [
@@ -37,7 +42,7 @@ const OutProductsSection = () => {
   const hasData = data?.data && data?.data?.length > 0;
 
   return (
-    <section className="mt-20 flex flex-col justify-center mx-[200px] mb-8">
+    <section className="mt-20 flex flex-col justify-center px-8 lg:px-12 xl:px-20 2xl:px-32 mb-8">
       <h2 className="text-2xl font-bold w-full text-center">
         {t('home.outProducts')}
       </h2>
@@ -54,7 +59,7 @@ const OutProductsSection = () => {
           children: (
             <div className="w-full">
               <div
-                className={`mt-6 grid gap-6 gap-y-8 w-full ${isLoading ? 'grid-cols-1' : hasData ? 'grid-cols-4' : 'grid-cols-1'}`}
+                className={`mt-6 grid gap-6 gap-y-8 w-full ${isLoading ? 'grid-cols-1' : hasData ? 'grid-cols-4 max-sm:grid-cols-2' : 'grid-cols-1'}`}
               >
                 {isLoading ? (
                   <div className="flex justify-center items-center h-[300px]">
@@ -66,6 +71,14 @@ const OutProductsSection = () => {
                       key={p._id}
                       to={`/products/${p.sku}`}
                       className="block"
+                      state={{ source }}
+                      onClick={() => {
+                        if (!user) return;
+                        void interactionService.trackClick({
+                          productId: p._id,
+                          source,
+                        });
+                      }}
                     >
                       <ProductCard product={p} />
                     </Link>

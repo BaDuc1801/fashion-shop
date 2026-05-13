@@ -115,11 +115,11 @@ const CartPage = () => {
   const isLoading = updateCart.isPending || removeCart.isPending;
 
   return (
-    <section className="py-8 mx-[200px]">
+    <section className="py-8 px-8 md:px-12 lg:px-12 xl:px-20 2xl:px-32">
       <h1 className="text-2xl font-bold text-slate-900">{t('nav.cart')}</h1>
 
-      <div className="flex items-start gap-8">
-        <div className="flex-1">
+      <div className="flex items-start gap-8 max-lg:flex-col">
+        <div className="flex-1 max-lg:w-full">
           {cartData?.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[50vh]">
               <Empty description={t('cartEmpty')} />
@@ -219,7 +219,7 @@ const CartPage = () => {
         </div>
 
         {/* SUMMARY */}
-        <aside className="w-[340px] shrink-0">
+        <aside className="w-[340px] shrink-0 max-lg:w-full">
           <div className="rounded-lg border border-slate-200 p-4">
             <div className="text-sm font-semibold text-slate-900">
               {t('cart.summary')}

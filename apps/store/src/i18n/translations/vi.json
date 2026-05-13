@@ -14,7 +14,9 @@
     "sale": "Giảm giá",
     "wishlist": "Đã thích",
     "cart": "Giỏ hàng",
-    "kids": "Trẻ em"
+    "kids": "Trẻ em",
+    "category": "Danh mục",
+    "language": "Ngôn ngữ"
   },
   "hero": {
     "subtitle": "HOLIDAY 2026",
@@ -56,7 +58,8 @@
     "basedOn": "{{rating}} / 5.0 dựa trên {{count}} đánh giá",
     "verifiedPurchase": "Đã mua hàng",
     "previous": "Trước",
-    "next": "Sau"
+    "next": "Sau",
+    "noReviews": "Chưa có đánh giá"
   },
   "auth": {
     "login": "Đăng nhập",
@@ -122,7 +125,8 @@
     "total": "Tổng",
     "memberCheckout": "Thanh toán",
     "minOrder": "Đơn từ",
-    "maxDiscount": "Giảm tối đa"
+    "maxDiscount": "Giảm tối đa",
+    "invalidVoucher": "Voucher không hợp lệ với đơn hàng này"
   },
   "collection": {
     "notFound": "Không tìm thấy bộ sưu tập"
@@ -221,6 +225,7 @@
   "phoneDigits": "Số điện thoại phải có 9-15 chữ số",
   "find": "Khám phá",
   "notSureWhatToChoose": "Bạn không biết chọn gì?",
+  "maybeYouLike": "Có thể bạn cũng thích",
   "letOurAIHelpYouFindThePerfectOutfit": "Hãy để AI của chúng tôi giúp bạn tìm ra bộ đồ hoàn hảo",
   "searchRecommendProduct": "eg: Tôi muốn mua bộ đồ cho nam phù hợp đi biển...",
   "cancelOrderContent": "Bạn có chắc muốn huỷ đơn hàng này?",

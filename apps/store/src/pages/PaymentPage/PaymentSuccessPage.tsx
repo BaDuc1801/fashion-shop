@@ -10,7 +10,7 @@ const PaymentSuccessPage = () => {
 
   return (
     <div className="h-[calc(100vh-80px)] flex flex-col items-center justify-center bg-pink-50">
-      <div className="flex flex-col items-center justify-center px-8 pb-8 bg-white rounded-lg shadow-sm mb-20">
+      <div className="flex flex-col items-center justify-center px-8 pb-8 bg-white rounded-lg shadow-sm mb-20 max-sm:w-full">
         <Result
           status="success"
           title={t('paymentProcessingSuccess')}

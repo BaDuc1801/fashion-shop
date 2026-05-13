@@ -23,7 +23,7 @@ const WishlistPage = () => {
   }
 
   return (
-    <section className="py-8 mx-[200px]">
+    <section className="py-8 px-8 md:px-12 lg:px-12 xl:px-20 2xl:px-32">
       <h1 className="text-2xl font-bold text-slate-900">{t('nav.wishlist')}</h1>
 
       <p className="mt-1 text-sm text-slate-500">
@@ -42,7 +42,7 @@ const WishlistPage = () => {
                 <img
                   src={it.variants[0].images?.[0] || ''}
                   alt={it.name}
-                  className="h-[220px] w-full object-cover"
+                  className="h-[220px] w-full object-cover object-top"
                 />
               </div>
 

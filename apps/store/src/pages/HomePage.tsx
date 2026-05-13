@@ -5,12 +5,12 @@ import RecommendProductSection from '../components/home/category/RecommendProduc
 
 const HomePage = () => {
   return (
-    <>
+    <div className="w-full">
       <HeroSection />
       <RecommendProductSection />
       <CategorySection />
       <OutProductsSection />
-    </>
+    </div>
   );
 };
 

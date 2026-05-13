@@ -14,7 +14,9 @@
     "sale": "Sale",
     "wishlist": "Wishlist",
     "cart": "Cart",
-    "kids": "Kids"
+    "kids": "Kids",
+    "category": "Category",
+    "language": "Language"
   },
   "hero": {
     "subtitle": "HOLIDAY 2026",
@@ -56,7 +58,8 @@
     "basedOn": "{{rating}} / 5.0 based on {{count}} reviews",
     "verifiedPurchase": "Verified Purchase",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "noReviews": "No reviews yet"
   },
   "auth": {
     "login": "Login",
@@ -122,7 +125,8 @@
     "total": "Total",
     "memberCheckout": "Member Checkout",
     "minOrder": "Min order",
-    "maxDiscount": "Max discount"
+    "maxDiscount": "Max discount",
+    "invalidVoucher": "Voucher is not valid for this order"
   },
   "collection": {
     "notFound": "Collection not found"
@@ -221,6 +225,7 @@
   "phoneDigits": "Phone number must be 9-15 digits",
   "find": "Find out",
   "notSureWhatToChoose": "Not sure what to choose?",
+  "maybeYouLike": "Maybe you like",
   "letOurAIHelpYouFindThePerfectOutfit": "Let our AI help you find the perfect outfit",
   "searchRecommendProduct": "e.g. I need a summer beach outfit for men...",
   "cancelOrderContent": "Are you sure you want to cancel this order?",

@@ -103,14 +103,24 @@ const ProductForm = ({
           items={[
             {
               key: 'en',
-              label: 'English',
+              label: t('english'),
               children: (
                 <>
-                  <FormItem name="nameEn" label="Name">
-                    <Input />
+                  <FormItem name="nameEn" label={t('productNameEn')}>
+                    <Input
+                      placeholder={t('admin.product.form.placeholderName')}
+                      size="large"
+                      className="mb-2"
+                    />
                   </FormItem>
-                  <FormItem name="descriptionEn" label="Description">
-                    <Input.TextArea rows={4} />
+                  <FormItem name="descriptionEn" label={t('descriptionEn')}>
+                    <Input.TextArea
+                      rows={5}
+                      placeholder={t(
+                        'admin.product.form.placeholderDescription',
+                      )}
+                      size="large"
+                    />
                   </FormItem>
                 </>
               ),
