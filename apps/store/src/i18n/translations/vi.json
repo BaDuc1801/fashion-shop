@@ -135,6 +135,21 @@
     "message": "Trang bạn tìm không tồn tại.",
     "goHome": "Về trang chủ"
   },
+  "footer": {
+    "brand": "MonoChic",
+    "tagline": "Thời trang hiện đại cho phong cách hằng ngày. Khám phá outfit được tuyển chọn, bộ sưu tập theo mùa và những món must-have vượt thời gian.",
+    "shop": "Mua sắm",
+    "support": "Hỗ trợ",
+    "followUs": "Theo dõi chúng tôi",
+    "contact": "Liên hệ",
+    "shipping": "Vận chuyển",
+    "returns": "Đổi trả",
+    "faq": "Câu hỏi thường gặp",
+    "copyright": "© {{year}} MonoChic. Bảo lưu mọi quyền.",
+    "socialFacebook": "Facebook",
+    "socialInstagram": "Instagram",
+    "socialTiktok": "TikTok"
+  },
   "account": {
     "title": "Tài khoản của tôi",
     "tabs": {

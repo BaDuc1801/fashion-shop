@@ -135,6 +135,21 @@
     "message": "The page you’re looking for doesn’t exist.",
     "goHome": "Go home"
   },
+  "footer": {
+    "brand": "MonoChic",
+    "tagline": "Modern fashion for everyday style. Discover curated outfits, seasonal collections, and timeless essentials.",
+    "shop": "Shop",
+    "support": "Support",
+    "followUs": "Follow us",
+    "contact": "Contact",
+    "shipping": "Shipping",
+    "returns": "Returns",
+    "faq": "FAQ",
+    "copyright": "© {{year}} MonoChic. All rights reserved.",
+    "socialFacebook": "Facebook",
+    "socialInstagram": "Instagram",
+    "socialTiktok": "TikTok"
+  },
   "account": {
     "title": "My Account",
     "tabs": {
