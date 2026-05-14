@@ -75,8 +75,8 @@ export default function AITryOnModal({
 
       setResultImage(response.imageUrl);
     } catch (error: unknown) {
-      getApiErrorMessage(error, 'Generate failed');
-      message.error('Generate failed');
+      const errorMessage = getApiErrorMessage(error, 'Generate failed');
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }

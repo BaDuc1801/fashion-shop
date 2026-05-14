@@ -22,6 +22,13 @@ const RecommendProductSection = () => {
   });
 
   const paginatedData = data?.data?.slice((page - 1) * 8, page * 8);
+  const canSubmit = Boolean(prompt.trim());
+
+  const runSearch = () => {
+    if (!canSubmit) return;
+    refetch();
+    onPageChange(1);
+  };
 
   return (
     <div className="mt-20 px-8 lg:px-12 xl:px-20 2xl:px-32">
@@ -37,22 +44,19 @@ const RecommendProductSection = () => {
       <Tooltip title={!user ? t('pleaseLogin') : ''}>
         <div className="mx-auto mb-10 flex max-w-2xl gap-2">
           <Input
-            disabled={!user}
+            disabled={!user || isFetching}
             size="large"
             placeholder={t('searchRecommendProduct')}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            onPressEnter={() => refetch()}
+            onPressEnter={runSearch}
           />
           <Button
             type="primary"
             size="large"
-            disabled={isFetching || !user}
+            disabled={isFetching || !user || !canSubmit}
             className="!bg-[#fb6f92]"
-            onClick={() => {
-              refetch();
-              onPageChange(1);
-            }}
+            onClick={runSearch}
           >
             {t('find')}
           </Button>
