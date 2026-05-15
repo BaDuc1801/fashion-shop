@@ -14,7 +14,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { orderService, formatUsd } from '@shared';
 import dayjs from 'dayjs';
 import { useForm, Controller } from 'react-hook-form';
@@ -42,6 +42,7 @@ const OrderDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { data: order, isLoading } = useQuery({
     queryKey: ['order', id],
@@ -70,10 +71,10 @@ const OrderDetailPage = () => {
         data.phone,
         data.address,
       ),
-    onSuccess: (_, variables) => {
+    onSuccess: async (_, variables) => {
       message.success(t('orderUpdated'));
-
       reset(variables);
+      await queryClient.invalidateQueries({ queryKey: ['order', id] });
     },
     onError: () => {
       message.error(t('orderUpdateFailed'));
@@ -148,6 +149,8 @@ const OrderDetailPage = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
+  const isCompleted = order?.orderStatus === 'completed';
+
   if (!order) {
     return (
       <div className="flex flex-col gap-4">
@@ -186,7 +189,9 @@ const OrderDetailPage = () => {
               <Controller
                 name="phone"
                 control={control}
-                render={({ field }) => <Input {...field} className="w-32" />}
+                render={({ field }) => (
+                  <Input {...field} className="w-32" disabled={isCompleted} />
+                )}
               />
             </Descriptions.Item>
 
@@ -194,7 +199,9 @@ const OrderDetailPage = () => {
               <Controller
                 name="address"
                 control={control}
-                render={({ field }) => <Input.TextArea {...field} autoSize />}
+                render={({ field }) => (
+                  <Input.TextArea {...field} autoSize disabled={isCompleted} />
+                )}
               />
             </Descriptions.Item>
 
@@ -206,6 +213,7 @@ const OrderDetailPage = () => {
                   <Select
                     {...field}
                     style={{ width: 160 }}
+                    disabled={isCompleted}
                     options={[
                       {
                         value: 'pending',
@@ -246,7 +254,7 @@ const OrderDetailPage = () => {
           <div className="flex justify-end mt-4">
             <Button
               type="primary"
-              disabled={!isDirty}
+              disabled={isCompleted || !isDirty}
               loading={updateOrderMutation.isPending}
               onClick={handleUpdate}
             >
