@@ -2,7 +2,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { message } from 'antd';
 import type { UploadFile } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { resolveImageUrls, userService, useAuthStore } from '@shared';
+import {
+  resolveImageUrls,
+  userService,
+  useAuthStore,
+  getApiErrorMessage,
+} from '@shared';
 
 export type AccountProfileFormValues = {
   avatar: UploadFile[];
@@ -70,8 +75,9 @@ export const useUpdateAccountProfile = () => {
       });
       message.success(t('account.profile.updateSuccess'));
     },
-    onError: () => {
-      message.error(t('account.profile.updateFailed'));
+    onError: (error: unknown) => {
+      const errorMessage = getApiErrorMessage(error, 'Update failed');
+      message.error(errorMessage);
     },
   });
 };
