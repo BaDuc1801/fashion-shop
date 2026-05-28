@@ -258,5 +258,8 @@
   "aiResult": "Kết Quả AI",
   "yourGeneratedFashionTryOnImageWillAppearHere": "Ảnh AI thử đồ sẽ xuất hiện ở đây.",
   "uploadYourPhotoAndGenerateARealisticVirtualFashionTryOn": "Tải ảnh của bạn và tạo ảnh thử đồ thời trang bằng AI.",
-  "aiPreviewWillAppearHere": "Ảnh AI sẽ hiển thị ở đây"
+  "aiPreviewWillAppearHere": "Ảnh AI sẽ hiển thị ở đây",
+  "outOfStock": "Hết hàng",
+  "outOfStockAlert": "Sản phẩm này đã hết hàng",
+  "maxStockAlert": "Sản phẩm đã đạt số lượng tối đa"
 }

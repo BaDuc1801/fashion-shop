@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
-import { ConfigProvider, theme as antdTheme } from 'antd';
+import { ConfigProvider, theme as antdTheme, App as AntdApp } from 'antd';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'antd/dist/reset.css';
 import '@fontsource/inter';
@@ -27,7 +27,9 @@ root.render(
     >
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <AntdApp>
+            <App />
+          </AntdApp>
         </BrowserRouter>
       </QueryClientProvider>
     </ConfigProvider>

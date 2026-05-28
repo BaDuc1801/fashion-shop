@@ -125,10 +125,13 @@ const RegisterContainer = ({ onRegisterSuccess }: RegisterContainerProps) => {
           }
         },
         onError: (err: unknown) => {
+          console.log(err);
           const errorMessage = getApiErrorMessage(
             err,
             t('auth.registerFailed'),
           );
+          console.log(errorMessage);
+          message.error(errorMessage);
           setError(errorMessage);
         },
       },

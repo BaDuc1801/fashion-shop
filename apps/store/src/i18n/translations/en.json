@@ -258,5 +258,8 @@
   "aiResult": "AI Result",
   "yourGeneratedFashionTryOnImageWillAppearHere": "Your generated fashion try-on image will appear here.",
   "uploadYourPhotoAndGenerateARealisticVirtualFashionTryOn": "Upload your photo and generate a realistic virtual fashion try-on.",
-  "aiPreviewWillAppearHere": "AI preview will appear here"
+  "aiPreviewWillAppearHere": "AI preview will appear here",
+  "outOfStock": "Out of stock",
+  "outOfStockAlert": "This product variation is currently out of stock.",
+  "maxStockAlert": "You have reached the maximum available stock for this variation."
 }

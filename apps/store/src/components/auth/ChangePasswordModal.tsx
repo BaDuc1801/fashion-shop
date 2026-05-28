@@ -30,6 +30,8 @@ const ChangePasswordModal = ({
 }: ChangePasswordModalProps) => {
   const { t } = useTranslation();
 
+  const removeSpaces = (value: string) => value.replace(/\s/g, '');
+
   return (
     <Modal
       open={open}
@@ -46,19 +48,23 @@ const ChangePasswordModal = ({
           size="large"
           placeholder={t('auth.currentPassword')}
           value={currentPassword}
-          onChange={(e) => onCurrentPasswordChange(e.target.value)}
+          onChange={(e) =>
+            onCurrentPasswordChange(removeSpaces(e.target.value))
+          }
         />
         <Input.Password
           size="large"
           placeholder={t('auth.newPassword')}
           value={newPassword}
-          onChange={(e) => onNewPasswordChange(e.target.value)}
+          onChange={(e) => onNewPasswordChange(removeSpaces(e.target.value))}
         />
         <Input.Password
           size="large"
           placeholder={t('auth.confirmPassword')}
           value={confirmPassword}
-          onChange={(e) => onConfirmPasswordChange(e.target.value)}
+          onChange={(e) =>
+            onConfirmPasswordChange(removeSpaces(e.target.value))
+          }
         />
         {error ? <p className="text-sm text-red-500">{error}</p> : null}
       </div>

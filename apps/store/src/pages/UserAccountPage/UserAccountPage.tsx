@@ -72,7 +72,24 @@ const UserAccountPage = () => {
             <Controller
               name="name"
               control={control}
-              render={({ field }) => <Input {...field} size="large" />}
+              rules={{
+                required: t('requiredName'),
+              }}
+              render={({ field, fieldState }) => (
+                <>
+                  <Input
+                    {...field}
+                    size="large"
+                    status={fieldState.error ? 'error' : ''}
+                  />
+
+                  {fieldState.error && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {fieldState.error.message}
+                    </p>
+                  )}
+                </>
+              )}
             />
           </div>
 
@@ -95,6 +112,7 @@ const UserAccountPage = () => {
               name="phone"
               control={control}
               rules={{
+                required: t('requiredPhone'),
                 pattern: {
                   value: /^[0-9]{9,15}$/,
                   message: t('phoneDigits'),
@@ -128,7 +146,38 @@ const UserAccountPage = () => {
             <Controller
               name="address"
               control={control}
-              render={({ field }) => <Input {...field} size="large" />}
+              rules={{
+                validate: (value) => {
+                  if (value && value.trim() === '') {
+                    return t('invalidAddress', {
+                      defaultValue: 'Address cannot be empty or only spaces',
+                    });
+                  }
+                  return true;
+                },
+              }}
+              render={({ field, fieldState }) => (
+                <>
+                  <Input
+                    {...field}
+                    size="large"
+                    status={fieldState.error ? 'error' : ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val.startsWith(' ')) {
+                        field.onChange(val.trim());
+                      } else {
+                        field.onChange(val);
+                      }
+                    }}
+                  />
+                  {fieldState.error && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {fieldState.error.message}
+                    </p>
+                  )}
+                </>
+              )}
             />
           </div>
 

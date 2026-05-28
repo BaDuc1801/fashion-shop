@@ -1,4 +1,3 @@
-/// <reference lib="dom" />
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload } from 'antd';
 import type { UploadFile, UploadProps } from 'antd';
@@ -44,17 +43,12 @@ export const ImageUploader = ({
     fileList: nextFileList,
   }) => {
     const normalized = nextFileList.slice(0, maxCount).map((file) => {
-      const isAvif =
-        file.url?.toLowerCase().endsWith('.avif') ||
-        file.name?.toLowerCase().endsWith('.avif');
-
-      if (isAvif && file.url && !file.thumbUrl) {
+      if (file.url && !file.thumbUrl) {
         return {
           ...file,
           thumbUrl: file.url,
         };
       }
-
       return file;
     });
 
@@ -74,17 +68,22 @@ export const ImageUploader = ({
           squareFullWidth ? 'image-uploader-square-full' : undefined
         }
         isImageUrl={(file) => {
+          if (file.type?.includes('image')) return true;
+
           const lowerUrl = file.url?.toLowerCase() || '';
           const lowerName = file.name?.toLowerCase() || '';
-          return !!(
-            file.type?.includes('image') ||
-            lowerUrl.endsWith('.avif') ||
-            lowerUrl.endsWith('.jpg') ||
-            lowerUrl.endsWith('.jpeg') ||
-            lowerName.endsWith('.avif') ||
-            lowerName.endsWith('.jpg') ||
-            lowerName.endsWith('.jpeg')
-          );
+
+          const hasImageExtension =
+            /\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i.test(lowerUrl) ||
+            /\.(jpg|jpeg|png|gif|webp|avif)$/i.test(lowerName);
+
+          const isExternalImage =
+            lowerUrl.startsWith('http') &&
+            (lowerUrl.includes('photo') ||
+              lowerUrl.includes('image') ||
+              lowerUrl.includes('format='));
+
+          return hasImageExtension || isExternalImage;
         }}
       >
         {fileList.length >= maxCount ? null : (

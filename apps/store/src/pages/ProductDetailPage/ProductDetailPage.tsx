@@ -44,7 +44,6 @@ const ProductDetailPage = () => {
     queryKey: ['product', sku, i18n.language],
     queryFn: () => {
       if (!sku) throw new Error('Missing product sku');
-      // Recommendations endpoint uses Mongo `_id`, while traditional listing uses `sku`.
       const looksLikeObjectId = /^[a-fA-F0-9]{24}$/.test(sku);
       if (looksLikeObjectId) return productService.getProductById(sku);
       return productService.getProductBySku(sku, i18n.language);
@@ -75,8 +74,20 @@ const ProductDetailPage = () => {
     [data, selectedColorId],
   );
 
+  const maxAvailableStock = useMemo(() => {
+    if (!selectedVariant || !selectedSize) return 0;
+    const currentSku = selectedVariant.skus.find(
+      (s) => s.size === selectedSize,
+    );
+    return currentSku ? currentSku.quantity : 0;
+  }, [selectedVariant, selectedSize]);
+
   const toggleWishlist = useToggleWishlist();
   const toggleCart = useToggleCart();
+
+  useEffect(() => {
+    setQuantity(1);
+  }, [selectedSize, selectedColorId]);
 
   useEffect(() => {
     if (!data) return;
@@ -85,7 +96,14 @@ const ProductDetailPage = () => {
       v.skus.some((s) => s.quantity > 0),
     );
 
-    if (!firstVariant) return;
+    if (!firstVariant) {
+      const defaultVariant = data.variants[0];
+      if (defaultVariant) {
+        setSelectedColorId(defaultVariant.color);
+        setSelectedSize(defaultVariant.skus[0]?.size || '');
+      }
+      return;
+    }
 
     setSelectedColorId(firstVariant.color);
 
@@ -164,11 +182,11 @@ const ProductDetailPage = () => {
                   className={`hover:text-[#fb6f92] w-40 ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
                   disabled={!user}
                 >
-                  <text
+                  <span
                     className={`${data.inWishlist ? 'text-[#fb6f92]' : ''}`}
                   >
                     {t('product.favorited')}
-                  </text>
+                  </span>
                   {data.inWishlist ? (
                     <FaHeart className="text-[#fb6f92]" />
                   ) : (
@@ -202,17 +220,7 @@ const ProductDetailPage = () => {
             <div className="text-2xl font-bold">${data.price}</div>
           </div>
 
-          {/* Stock */}
-          {/* <div>
-            <div className="text-sm font-semibold">{t('product.stock')}</div>
-            <div className="text-xl font-bold">
-              {selectedVariant?.skus.find((s) => s.size === selectedSize)
-                ?.quantity ?? 0}
-            </div>
-          </div> */}
-
-          {/* <div className="flex gap-8"> */}
-          {/* Size */}
+          {/* Size Selection */}
           <div>
             <div className="text-sm font-semibold">
               {t('product.selectSize')}
@@ -220,36 +228,33 @@ const ProductDetailPage = () => {
             <div className="flex flex-wrap gap-2">
               {selectedVariant?.skus.map((v) => {
                 const active = v.size === selectedSize;
+                const isOutOfStock = v.quantity === 0;
+
                 return (
-                  <button
-                    key={v.size}
-                    disabled={selectedVariant?.skus.every(
-                      (s) => s.quantity === 0,
-                    )}
-                    onClick={() => setSelectedSize(v.size)}
-                    className={[
-                      'relative h-10 min-w-10 px-3 rounded-full border flex items-center justify-center',
-                      active
-                        ? 'border-pink-300 bg-pink-50'
-                        : 'border-slate-200',
-                      selectedVariant?.skus.every((s) => s.quantity === 0)
-                        ? 'cursor-not-allowed opacity-60'
-                        : '',
-                    ].join(' ')}
-                  >
-                    {v.size}
-                    {selectedVariant?.skus.every((s) => s.quantity === 0) && (
-                      <span className="absolute text-red-400 text-xl font-bold">
-                        ✕
-                      </span>
-                    )}
-                  </button>
+                  <Tooltip title={isOutOfStock ? t('outOfStock') : ''}>
+                    <button
+                      key={v.size}
+                      disabled={isOutOfStock}
+                      onClick={() => setSelectedSize(v.size)}
+                      className={[
+                        'relative h-10 min-w-10 px-3 rounded-full border flex items-center justify-center transition-all',
+                        active
+                          ? 'border-pink-300 bg-pink-50 text-pink-600'
+                          : 'border-slate-200 text-slate-800 hover:border-slate-400',
+                        isOutOfStock
+                          ? 'cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200 opacity-50'
+                          : '',
+                      ].join(' ')}
+                    >
+                      {v.size}
+                    </button>
+                  </Tooltip>
                 );
               })}
             </div>
           </div>
 
-          {/* Color */}
+          {/* Color Selection */}
           <div>
             <div className="text-sm font-semibold">
               {t('product.selectColor')}
@@ -260,44 +265,57 @@ const ProductDetailPage = () => {
                   key={v.color}
                   onClick={() => {
                     setSelectedColorId(v.color);
-
                     const firstSize = v.skus.find((s) => s.quantity > 0)?.size;
-
-                    setSelectedSize(firstSize || '');
+                    setSelectedSize(firstSize || v.skus[0]?.size || '');
                   }}
                   className={[
-                    'w-10 h-10 border',
+                    'w-10 h-10 border rounded-sm transition-all',
                     selectedColorId === v.color
-                      ? 'border-pink-400'
-                      : 'border-gray-300',
+                      ? 'border-pink-500 scale-105 shadow-sm'
+                      : 'border-gray-300 hover:border-gray-400',
                   ].join(' ')}
                   style={{ backgroundColor: v.color }}
                 />
               ))}
             </div>
           </div>
-          {/* </div> */}
-          <div className="my-2 flex items-center gap-2">
-            <button
-              disabled={isLoading}
-              onClick={() => setQuantity(quantity - 1)}
-              className="h-8 w-8 rounded-full border border-slate-300"
-            >
-              −
-            </button>
 
-            <div className="min-w-6 text-center text-sm font-semibold">
-              {quantity}
+          <div>
+            <div className="flex items-center gap-2">
+              <button
+                disabled={quantity <= 1 || maxAvailableStock === 0}
+                onClick={() => setQuantity(quantity - 1)}
+                className="h-8 w-8 rounded-full border border-slate-300 flex items-center justify-center hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                −
+              </button>
+
+              <div className="min-w-6 text-center text-sm font-semibold">
+                {maxAvailableStock === 0 ? 0 : quantity}
+              </div>
+
+              <button
+                disabled={
+                  quantity >= maxAvailableStock || maxAvailableStock === 0
+                }
+                onClick={() => setQuantity(quantity + 1)}
+                className="h-8 w-8 rounded-full border border-slate-300 flex items-center justify-center hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                +
+              </button>
             </div>
 
-            <button
-              disabled={isLoading}
-              onClick={() => setQuantity(quantity + 1)}
-              className="h-8 w-8 rounded-full border border-slate-300"
-            >
-              +
-            </button>
+            {maxAvailableStock === 0 ? (
+              <p className="text-red-500 text-sm mt-2 font-medium">
+                {t('outOfStockAlert')}
+              </p>
+            ) : quantity >= maxAvailableStock ? (
+              <p className="text-red-500 text-sm mt-2 font-medium">
+                * {t('maxStockAlert')}
+              </p>
+            ) : null}
           </div>
+
           {/* Actions */}
           <Tooltip title={!user ? t('pleaseLogin') : ''}>
             <div className="flex flex-col gap-2">
@@ -312,7 +330,7 @@ const ProductDetailPage = () => {
                     quantity: quantity,
                   })
                 }
-                disabled={!user}
+                disabled={!user || maxAvailableStock === 0}
               >
                 {t('product.addToCart')}
               </Button>
@@ -329,12 +347,12 @@ const ProductDetailPage = () => {
                         price: data.price,
                         size: selectedSize,
                         color: selectedColorId,
-                        quantity: 1,
+                        quantity: quantity,
                       },
                     },
                   })
                 }
-                disabled={!user}
+                disabled={!user || maxAvailableStock === 0}
               >
                 {t('byNow')}
               </Button>
