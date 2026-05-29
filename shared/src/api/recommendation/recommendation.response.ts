@@ -1,8 +1,4 @@
-export type RecommendationType =
-  | 'trending'
-  | 'hybrid'
-  | 'folding_in'
-  | string;
+export type RecommendationType = 'trending' | 'hybrid' | 'folding_in' | string;
 
 export interface RecommendationReason {
   reason: string;
@@ -14,8 +10,6 @@ export interface RecommendationProduct {
   name: string;
   nameEn?: string;
   price: number;
-  // Hybrid recommendations contain `variants`, while the public trending endpoint
-  // may return a simpler shape.
   variants?: Array<{
     images: string[];
   }>;
@@ -36,4 +30,3 @@ export interface RecommendationProductsResponse {
   products: RecommendationProduct[];
   meta?: RecommendationMeta;
 }
-

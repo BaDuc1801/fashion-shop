@@ -237,7 +237,7 @@
   "total": "Total",
   "cancelOrder": "Cancel order",
   "action": "Action",
-  "phoneDigits": "Phone number must be 9-15 digits",
+  "phoneDigits": "Phone number must be 10 digits",
   "find": "Find out",
   "notSureWhatToChoose": "Not sure what to choose?",
   "maybeYouLike": "Maybe you like",
@@ -261,5 +261,6 @@
   "aiPreviewWillAppearHere": "AI preview will appear here",
   "outOfStock": "Out of stock",
   "outOfStockAlert": "This product variation is currently out of stock.",
-  "maxStockAlert": "You have reached the maximum available stock for this variation."
+  "maxStockAlert": "You have reached the maximum available stock for this variation.",
+  "trendingNow": "Trending Now"
 }

@@ -237,7 +237,7 @@
   "total": "Tổng",
   "cancelOrder": "Huỷ đơn hàng",
   "action": "Hành động",
-  "phoneDigits": "Số điện thoại phải có 9-15 chữ số",
+  "phoneDigits": "Số điện thoại phải có 10 chữ số",
   "find": "Khám phá",
   "notSureWhatToChoose": "Bạn không biết chọn gì?",
   "maybeYouLike": "Có thể bạn cũng thích",
@@ -261,5 +261,6 @@
   "aiPreviewWillAppearHere": "Ảnh AI sẽ hiển thị ở đây",
   "outOfStock": "Hết hàng",
   "outOfStockAlert": "Sản phẩm này đã hết hàng",
-  "maxStockAlert": "Sản phẩm đã đạt số lượng tối đa"
+  "maxStockAlert": "Sản phẩm đã đạt số lượng tối đa",
+  "trendingNow": "Sản phẩm đang thịnh hành"
 }

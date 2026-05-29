@@ -170,18 +170,25 @@ const CategoryPage = () => {
               </div>
             ) : hasData ? (
               data?.data?.map((p) => (
-                <Link key={p._id} to={`/products/${p.sku}`}>
-                  <div className="border rounded overflow-hidden">
-                    <img
-                      alt={p.name}
-                      src={p.variants[0].images[0]}
-                      className="h-[300px] w-full object-top object-cover"
-                    />
-                    <div className="p-2">
-                      <div className="text-sm font-semibold truncate">
+                <Link
+                  key={p._id}
+                  to={`/products/${p.sku}`}
+                  className="group block "
+                >
+                  <div className="border rounded">
+                    <div className="overflow-hidden">
+                      <img
+                        alt={p.name}
+                        src={p.variants[0].images[0]}
+                        className="h-[300px] w-full object-cover object-top transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+                    <div className="p-2 overflow-hidden">
+                      <div className="text-sm font-semibold truncate text-slate-900 group-hover:text-slate-900">
+                        {' '}
                         {i18n.language === 'vi' ? p.name : p.nameEn}
                       </div>
-                      <div className="font-bold">
+                      <div className="text-sm font-bold truncate text-slate-900 group-hover:text-slate-900">
                         ${p.price.toLocaleString()}
                       </div>
                     </div>

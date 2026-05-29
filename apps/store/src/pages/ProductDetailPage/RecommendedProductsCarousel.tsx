@@ -12,20 +12,31 @@ import { useTranslation } from 'react-i18next';
 
 const LIMIT = 12;
 
-const RecommendedProductsCarousel = () => {
+interface RecommendedProductsCarouselProps {
+  onlyTrending?: boolean;
+}
+
+const RecommendedProductsCarousel = (
+  props: RecommendedProductsCarouselProps,
+) => {
+  const { onlyTrending = false } = props;
   const { t, i18n } = useTranslation();
   const user = useAuthStore((s) => s.user);
 
   const { data, isFetching } = useQuery({
-    queryKey: ['product-detail-recommendations', user?.userId],
+    queryKey: onlyTrending
+      ? ['product-trending-only']
+      : ['product-detail-recommendations', user?.userId],
     queryFn: () => {
-      if (!user) return recommendationService.getTrending(LIMIT);
+      if (onlyTrending || !user)
+        return recommendationService.getTrending(LIMIT);
+
       return recommendationService.getRecommendations(user.userId, LIMIT);
     },
   });
 
   const source: InteractionSource =
-    data?.type === 'trending' ? 'trending' : 'recommendation';
+    onlyTrending || data?.type === 'trending' ? 'trending' : 'recommendation';
 
   const products = useMemo(() => data?.products ?? [], [data?.products]);
 
@@ -40,13 +51,18 @@ const RecommendedProductsCarousel = () => {
   if (!products.length) return null;
 
   return (
-    <section className="my-10">
+    <section
+      className={` ${onlyTrending ? 'px-8 lg:px-12 xl:px-20 2xl:px-32 mt-20' : 'my-10'}`}
+    >
       <div className="mb-3 flex items-end justify-between">
         <h2 className="text-lg font-semibold text-slate-900">
-          {t('maybeYouLike')}
+          {onlyTrending ? (
+            <span className="text-2xl font-bold"> {t('trendingNow')}</span>
+          ) : (
+            t('maybeYouLike')
+          )}{' '}
         </h2>
       </div>
-
       <div className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
         {products.map((p) => {
           const name = i18n.language === 'en' ? (p.nameEn ?? p.name) : p.name;
@@ -76,17 +92,12 @@ const RecommendedProductsCarousel = () => {
                 )}
               </div>
               <div className="p-2">
-                <div className="text-sm font-semibold text-slate-900 line-clamp-2">
+                <div className="text-sm font-semibold text-slate-900 line-clamp-1">
                   {name}
                 </div>
                 <div className="mt-1 text-sm font-bold text-slate-900">
                   ${p.price}
                 </div>
-                {!!p.explanation?.reason && (
-                  <div className="mt-1 text-xs text-slate-500 line-clamp-2">
-                    {p.explanation.reason}
-                  </div>
-                )}
               </div>
             </Link>
           );

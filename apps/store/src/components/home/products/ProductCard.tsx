@@ -16,7 +16,8 @@ type ProductCardProps = {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const { i18n } = useTranslation();
-  const displayName = i18n.language === 'en' ? product.nameEn ?? product.name : product.name;
+  const displayName =
+    i18n.language === 'en' ? (product.nameEn ?? product.name) : product.name;
   const imageSrc =
     product.variants?.[0]?.images?.[0] ?? product.images?.[0] ?? '';
 
