@@ -8,6 +8,18 @@ import { getVoucherDiscount } from './utils/getDiscountVoucher';
 import { useNavigate } from 'react-router-dom';
 import { LuTrash2 } from 'react-icons/lu';
 
+const getMaxQuantity = (it: CartItem) => {
+  const variant = it.product.variants.find(
+    (v) => v.color === it.color,
+  );
+
+  const sku = variant?.skus.find(
+    (s) => s.size === it.size,
+  );
+
+  return sku?.quantity ?? 0;
+};
+
 const CartPage = () => {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
@@ -66,6 +78,35 @@ const CartPage = () => {
     }
   }, [selectedVoucher, subtotal]);
 
+  const handleRemove = (it: CartItem) => {
+    Modal.confirm({
+      title: t('product.removeItem'),
+      content: (
+        <span className="text-sm">
+          <Trans
+            i18nKey="product.removeItemConfirm"
+            values={{
+              name:
+                i18n.language === 'en'
+                  ? it.product.nameEn
+                  : it.product.name,
+            }}
+            components={[<span className="font-semibold" />]}
+          />
+        </span>
+      ),
+      okText: t('product.remove'),
+      cancelText: t('product.cancel'),
+      okButtonProps: { danger: true },
+      onOk: () =>
+        removeCart.mutate({
+          productId: it.product._id,
+          size: it.size,
+          color: it.color,
+        }),
+    });
+  };
+
   const handleDecrease = (it: CartItem) => {
     if (it.quantity === 1) {
       Modal.confirm({
@@ -104,6 +145,12 @@ const CartPage = () => {
   };
 
   const handleIncrease = (it: CartItem) => {
+    const maxQuantity = getMaxQuantity(it);
+  
+    if (it.quantity >= maxQuantity) {
+      return;
+    }
+  
     updateCart.mutate({
       productId: it.product._id,
       size: it.size,
@@ -188,25 +235,27 @@ const CartPage = () => {
                             </div>
 
                             <button
-                              disabled={isLoading}
+                              disabled={
+                                isLoading ||
+                                it.quantity >= getMaxQuantity(it)
+                              }
                               onClick={() => handleIncrease(it)}
-                              className="h-8 w-8 rounded-full border border-slate-300 transition hover:bg-slate-100"
+                              className="h-8 w-8 rounded-full border border-slate-300 transition hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               +
                             </button>
+                            {it.quantity >= getMaxQuantity(it) && (
+                              <div className="text-red-500 text-sm font-medium">
+                                * {t('maxStockAlert')}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
 
                       <button
                         disabled={isLoading}
-                        onClick={() =>
-                          removeCart.mutate({
-                            productId: it.product._id,
-                            size: it.size,
-                            color: it.color,
-                          })
-                        }
+                        onClick={() => handleRemove(it)}
                         className="absolute right-0 top-0 h-full w-20 translate-x-full opacity-0 bg-red-400 text-white transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100  hover:bg-red-600 flex items-center justify-center"
                       >
                         <LuTrash2 size={20} />

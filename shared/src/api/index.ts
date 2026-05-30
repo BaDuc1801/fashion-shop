@@ -24,10 +24,8 @@ export * from './notification/notification.api';
 export * from './notification/notification.response';
 export * from './notification/notification.request';
 export * from './shipping/shipping.api';
-
 export * from './interaction/interaction.api';
 export * from './interaction/interaction.request';
 export * from './interaction/interaction.response';
-
 export * from './recommendation/recommendation.api';
 export * from './recommendation/recommendation.response';
