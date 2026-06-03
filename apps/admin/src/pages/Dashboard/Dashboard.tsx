@@ -3,11 +3,12 @@ import StatisticSection from './StatisticSection';
 import ChartSection from './ChartSection';
 import OrderInfinityList from './OrderInfinityList';
 import BestSellerInfinityList from './BestSellerInfinityList';
-import { ADMIN_PANEL_ROLE, useAuthStore } from '@fashion-monorepo/shared';
+import { ADMIN_PANEL_ROLE, useAuthStore } from '@shared';
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const isAdmin = useAuthStore((s) => s.user?.role === ADMIN_PANEL_ROLE);
+  const isAdmin =
+    useAuthStore((s) => s.user?.role?.toLowerCase() === ADMIN_PANEL_ROLE);
 
   return (
     <div className="flex flex-col gap-6">
