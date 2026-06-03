@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { productService, resolveImageUrls } from '@shared';
+import { getApiErrorMessage, productService, resolveImageUrls } from '@shared';
 import type { AddNewProductFormValues } from '../schemas/addNewProductSchema';
 import { useHexColorPayload } from './useHexColorPayload';
 
@@ -46,8 +46,9 @@ export const useCreateProduct = () => {
       await queryClient.invalidateQueries({ queryKey: ['products'] });
       navigate(`/products/${createdProduct.sku}`);
     },
-    onError: () => {
-      message.error(t('admin.product.form.createFailed'));
+    onError: (error) => {
+      const errorMessage = getApiErrorMessage(error, t('admin.product.form.createFailed'));
+      message.error(errorMessage || t('admin.product.form.createFailed'));
     },
   });
 };

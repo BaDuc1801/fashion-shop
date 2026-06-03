@@ -204,36 +204,36 @@ const NavBar = () => {
   ];
 
   return (
-    <div className="absolute inset-x-0 top-0 z-10 mx-auto flex w-full items-center justify-between xl:px-[120px] 2xl:px-[200px] py-4 max-xl:px-[48px] max-md:px-[16px]">
+    <div className="absolute inset-x-0 top-0 z-10 mx-auto flex w-full items-center justify-between xl:px-[120px] py-4 max-xl:px-[48px] max-md:px-[16px]">
       <div className="flex items-center gap-6">
         <Link
           to="/"
-          className="font-bold text-3xl mr-3
+          className="font-bold text-3xl mr-3 hover:text-[#fb6f92]
         "
         >
           MonoChic
         </Link>
         <Link
           to="/category/men"
-          className="text-base font-medium hover:font-semibold max-2xl:hidden"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden hover:text-[#fb6f92]"
         >
           {t('nav.men')}
         </Link>
         <Link
           to="/category/women"
-          className="text-base font-medium hover:font-semibold max-2xl:hidden"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden hover:text-[#fb6f92]"
         >
           {t('nav.women')}
         </Link>
         <Link
           to="/category/new-arrivals"
-          className="text-base font-medium hover:font-semibold max-2xl:hidden truncate"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden truncate hover:text-[#fb6f92]"
         >
           {t('nav.newArrivals')}
         </Link>
         <Link
           to="/category/sale"
-          className="text-base font-medium hover:font-semibold max-2xl:hidden"
+          className="text-base font-medium hover:font-semibold max-2xl:hidden hover:text-[#fb6f92]"
         >
           {t('nav.sale')}
         </Link>

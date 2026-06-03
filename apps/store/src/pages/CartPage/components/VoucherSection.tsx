@@ -29,6 +29,17 @@ const VoucherSection = ({
   const isEligible = (voucher: Voucher) =>
     !voucher.minOrderValue || subtotal >= voucher.minOrderValue;
 
+  const isExpired = (expiresAt: string) =>
+    new Date(expiresAt).getTime() <= Date.now();
+
+  const availableVouchers = useMemo(
+    () =>
+      vouchers.filter(
+        (v) => v.status === 'active' && !isExpired(v.expiresAt),
+      ),
+    [vouchers],
+  );
+
   return (
     <div className="space-y-2">
       <div
@@ -58,66 +69,76 @@ const VoucherSection = ({
         width={520}
       >
         <div className="space-y-3 max-h-[400px] overflow-y-auto">
-          {vouchers
-            .filter((v) => v.status === 'active')
-            .map((v) => {
-              const eligible = isEligible(v);
-              const active = selectedVoucherId === v._id;
-              const voucherCard = (
-                <div
-                  key={v._id}
-                  onClick={() => {
-                    if (!eligible) return;
-                    onSelect(v._id);
-                  }}
-                  className={[
-                    'border rounded-lg p-3 flex justify-between items-center cursor-pointer transition',
-                    active
-                      ? 'border-black bg-slate-50'
-                      : 'border-slate-200 hover:border-slate-400',
-                    !eligible ? 'opacity-50 cursor-not-allowed' : '',
-                  ].join(' ')}
-                >
-                  <div className="flex items-center gap-4 h-[150px]">
-                    <img
-                      src={v.image}
-                      alt={v.code}
+          {availableVouchers.length === 0 && (
+            <div className="py-8 text-center text-slate-500">
+              {t('cart.noVoucherAvailable')}
+            </div>
+          )}
+
+          {availableVouchers.map((v) => {
+            const eligible = isEligible(v);
+            const active = selectedVoucherId === v._id;
+            const voucherCard = (
+              <div
+                key={v._id}
+                onClick={() => {
+                  if (!eligible) return;
+
+                  if (active) {
+                    onSelect(undefined);
+                    return;
+                  }
+
+                  onSelect(v._id);
+                }}
+                className={[
+                  'border rounded-lg p-3 flex justify-between items-center cursor-pointer transition',
+                  active
+                    ? 'border-black bg-slate-50'
+                    : 'border-slate-200 hover:border-slate-400',
+                  !eligible ? 'opacity-50 cursor-not-allowed' : '',
+                ].join(' ')}
+              >
+                <div className="flex items-center gap-4 h-[150px]">
+                  <img
+                    src={v.image}
+                    alt={v.code}
                       className="h-full object-fit w-[200px]"
-                    />
+                  />
                     <div className="flex flex-col justify-between gap-1 h-full">
-                      <div>
-                        <div className="text-xl font-semibold">{v.code}</div>
+                    <div>
+                      <div className="text-xl font-semibold">{v.code}</div>
                         <div className="font-semibold text-sm">
-                          {v.discountPercent}% OFF
-                        </div>
+                        {v.discountPercent}% OFF
+                      </div>
                         <div className="text-sm text-slate-500">
                           {v.maxDiscount
                             ? `Max discount: $${v.maxDiscount}`
                             : ''}
                         </div>
-                      </div>
-                      <div className="text-sm text-slate-500">
-                        {t('cart.minOrder')} ${v.minOrderValue ?? 0}
-                      </div>
+                    </div>
+                    <div className="text-sm text-slate-500">
+                      {t('cart.minOrder')} ${v.minOrderValue ?? 0}
                     </div>
                   </div>
-
-                  {active && (
-                    <div className="text-green-500 text-sm font-semibold">
-                      Selected
-                    </div>
-                  )}
                 </div>
-              );
 
-              if (eligible) return voucherCard;
+                {active && (
+                    <div className="text-green-500 text-sm font-semibold">
+                    Selected
+                  </div>
+                )}
+              </div>
+            );
 
-              return (
-                <Tooltip key={v._id} title={t('cart.invalidVoucher')}>
-                  {voucherCard}
-                </Tooltip>
-              );
-            })}
+            if (eligible) return voucherCard;
+
+            return (
+              <Tooltip key={v._id} title={t('cart.invalidVoucher')}>
+                {voucherCard}
+              </Tooltip>
+            );
+          })}
         </div>
       </Modal>
     </div>
