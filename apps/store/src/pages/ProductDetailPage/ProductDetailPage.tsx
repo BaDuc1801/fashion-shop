@@ -177,6 +177,7 @@ const ProductDetailPage = () => {
                     toggleWishlist.mutate({
                       productId: data._id,
                       inWishlist: data.inWishlist ?? false,
+                      source: source ?? 'organic',
                     })
                   }
                   className={`hover:text-[#fb6f92] w-40 ${data.inWishlist ? 'border-[#fb6f92]' : ''}`}
@@ -328,6 +329,7 @@ const ProductDetailPage = () => {
                     size: selectedSize,
                     color: selectedColorId,
                     quantity: quantity,
+                    source: source ?? 'organic',
                   })
                 }
                 disabled={!user || maxAvailableStock === 0}
