@@ -1,4 +1,4 @@
-import { ChartData, dashboardService } from '@shared';
+import { ChartData, dashboardService, formatUsd } from '@shared';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from 'antd';
 import dayjs from 'dayjs';
@@ -51,16 +51,22 @@ const ChartSection = ({ t }: Props) => {
 
   return (
     <Card title={t('salesChart')}>
-      <div className="flex items-end gap-2 h-[160px]">
+      <div className="flex items-end gap-2 h-[200px]">
         {chartData.map((d) => (
-          <div key={d.date} className="flex-1 flex flex-col items-center">
+          <div
+            key={d.date}
+            className="flex-1 flex flex-col items-center justify-end min-w-0"
+          >
+            <span className="text-[10px] text-gray-600 mb-1 text-center leading-tight">
+              {formatUsd(d.revenue)}
+            </span>
             <div
-              className="w-[50px] bg-blue-400 rounded-t"
+              className="w-full max-w-[50px] bg-blue-400 rounded-t"
               style={{
                 height: `${Math.max(4, (d.revenue / maxSales) * 140)}px`,
               }}
             />
-            <span className="text-xs">{d.label}</span>
+            <span className="text-xs mt-1">{d.label}</span>
           </div>
         ))}
       </div>
