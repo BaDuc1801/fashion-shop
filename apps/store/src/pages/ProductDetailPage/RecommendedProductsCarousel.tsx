@@ -27,11 +27,11 @@ const RecommendedProductsCarousel = (
     queryKey: onlyTrending
       ? ['product-trending-only']
       : ['product-detail-recommendations', user?.userId],
+    enabled: onlyTrending || !!user?.userId,
     queryFn: () => {
-      if (onlyTrending || !user)
-        return recommendationService.getTrending(LIMIT);
+      if (onlyTrending) return recommendationService.getTrending(LIMIT);
 
-      return recommendationService.getRecommendations(user.userId, LIMIT);
+      return recommendationService.getRecommendations(user!.userId, LIMIT);
     },
   });
 
