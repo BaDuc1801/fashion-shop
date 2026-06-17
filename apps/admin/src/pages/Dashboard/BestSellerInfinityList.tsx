@@ -57,7 +57,7 @@ const BestSellerInfinityList = () => {
   }, [hasMore, isFetching]);
 
   return (
-    <Card title="Recent Orders">
+    <Card title="Best Seller Products">
       <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto">
         {products?.map((product) => (
           <div

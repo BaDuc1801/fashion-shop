@@ -54,14 +54,19 @@ const RecommendedProductsCarousel = (
     <section
       className={` ${onlyTrending ? 'px-8 lg:px-12 xl:px-20 2xl:px-32 mt-20' : 'my-10'}`}
     >
-      <div className="mb-3 flex items-end justify-between">
+      <div className="mb-3">
         <h2 className="text-lg font-semibold text-slate-900">
           {onlyTrending ? (
-            <span className="text-2xl font-bold"> {t('trendingNow')}</span>
+            <span className="text-2xl font-bold">{t('trendingNow')}</span>
           ) : (
             t('maybeYouLike')
-          )}{' '}
+          )}
         </h2>
+        {!onlyTrending && data?.type !== 'trending' && (
+          <p className="mt-1 text-sm text-slate-500">
+            {t('recommendationBasedOn')}
+          </p>
+        )}
       </div>
       <div className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
         {products.map((p) => {
